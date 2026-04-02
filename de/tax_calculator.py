@@ -6,9 +6,9 @@ while preserving all original calculation logic.
 """
 
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from locales.de.tax_rules import (
+from .tax_rules import (
     calculate_income_tax,
     calculate_soli,
     coerce_receipt_deductible_amount,
@@ -16,53 +16,84 @@ from locales.de.tax_rules import (
     resolve_supported_year,
 )
 
+if TYPE_CHECKING:
+    from ..context import LocaleContext
 
-def _extract_german_fields(profile: dict) -> dict:
-    """Map Finance Assistant profile to German tax fields."""
-    tax_extra = profile.get("tax_profile", {}).get("extra", {})
-    emp = profile.get("employment", {})
-    fam = profile.get("family", {})
-    housing = profile.get("housing", {})
-    personal = profile.get("personal", {})
 
-    # Map employment type back to German terms for internal use
-    emp_type = emp.get("type", "")
+def _extract_german_fields(ctx: "LocaleContext") -> dict:
+    """Map LocaleContext to German tax fields."""
     type_map = {"employed": "angestellter", "freelancer": "freelancer",
                 "self_employed": "gewerbe", "mixed": "mixed", "retired": "rentner"}
-    german_type = type_map.get(emp_type, emp_type)
+    german_type = type_map.get(ctx.employment_type, ctx.employment_type)
+
+    # Convert ChildInfo / ReceiptItem objects back to dicts for downstream code
+    children = []
+    for ch in ctx.children:
+        if isinstance(ch, dict):
+            children.append(ch)
+        else:
+            children.append({
+                "birth_year": ch.birth_year,
+                "childcare": ch.childcare,
+                "childcare_annual_cost": ch.childcare_annual_cost,
+            })
+
+    receipts = []
+    for r in ctx.receipts:
+        if isinstance(r, dict):
+            receipts.append(r)
+        else:
+            receipts.append({
+                "category": r.category,
+                "amount": r.amount,
+                "business_use_pct": r.business_use_pct,
+                "description": r.description,
+                "deductible_amount": r.deductible_amount,
+            })
 
     return {
         "type": german_type,
-        "annual_gross": emp.get("annual_gross") or 0.0,
-        "nebenjob_income": emp.get("side_income") or 0.0,
-        "steuerklasse": profile.get("tax_profile", {}).get("tax_class") or "I",
-        "married": fam.get("status") in ("married", "civil_partnership"),
-        "children": fam.get("children", []),
-        "bundesland": personal.get("region", ""),
-        "kirchensteuer": profile.get("tax_profile", {}).get("church_tax", False),
-        "homeoffice_days_per_week": housing.get("homeoffice_days_per_week"),
-        "commute_km": housing.get("commute_km") or 0.0,
-        "commute_days_per_year": housing.get("commute_days_per_year") or 0,
-        "riester": tax_extra.get("riester", False),
-        "riester_contribution": tax_extra.get("riester_contribution") or 0.0,
-        "ruerup": tax_extra.get("ruerup", False),
-        "ruerup_contribution": tax_extra.get("ruerup_contribution") or 0.0,
-        "bav": tax_extra.get("bav", False),
-        "bav_contribution": tax_extra.get("bav_contribution") or 0.0,
-        "gewerkschaft_beitrag": tax_extra.get("gewerkschaft_beitrag") or 0.0,
-        "disability_grade": tax_extra.get("disability_grade") or 0,
-        "expat": tax_extra.get("expat", False),
-        "dba_relevant": tax_extra.get("dba_relevant", False),
-        "receipts": profile.get("current_year_receipts", []),
+        "annual_gross": ctx.annual_gross,
+        "nebenjob_income": ctx.side_income,
+        "steuerklasse": ctx.tax_class,
+        "married": ctx.married,
+        "children": children,
+        "bundesland": ctx.region,
+        "kirchensteuer": ctx.church_tax,
+        "homeoffice_days_per_week": ctx.homeoffice_days_per_week,
+        "commute_km": ctx.commute_km,
+        "commute_days_per_year": ctx.commute_days_per_year,
+        "riester": ctx.riester,
+        "riester_contribution": ctx.riester_contribution,
+        "ruerup": ctx.ruerup,
+        "ruerup_contribution": ctx.ruerup_contribution,
+        "bav": ctx.bav,
+        "bav_contribution": ctx.bav_contribution,
+        "gewerkschaft_beitrag": ctx.union_dues,
+        "disability_grade": ctx.disability_grade,
+        "expat": ctx.expat,
+        "dba_relevant": ctx.dba_relevant,
+        "receipts": receipts,
     }
 
 
-def calculate_refund(profile: dict) -> dict:
+def _import_locale_context():
+    try:
+        from ..context import LocaleContext
+    except ImportError:
+        from context import LocaleContext  # type: ignore
+    return LocaleContext
+
+
+def calculate_refund(ctx: "LocaleContext | dict") -> dict:
     """Full refund estimate with breakdown and confidence scoring."""
-    requested_year = profile.get("meta", {}).get("tax_year", 2024)
+    if isinstance(ctx, dict):
+        LocaleContext = _import_locale_context()
+        ctx = LocaleContext.from_finance_profile(ctx)
+    requested_year = ctx.tax_year
     year, year_note = resolve_supported_year(requested_year)
     p = get_tax_year_rules(year)
-    g = _extract_german_fields(profile)
+    g = _extract_german_fields(ctx)
 
     gross = g["annual_gross"]
     confidence = 100

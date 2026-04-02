@@ -7,16 +7,8 @@ and deduction discovery for 2024-2026.
 
 from __future__ import annotations
 
-import os
-import sys
-
-# Ensure the scripts directory is on path for shared imports
-_scripts_dir = os.path.join(os.path.dirname(__file__), "..", "..", "scripts")
-if _scripts_dir not in sys.path:
-    sys.path.insert(0, _scripts_dir)
-
 # Import from co-located locale modules
-from locales.de.tax_rules import (
+from .tax_rules import (
     TAX_YEAR_RULES,
     calculate_income_tax,
     calculate_soli,
@@ -26,8 +18,14 @@ from locales.de.tax_rules import (
     coerce_receipt_deductible_amount,
     equipment_useful_life,
 )
-from locales.de.tax_calculator import calculate_refund, format_refund_display
-from locales.de.tax_dates import get_filing_deadline, format_deadline_label
+from .tax_calculator import calculate_refund, format_refund_display
+from .tax_dates import get_filing_deadline, format_deadline_label
+
+try:
+    from ..context import LocaleContext
+except ImportError:
+    # Standalone usage: locales/ root is on sys.path, so `de` is a top-level package
+    from context import LocaleContext  # type: ignore
 
 LOCALE_CODE = "de"
 LOCALE_NAME = "Germany"
@@ -39,11 +37,16 @@ def get_tax_rules(year: int) -> dict:
     return get_tax_year_rules(year)
 
 
-def calculate_tax(profile: dict, year: int = None) -> dict:
-    if year:
-        profile = dict(profile)
-        profile.setdefault("meta", {})["tax_year"] = year
-    return calculate_refund(profile)
+def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
+    if isinstance(ctx, dict):
+        if year:
+            ctx = dict(ctx)
+            ctx.setdefault("meta", {})["tax_year"] = year
+        ctx = LocaleContext.from_finance_profile(ctx, tax_year=year)
+    elif year is not None:
+        from dataclasses import replace
+        ctx = replace(ctx, tax_year=year)
+    return calculate_refund(ctx)
 
 
 def get_filing_deadlines(year: int) -> list[dict]:
@@ -62,7 +65,7 @@ def get_filing_deadlines(year: int) -> list[dict]:
 
 
 def get_social_contributions(gross: float, year: int) -> dict:
-    from locales.de.social_contributions import estimate_employee_social_contributions
+    from .social_contributions import estimate_employee_social_contributions
     return estimate_employee_social_contributions(gross, year)
 
 
@@ -82,6 +85,6 @@ def get_deduction_categories() -> list[dict]:
     ]
 
 
-def generate_tax_claims(profile: dict, year: int = None) -> list[dict]:
-    from locales.de.claim_rules import generate_german_claims
-    return generate_german_claims(profile, year)
+def generate_tax_claims(ctx: "LocaleContext | dict", year: int = None) -> list[dict]:
+    from .claim_rules import generate_german_claims
+    return generate_german_claims(ctx, year)

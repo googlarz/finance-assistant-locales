@@ -9,28 +9,56 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Optional
 
-from locales.de.tax_rules import get_tax_year_rules
-from locales.de.tax_calculator import calculate_refund
+from .tax_rules import get_tax_year_rules
+from .tax_calculator import calculate_refund
 
 
-def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
-    """Generate German tax claims from profile. Returns list of claim dicts."""
-    year = year or profile.get("meta", {}).get("tax_year", datetime.now().year)
+def generate_german_claims(ctx, year: int = None) -> list[dict]:
+    """Generate German tax claims from LocaleContext or profile dict. Returns list of claim dicts."""
+    if isinstance(ctx, dict):
+        try:
+            from ..context import LocaleContext
+        except ImportError:
+            from context import LocaleContext  # type: ignore
+        ctx = LocaleContext.from_finance_profile(ctx, tax_year=year)
+
+    year = year or ctx.tax_year or datetime.now().year
     rules = get_tax_year_rules(year)
 
-    tax_extra = profile.get("tax_profile", {}).get("extra", {})
-    emp = profile.get("employment", {})
-    fam = profile.get("family", {})
-    housing = profile.get("housing", {})
-    receipts = profile.get("current_year_receipts", [])
+    is_employee = ctx.employment_type in ("employed", "angestellter")
 
-    emp_type = emp.get("type", "")
-    is_employee = emp_type in ("employed", "angestellter")
+    # Convert ChildInfo / ReceiptItem objects to dicts for downstream compatibility
+    children = []
+    for ch in ctx.children:
+        if isinstance(ch, dict):
+            children.append(ch)
+        else:
+            children.append({
+                "birth_year": ch.birth_year,
+                "childcare": ch.childcare,
+                "childcare_annual_cost": ch.childcare_annual_cost,
+            })
+
+    receipts = []
+    for r in ctx.receipts:
+        if isinstance(r, dict):
+            receipts.append(r)
+        else:
+            receipts.append({
+                "category": r.category,
+                "amount": r.amount,
+                "business_use_pct": r.business_use_pct,
+                "description": r.description,
+                "deductible_amount": r.deductible_amount,
+            })
+
+    gross = ctx.annual_gross
+    married = ctx.married
 
     claims = []
 
     # Homeoffice
-    ho_days_pw = housing.get("homeoffice_days_per_week")
+    ho_days_pw = ctx.homeoffice_days_per_week
     if ho_days_pw is None and is_employee:
         claims.append(_claim(year, "werbungskosten", "Homeoffice-Pauschale", "homeoffice",
                              "needs_input", None, None, "likely",
@@ -43,8 +71,8 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                              "§4 Abs. 5 Nr. 6b EStG", "Keep a day log."))
 
     # Commute
-    commute_km = housing.get("commute_km")
-    commute_days = housing.get("commute_days_per_year")
+    commute_km = ctx.commute_km
+    commute_days = ctx.commute_days_per_year
     if is_employee and not (commute_km and commute_days):
         claims.append(_claim(year, "werbungskosten", "Pendlerpauschale", "commute",
                              "needs_input", None, None, "likely",
@@ -78,7 +106,6 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                              "§10b EStG", "Keep donation receipts."))
 
     # Childcare
-    children = fam.get("children", [])
     for i, child in enumerate(children, 1):
         birth_year = child.get("birth_year")
         age = year - birth_year if birth_year else 99
@@ -96,8 +123,8 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                                      "§10 Abs. 1 Nr. 5 EStG", "Add annual childcare cost."))
 
     # Riester
-    if tax_extra.get("riester"):
-        contrib = float(tax_extra.get("riester_contribution") or 0)
+    if ctx.riester:
+        contrib = ctx.riester_contribution
         if contrib:
             claims.append(_claim(year, "sonderausgaben", "Riester", "riester",
                                  "ready", min(contrib, rules["riester_max"]), None, "definitive",
@@ -108,8 +135,8 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                                  "§10a EStG", "Add annual Riester contribution."))
 
     # Rürup
-    if tax_extra.get("ruerup"):
-        contrib = float(tax_extra.get("ruerup_contribution") or 0)
+    if ctx.ruerup:
+        contrib = ctx.ruerup_contribution
         if contrib:
             cap = rules.get("ruerup_max_single")
             amount = contrib if cap is None else min(contrib, cap)
@@ -118,14 +145,14 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                                  "§10 Abs. 1 Nr. 2b EStG", "Keep provider statement."))
 
     # Union dues
-    union = float(tax_extra.get("gewerkschaft_beitrag") or 0)
+    union = ctx.union_dues
     if union > 0:
         claims.append(_claim(year, "werbungskosten", "Gewerkschaftsbeiträge", "union_dues",
                              "ready", union, None, "definitive",
                              "§9 Abs. 1 Nr. 3d EStG", "Keep union statement."))
 
     # Disability
-    disability = int(tax_extra.get("disability_grade") or 0)
+    disability = ctx.disability_grade
     if disability >= 20:
         g = (disability // 10) * 10
         amount = rules["behindertenpauschbetrag"].get(g, 0)
@@ -134,7 +161,7 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                              "§33b EStG", "Keep disability certificate."))
 
     # Steuerberatungskosten (§ 10 Abs. 1 Nr. 6 EStG)
-    steuerberatung_cost = float(tax_extra.get("steuerberatung_cost") or 0)
+    steuerberatung_cost = float(ctx.extra.get("steuerberatung_cost") or 0)
     steuerberatung_receipts = [r for r in receipts if r.get("category") == "steuerberatung"]
     if steuerberatung_receipts:
         amount = sum(float(r.get("deductible_amount") or r.get("amount", 0)) for r in steuerberatung_receipts)
@@ -152,8 +179,8 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                              "Did you pay a tax adviser or software this year? Add the cost."))
 
     # Handwerkerleistungen (§ 35a Abs. 3 EStG) — tax credit (Steuerermäßigung), not deduction
-    housing_type = housing.get("type", "")
-    handwerker_labour_cost = float(tax_extra.get("handwerker_labour_cost") or 0)
+    housing_type = ctx.extra.get("housing_type", "")
+    handwerker_labour_cost = float(ctx.extra.get("handwerker_labour_cost") or 0)
     if handwerker_labour_cost > 0:
         credit = min(handwerker_labour_cost * 0.20, 1200)
         claims.append(_claim(year, "steuerermaeßigung", "Handwerkerleistungen (Steuerermäßigung)",
@@ -167,7 +194,7 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                              "Did you have craftsmen/tradespeople work at your home? 20% of labour costs up to €1,200 credit."))
 
     # Haushaltsnahe Dienstleistungen (§ 35a Abs. 2 EStG) — tax credit
-    haushaltsnahe_cost = float(tax_extra.get("haushaltsnahe_cost") or 0)
+    haushaltsnahe_cost = float(ctx.extra.get("haushaltsnahe_cost") or 0)
     if haushaltsnahe_cost > 0:
         credit = min(haushaltsnahe_cost * 0.20, 4000)
         claims.append(_claim(year, "steuerermaeßigung", "Haushaltsnahe Dienstleistungen (Steuerermäßigung)",
@@ -181,13 +208,11 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                              "Did you pay for cleaning, gardening, or care services at home? 20% credit up to €4,000."))
 
     # Außergewöhnliche Belastungen — Krankheitskosten (§ 33 EStG)
-    gross = emp.get("annual_gross") or 0.0
+    num_children = len(children)
     medical_receipts = [r for r in receipts if r.get("category") == "medical"]
     if medical_receipts:
         medical_total = sum(float(r.get("deductible_amount") or r.get("amount", 0)) for r in medical_receipts)
         # Simplified zumutbare Belastung: 1-7% of gross depending on income/family
-        num_children = len(fam.get("children", []))
-        married = fam.get("status") in ("married", "civil_partnership")
         if num_children >= 2 or (num_children >= 1 and married):
             zb_pct = 0.01 if gross <= 15_340 else (0.02 if gross <= 51_130 else 0.04)
         elif num_children == 1 or married:
@@ -216,7 +241,7 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                              "Add medical receipts (co-pays, glasses, dental, etc.) to check if threshold is exceeded."))
 
     # Ausbildungskosten / Zweitstudium (§ 10 Abs. 1 Nr. 7 EStG) — max €6,000/year
-    ausbildung_costs = float(tax_extra.get("ausbildung_costs") or 0)
+    ausbildung_costs = float(ctx.extra.get("ausbildung_costs") or 0)
     if ausbildung_costs > 0:
         amount = min(ausbildung_costs, 6_000)
         claims.append(_claim(year, "sonderausgaben",
@@ -226,8 +251,8 @@ def generate_german_claims(profile: dict, year: int = None) -> list[dict]:
                              "Second professional education or studies. Max €6,000/year. Keep tuition and course receipts."))
 
     # Unterhaltsleistungen (§ 33a EStG) — up to Grundfreibetrag
-    unterhalt_paid = float(tax_extra.get("unterhalt_paid") or 0)
-    dependents_outside = fam.get("dependents_outside_household", [])
+    unterhalt_paid = float(ctx.extra.get("unterhalt_paid") or 0)
+    dependents_outside = ctx.extra.get("dependents_outside_household", [])
     if unterhalt_paid > 0:
         unterhalt_max = rules.get("grundfreibetrag", 11_784)
         amount = min(unterhalt_paid, unterhalt_max)
