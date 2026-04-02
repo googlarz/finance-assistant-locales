@@ -1,8 +1,8 @@
 """
 German locale plugin for Finance Assistant.
 
-Bundles tax rules, social contributions, and filing deadlines for 2024-2026.
-Ported directly from TaxDE with all original modules preserved.
+Bundles tax rules, social contributions, filing deadlines, insurance thresholds,
+and deduction discovery for 2024-2026.
 """
 
 from __future__ import annotations

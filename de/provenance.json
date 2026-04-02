@@ -1,0 +1,307 @@
+{
+  "locale": "de",
+  "last_verified": "2025-04-01",
+  "maintainer_notes": "2026 parameters are estimates based on BBG progression. Verify against BMF publication when available.",
+  "rules": {
+    "grundfreibetrag": {
+      "2024": {
+        "value": 11784,
+        "source_url": "https://www.bundesfinanzministerium.de/Content/DE/Standardartikel/Themen/Steuern/Steuerarten/Einkommensteuer/2024-01-01-einkommensteuer-aenderungen-2024.html",
+        "source_label": "BMF Einkommensteuer 2024 — Jahressteuergesetz 2024",
+        "verified_date": "2024-01-01",
+        "confidence": "official"
+      },
+      "2025": {
+        "value": 12096,
+        "source_url": "https://www.bundesfinanzministerium.de/Content/DE/Standardartikel/Themen/Steuern/Steuerarten/Einkommensteuer/2024-10-01-steuerfortentwicklungsgesetz.html",
+        "source_label": "BMF Steuerfortentwicklungsgesetz 2024 (Jahressteuergesetz 2025)",
+        "verified_date": "2024-10-01",
+        "confidence": "official"
+      },
+      "2026": {
+        "value": 12348,
+        "source_url": "https://www.bundesfinanzministerium.de/Content/DE/Standardartikel/Themen/Steuern/Steuerarten/Einkommensteuer/2024-10-01-steuerfortentwicklungsgesetz.html",
+        "source_label": "BMF Steuerfortentwicklungsgesetz 2024 — Progression estimate",
+        "verified_date": "2025-04-01",
+        "confidence": "estimated"
+      }
+    },
+    "soli_freigrenze": {
+      "2024": {
+        "value": 18130,
+        "source_url": "https://www.bundesfinanzministerium.de/Content/DE/Standardartikel/Themen/Steuern/Steuerarten/Solidaritaetszuschlag/solidaritaetszuschlag.html",
+        "source_label": "BMF Solidaritätszuschlag — § 3 SolZG 1995",
+        "verified_date": "2024-01-01",
+        "confidence": "official"
+      },
+      "2025": {
+        "value": 19950,
+        "source_url": "https://www.bundesfinanzministerium.de/Content/DE/Standardartikel/Themen/Steuern/Steuerarten/Solidaritaetszuschlag/solidaritaetszuschlag.html",
+        "source_label": "BMF Solidaritätszuschlag 2025",
+        "verified_date": "2024-10-01",
+        "confidence": "official"
+      },
+      "2026": {
+        "value": 20350,
+        "source_url": "https://www.bundesfinanzministerium.de/Content/DE/Standardartikel/Themen/Steuern/Steuerarten/Solidaritaetszuschlag/solidaritaetszuschlag.html",
+        "source_label": "BMF Solidaritätszuschlag 2026 — estimated from BBG progression",
+        "verified_date": "2025-04-01",
+        "confidence": "estimated"
+      }
+    },
+    "arbeitnehmer_pauschbetrag": {
+      "2024": {
+        "value": 1230,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__9a.html",
+        "source_label": "§ 9a Satz 1 Nr. 1a EStG — Arbeitnehmer-Pauschbetrag",
+        "verified_date": "2023-01-01",
+        "confidence": "stable"
+      },
+      "2025": {
+        "value": 1230,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__9a.html",
+        "source_label": "§ 9a Satz 1 Nr. 1a EStG — unchanged for 2025",
+        "verified_date": "2024-10-01",
+        "confidence": "stable"
+      },
+      "2026": {
+        "value": 1230,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__9a.html",
+        "source_label": "§ 9a Satz 1 Nr. 1a EStG — assumed unchanged for 2026",
+        "verified_date": "2025-04-01",
+        "confidence": "stable"
+      }
+    },
+    "sparer_pauschbetrag": {
+      "2024": {
+        "value_single": 1000,
+        "value_married": 2000,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__20.html",
+        "source_label": "§ 20 Abs. 9 EStG — Sparer-Pauschbetrag (erhöht ab 2023)",
+        "verified_date": "2023-01-01",
+        "confidence": "stable"
+      },
+      "2025": {
+        "value_single": 1000,
+        "value_married": 2000,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__20.html",
+        "source_label": "§ 20 Abs. 9 EStG — unchanged",
+        "verified_date": "2024-10-01",
+        "confidence": "stable"
+      },
+      "2026": {
+        "value_single": 1000,
+        "value_married": 2000,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__20.html",
+        "source_label": "§ 20 Abs. 9 EStG — assumed unchanged for 2026",
+        "verified_date": "2025-04-01",
+        "confidence": "stable"
+      }
+    },
+    "homeoffice_tagespauschale": {
+      "2024": {
+        "value": 6,
+        "max_days": 210,
+        "max_annual": 1260,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__4.html",
+        "source_label": "§ 4 Abs. 5 Nr. 6b EStG — Tagespauschale €6/Tag, max 210 Tage",
+        "verified_date": "2023-01-01",
+        "confidence": "stable"
+      },
+      "2025": {
+        "value": 6,
+        "max_days": 210,
+        "max_annual": 1260,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__4.html",
+        "source_label": "§ 4 Abs. 5 Nr. 6b EStG — unchanged",
+        "verified_date": "2024-10-01",
+        "confidence": "stable"
+      },
+      "2026": {
+        "value": 6,
+        "max_days": 210,
+        "max_annual": 1260,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__4.html",
+        "source_label": "§ 4 Abs. 5 Nr. 6b EStG — assumed unchanged for 2026",
+        "verified_date": "2025-04-01",
+        "confidence": "stable"
+      }
+    },
+    "kindergeld": {
+      "2024": {
+        "value_per_child_monthly": 250,
+        "source_url": "https://www.bundesregierung.de/breg-de/themen/arbeit-und-soziales/kindergeld-1885592",
+        "source_label": "Bundeskindergeldgesetz (BKGG) § 6 — Kindergeld €250/Monat ab 2023",
+        "verified_date": "2023-01-01",
+        "confidence": "official"
+      },
+      "2025": {
+        "value_per_child_monthly": 255,
+        "source_url": "https://www.bundesregierung.de/breg-de/themen/arbeit-und-soziales/kindergeld-1885592",
+        "source_label": "BKGG § 6 — Kindergeld €255/Monat ab Jan 2025",
+        "verified_date": "2024-10-01",
+        "confidence": "official"
+      },
+      "2026": {
+        "value_per_child_monthly": 259,
+        "source_url": "https://www.bundesregierung.de/breg-de/themen/arbeit-und-soziales/kindergeld-1885592",
+        "source_label": "BKGG § 6 — estimated €259/Monat 2026 (pending legislation)",
+        "verified_date": "2025-04-01",
+        "confidence": "estimated"
+      }
+    },
+    "kinderfreibetrag": {
+      "2024": {
+        "child_freibetrag": 3306,
+        "bea_freibetrag": 1464,
+        "total_per_parent": 4770,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__32.html",
+        "source_label": "§ 32 Abs. 6 EStG — Kinderfreibetrag + BEA-Freibetrag 2024",
+        "verified_date": "2024-01-01",
+        "confidence": "official"
+      },
+      "2025": {
+        "child_freibetrag": 3336,
+        "bea_freibetrag": 1464,
+        "total_per_parent": 4800,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__32.html",
+        "source_label": "§ 32 Abs. 6 EStG — Kinderfreibetrag 2025 (Steuerfortentwicklungsgesetz)",
+        "verified_date": "2024-10-01",
+        "confidence": "official"
+      },
+      "2026": {
+        "child_freibetrag": 3414,
+        "bea_freibetrag": 1464,
+        "total_per_parent": 4878,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__32.html",
+        "source_label": "§ 32 Abs. 6 EStG — 2026 estimated from progression",
+        "verified_date": "2025-04-01",
+        "confidence": "estimated"
+      }
+    },
+    "riester_max": {
+      "2024": {
+        "value": 2100,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__10a.html",
+        "source_label": "§ 10a EStG — Riester Sonderausgabenabzug max. €2.100",
+        "verified_date": "2008-01-01",
+        "confidence": "stable"
+      },
+      "2025": {
+        "value": 2100,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__10a.html",
+        "source_label": "§ 10a EStG — unchanged",
+        "verified_date": "2024-10-01",
+        "confidence": "stable"
+      },
+      "2026": {
+        "value": 2100,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__10a.html",
+        "source_label": "§ 10a EStG — assumed unchanged for 2026",
+        "verified_date": "2025-04-01",
+        "confidence": "stable"
+      }
+    },
+    "ruerup_max": {
+      "2024": {
+        "value_single": 27566,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__10.html",
+        "source_label": "§ 10 Abs. 1 Nr. 2b EStG — Rürup/Basisrente max. Abzugsbetrag 2024",
+        "verified_date": "2024-01-01",
+        "confidence": "official"
+      },
+      "2025": {
+        "value_single": 29344,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__10.html",
+        "source_label": "§ 10 Abs. 1 Nr. 2b EStG — Rürup max. 2025 (BBG West €96.600)",
+        "verified_date": "2024-10-01",
+        "confidence": "official"
+      },
+      "2026": {
+        "value_single": 30784,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__10.html",
+        "source_label": "§ 10 Abs. 1 Nr. 2b EStG — estimated from BBG 2026 €101.400",
+        "verified_date": "2025-04-01",
+        "confidence": "estimated"
+      }
+    },
+    "bav_limits": {
+      "2024": {
+        "value_4pct_of_bbg": 3624,
+        "value_extra_flat": 1800,
+        "bbg_rv_west": 90600,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__3.html",
+        "source_label": "§ 3 Nr. 63 EStG — bAV steuerfreier Arbeitgeberbeitrag 4% BBG RV West + €1.800",
+        "verified_date": "2024-01-01",
+        "confidence": "official"
+      },
+      "2025": {
+        "value_4pct_of_bbg": 3864,
+        "value_extra_flat": 1800,
+        "bbg_rv_west": 96600,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__3.html",
+        "source_label": "§ 3 Nr. 63 EStG — bAV 2025 (BBG West €96.600)",
+        "verified_date": "2024-10-01",
+        "confidence": "official"
+      },
+      "2026": {
+        "value_4pct_of_bbg": 4056,
+        "value_extra_flat": 1800,
+        "bbg_rv_west": 101400,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__3.html",
+        "source_label": "§ 3 Nr. 63 EStG — bAV 2026 estimated (BBG West est. €101.400)",
+        "verified_date": "2025-04-01",
+        "confidence": "estimated"
+      }
+    },
+    "social_contribution_caps": {
+      "2024": {
+        "rv_alv_bbg": 90600,
+        "gkv_pv_bbg": 62100,
+        "source_url": "https://www.bundesgesundheitsministerium.de/themen/krankenversicherung/online-ratgeber-krankenversicherung/beitraege.html",
+        "source_label": "BMG / GKV-Spitzenverband — Beitragsbemessungsgrenze 2024",
+        "verified_date": "2024-01-01",
+        "confidence": "official"
+      },
+      "2025": {
+        "rv_alv_bbg": 96600,
+        "gkv_pv_bbg": 66150,
+        "source_url": "https://www.bundesgesundheitsministerium.de/themen/krankenversicherung/online-ratgeber-krankenversicherung/beitraege.html",
+        "source_label": "BMG / GKV-Spitzenverband — Beitragsbemessungsgrenze 2025",
+        "verified_date": "2024-10-01",
+        "confidence": "official"
+      },
+      "2026": {
+        "rv_alv_bbg": 101400,
+        "gkv_pv_bbg": 69750,
+        "source_url": "https://www.bundesgesundheitsministerium.de/themen/krankenversicherung/online-ratgeber-krankenversicherung/beitraege.html",
+        "source_label": "BMG / GKV-Spitzenverband — Beitragsbemessungsgrenze 2026 (estimated)",
+        "verified_date": "2025-04-01",
+        "confidence": "estimated"
+      }
+    },
+    "kirchensteuer_rates": {
+      "general": {
+        "value_most_states": 0.09,
+        "value_bw_bavaria": 0.08,
+        "source_url": "https://www.bundesfinanzministerium.de/Content/DE/Standardartikel/Themen/Steuern/Steuerarten/Kirchensteuer/kirchensteuer.html",
+        "source_label": "BMF Kirchensteuer — 9% (8% in Baden-Württemberg und Bayern)",
+        "verified_date": "2024-01-01",
+        "confidence": "stable"
+      }
+    },
+    "behindertenpauschbetrag": {
+      "2024": {
+        "values": {
+          "20": 384, "30": 620, "40": 860, "50": 1140, "60": 1440,
+          "70": 1780, "80": 2120, "90": 2460, "100": 2840,
+          "blind_helpless": 7400
+        },
+        "source_url": "https://www.gesetze-im-internet.de/estg/__33b.html",
+        "source_label": "§ 33b EStG — Behinderten-Pauschbetrag (neu ab 2021)",
+        "verified_date": "2021-01-01",
+        "confidence": "stable"
+      }
+    }
+  }
+}

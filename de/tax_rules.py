@@ -1,5 +1,5 @@
 """
-German tax rules and helpers — ported from TaxDE with 2026 None values fixed.
+German tax rules and helpers.
 
 The Rürup maximum for 2026 was previously None (not yet published when TaxDE
 was last updated). Based on the 2026 Beitragsbemessungsgrenze (BBG) for the
@@ -15,46 +15,46 @@ from typing import Optional
 
 TAX_YEAR_RULES = {
     2024: {
-        "grundfreibetrag": 11_784,
-        "zone1_upper": 17_005,
-        "zone1_coeff": 954.80,
-        "zone2_upper": 66_760,
-        "zone2_coeff": 181.19,
-        "zone2_base": 991.21,
-        "spitzensteuersatz_threshold": 66_761,
-        "spitzensteuersatz_offset": 10_636.31,
-        "reichensteuersatz_threshold": 277_826,
-        "reichensteuersatz_offset": 18_971.06,
-        "soli_freigrenze_single": 18_130,
-        "arbeitnehmer_pauschbetrag": 1_230,
-        "sonderausgaben_pauschbetrag": 36,
-        "homeoffice_tagespauschale": 6,
-        "homeoffice_max_days": 210,
-        "homeoffice_max_annual": 1_260,
-        "pendlerpauschale_short": 0.30,
-        "pendlerpauschale_long": 0.38,
-        "sparer_pauschbetrag_single": 1_000,
-        "sparer_pauschbetrag_married": 2_000,
-        "riester_max": 2_100,
-        "ruerup_max_single": 27_566,
-        "bav_4pct_bbg": 3_624,
-        "bav_4pct_extra": 1_800,
-        "kindergeld_per_child": 250,
-        "kinderfreibetrag_child": 3_306,
-        "kinderfreibetrag_bea": 1_464,
-        "kinderbetreuung_pct": 2 / 3,
-        "kinderbetreuung_max": 4_000,
-        "ausbildungsfreibetrag": 1_200,
-        "entlastungsbetrag_alleinerziehende": 4_260,
-        "pflegepauschbetrag_pf1": 600,
-        "pflegepauschbetrag_pf2": 1_100,
-        "pflegepauschbetrag_pf3": 1_800,
-        "gwg_threshold_net": 800,
-        "gwg_threshold_gross": 952,
-        "behindertenpauschbetrag": {
+        "grundfreibetrag": 11_784,                   # Tax-free allowance (§ 32a EStG)
+        "zone1_upper": 17_005,                       # Upper bound of progression zone 1 (§ 32a Abs. 1 Nr. 2 EStG)
+        "zone1_coeff": 954.80,                       # Coefficient for zone 1 formula
+        "zone2_upper": 66_760,                       # Upper bound of progression zone 2 (§ 32a Abs. 1 Nr. 3 EStG)
+        "zone2_coeff": 181.19,                       # Coefficient for zone 2 formula
+        "zone2_base": 991.21,                        # Base tax at start of zone 2
+        "spitzensteuersatz_threshold": 66_761,       # Income where 42% top rate begins (§ 32a Abs. 1 Nr. 4 EStG)
+        "spitzensteuersatz_offset": 10_636.31,       # Offset for 42% rate calculation
+        "reichensteuersatz_threshold": 277_826,      # Income where 45% rate begins (§ 32a Abs. 1 Nr. 5 EStG)
+        "reichensteuersatz_offset": 18_971.06,       # Offset for 45% rate calculation
+        "soli_freigrenze_single": 18_130,            # Soli exemption threshold for singles (§ 3 SolZG 1995)
+        "arbeitnehmer_pauschbetrag": 1_230,          # Employee flat deduction (§ 9a Satz 1 Nr. 1a EStG)
+        "sonderausgaben_pauschbetrag": 36,           # Flat Sonderausgaben deduction (§ 10c EStG)
+        "homeoffice_tagespauschale": 6,              # €/day home office flat rate (§ 4 Abs. 5 Nr. 6b EStG)
+        "homeoffice_max_days": 210,                  # Maximum qualifying home office days per year
+        "homeoffice_max_annual": 1_260,              # Annual cap: 210 days × €6 (§ 4 Abs. 5 Nr. 6b EStG)
+        "pendlerpauschale_short": 0.30,              # €/km commute allowance for first 20 km (§ 9 Abs. 1 Nr. 4 EStG)
+        "pendlerpauschale_long": 0.38,               # €/km commute allowance beyond 20 km (§ 9 Abs. 1 Nr. 4 EStG)
+        "sparer_pauschbetrag_single": 1_000,         # Savings allowance for singles (§ 20 Abs. 9 EStG)
+        "sparer_pauschbetrag_married": 2_000,        # Savings allowance for married couples (§ 20 Abs. 9 EStG)
+        "riester_max": 2_100,                        # Max Riester Sonderausgaben deduction (§ 10a EStG)
+        "ruerup_max_single": 27_566,                 # Max Rürup/Basisrente deduction for singles (§ 10 Abs. 1 Nr. 2b EStG)
+        "bav_4pct_bbg": 3_624,                       # bAV tax-free limit: 4% of RV-BBG West (§ 3 Nr. 63 EStG)
+        "bav_4pct_extra": 1_800,                     # Additional bAV flat allowance (§ 3 Nr. 63 EStG)
+        "kindergeld_per_child": 250,                 # Monthly Kindergeld per child (§ 6 BKGG)
+        "kinderfreibetrag_child": 3_306,             # Child tax allowance per parent (§ 32 Abs. 6 EStG)
+        "kinderfreibetrag_bea": 1_464,               # BEA (Betreuungs-/Erziehungs-/Ausbildungsbedarf) per parent (§ 32 Abs. 6 EStG)
+        "kinderbetreuung_pct": 2 / 3,               # Deductible fraction of childcare costs (§ 10 Abs. 1 Nr. 5 EStG)
+        "kinderbetreuung_max": 4_000,                # Annual cap on deductible childcare costs (§ 10 Abs. 1 Nr. 5 EStG)
+        "ausbildungsfreibetrag": 1_200,              # Away-from-home training allowance (§ 33a Abs. 2 EStG)
+        "entlastungsbetrag_alleinerziehende": 4_260, # Single-parent relief amount (§ 24b EStG)
+        "pflegepauschbetrag_pf1": 600,               # Carer's flat allowance — Pflegegrad 2 (§ 33b Abs. 6 EStG)
+        "pflegepauschbetrag_pf2": 1_100,             # Carer's flat allowance — Pflegegrad 3 (§ 33b Abs. 6 EStG)
+        "pflegepauschbetrag_pf3": 1_800,             # Carer's flat allowance — Pflegegrad 4/5 (§ 33b Abs. 6 EStG)
+        "gwg_threshold_net": 800,                    # GWG net price limit for immediate write-off (§ 6 Abs. 2 EStG)
+        "gwg_threshold_gross": 952,                  # GWG gross price limit (net €800 + 19% VAT)
+        "behindertenpauschbetrag": {                 # Disability lump-sum by grade % (§ 33b EStG)
             20: 384, 30: 620, 40: 860, 50: 1_140, 60: 1_440,
             70: 1_780, 80: 2_120, 90: 2_460, 100: 2_840,
-            "blind_helpless": 7_400,
+            "blind_helpless": 7_400,                 # Blind / hilflos (§ 33b Abs. 3 EStG)
         },
     },
     2025: {
