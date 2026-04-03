@@ -1,0 +1,36 @@
+{
+  "locale": "uk",
+  "last_reviewed": "2026-04-03",
+  "rules": {
+    "personal_allowance_2024_2026": {
+      "source_url": "https://www.gov.uk/income-tax-rates",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Frozen at £12,570 until April 2028 per Autumn Budget 2022"
+    },
+    "basic_rate_limit_2024_2026": {
+      "source_url": "https://www.gov.uk/income-tax-rates",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Frozen at £50,270 until April 2028"
+    },
+    "ni_employee_rate_2024": {
+      "source_url": "https://www.gov.uk/national-insurance-rates-letters",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Reduced from 12% to 8% on 6 Jan 2024 (Spring Budget)"
+    },
+    "isa_allowance_2024_2026": {
+      "source_url": "https://www.gov.uk/individual-savings-accounts",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "£20,000 annual ISA allowance, unchanged"
+    },
+    "pension_annual_allowance_2024_2026": {
+      "source_url": "https://www.gov.uk/tax-on-your-private-pension/annual-allowance",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Raised to £60,000 from April 2023, unchanged since"
+    }
+  }
+}

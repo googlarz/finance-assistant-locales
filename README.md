@@ -11,6 +11,7 @@ Part of [Finance Assistant](https://github.com/googlarz/finance-assistant-skill)
 ```
 locales/
 ├── de/     # Germany — bundled, full 2024-2026 support
+├── uk/     # United Kingdom — bundled, full 2024-2026 support
 ├── at/     # Austria — not yet implemented
 ├── ch/     # Switzerland — not yet implemented
 ├── fr/     # France — not yet implemented
@@ -206,6 +207,35 @@ Key German-specific areas covered:
 - **Vorabpauschale awareness** — ETF prepayment tax flag in investment tax context
 
 Sources and verification dates for all 2026 parameters are tracked in `provenance.json`.
+
+---
+
+### United Kingdom (`uk`)
+
+Full support for tax years 2024, 2025, and 2026. All parameters are filled — no `None` values for any supported year. All income tax thresholds are frozen at 2024/25 levels until April 2028 (Autumn Budget 2022). NI rates reflect the Spring Budget 2024 reductions effective 6 January 2024.
+
+Tax year convention: `year=2024` → 2024/25 tax year (6 April 2024 – 5 April 2025).
+
+| Module | Content |
+|--------|---------|
+| `tax_rules.py` | `TAX_YEAR_RULES` for 2024, 2025, 2026 — personal allowance, rate bands, NI thresholds, ISA/pension allowances |
+| `tax_calculator.py` | Income tax with personal allowance taper, NI (Class 1/Class 4), net pay, effective and marginal rates |
+| `tax_dates.py` | Self Assessment filing deadlines (paper, online, payment on account), PAYE coding review |
+| `social_contributions.py` | Class 1 NI employee (8%/2%) and employer (13.8%); Class 4 NI self-employed (6%/2%) |
+| `claim_rules.py` | Deduction discovery: personal allowance, marriage allowance, pension relief, Gift Aid, ISA, WFH flat rate, professional subscriptions, mileage allowance, CGT exemption |
+
+Key UK-specific areas covered:
+
+- **Personal allowance taper** — £1 lost per £2 of income over £100,000; effective 60% marginal rate in the £100k–£125,140 band
+- **Marriage allowance** — up to £1,260 transferable between spouses where lower earner is below basic rate threshold
+- **NI (Class 1 employee)** — 8% on £12,570–£50,270, 2% above (reduced from 12% effective Jan 2024)
+- **NI (Class 4 self-employed)** — 6% on £12,570–£50,270, 2% above (Class 2 abolished April 2024)
+- **ISA allowance** — £20,000 annual, flagged if under-utilised
+- **Pension annual allowance** — £60,000 (raised from £40,000 in April 2023)
+- **Working from home** — HMRC flat rate £6/week (£312/year) for employees required to work from home
+- **Gift Aid** — 25% uplift flagged; higher-rate reclaim via Self Assessment noted
+
+Sources and verification dates for all parameters are tracked in `provenance.json`.
 
 ---
 
