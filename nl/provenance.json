@@ -1,0 +1,72 @@
+{
+  "locale": "nl",
+  "last_reviewed": "2026-04-03",
+  "rules": {
+    "box1_rates_2024": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingen_op_uw_inkomen_uit_werk_en_woning/belastingtarieven_box_1/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Box 1: 36.97% up to €75,518; 49.50% above. Rate includes AOW (17.90%), ANW (0.10%), WLZ (9.65%)."
+    },
+    "box1_rates_2025": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingen_op_uw_inkomen_uit_werk_en_woning/belastingtarieven_box_1/",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Box 1: first bracket reduced to 35.82% up to €76,817 per Belastingplan 2025. Social premiums unchanged."
+    },
+    "box1_rates_2026": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingen_op_uw_inkomen_uit_werk_en_woning/belastingtarieven_box_1/",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Estimated based on 2025 trend (+1.8% threshold). First bracket rate assumed 35.82% pending Belastingplan 2026."
+    },
+    "heffingskorting_2024": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_1_2_en_3/heffingskortingen/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Algemene heffingskorting 2024: €3,362 base; phases out at 6.315% above €24,814."
+    },
+    "heffingskorting_2025": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_1_2_en_3/heffingskortingen/",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Heffingskorting 2025: €3,068. Published in Belastingplan 2025."
+    },
+    "arbeidskorting_2024": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_1_2_en_3/heffingskortingen/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Arbeidskorting 2024: max €5,532; phases out above €39,957 at 6.51%."
+    },
+    "box2_rates_2024": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/vermogen_en_aanmerkelijk_belang/aanmerkelijk_belang/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Box 2: 24.5% on first €67,000 of ab-inkomen; 33% above. Two-rate structure introduced 2024."
+    },
+    "box3_deemed_returns_2024": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/vermogen_en_aanmerkelijk_belang/vermogen/",
+      "verified_date": "2026-04-03",
+      "confidence": "Debatable",
+      "notes": "Box 3 deemed returns 2024 (provisional): savings 1.44%, other investments 6.04%, debts -2.46%. Rate 36%. System under legal challenge (HR 24-12-2021, Kerstarrest). May change."
+    },
+    "box3_exemption_2024": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/vermogen_en_aanmerkelijk_belang/vermogen/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Heffingvrij vermogen 2024: €57,000 per person (€114,000 for partners)."
+    },
+    "zvw_2024": {
+      "source_url": "https://www.rijksoverheid.nl/onderwerpen/zorgverzekering/inkomensafhankelijke-bijdrage-zvw",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "ZVW inkomensafhankelijke bijdrage 2024: 5.32% employer-paid on max income €71,628 (max €3,802)."
+    },
+    "dertig_procent_regeling": {
+      "source_url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/zakelijk/internationaal/werken_in_het_buitenland/buitenlandse_werknemers_naar_nederland/30_procentsregeling/",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "30%-regeling allows up to 30% of salary paid tax-free as ET cost reimbursement. Duration: 5 years from arrival. Salary threshold and conditions apply."
+    }
+  }
+}

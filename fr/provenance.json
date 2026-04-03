@@ -1,0 +1,84 @@
+{
+  "locale": "fr",
+  "last_reviewed": "2026-04-03",
+  "rules": {
+    "brackets_2024": {
+      "source_url": "https://www.impots.gouv.fr/particulier/le-bareme-de-limpot",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Published by DGFiP. Five-bracket IR schedule for revenu net imposable 2024."
+    },
+    "brackets_2025": {
+      "source_url": "https://www.impots.gouv.fr/particulier/le-bareme-de-limpot",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Indexed +1.8% on 2024 values per PLF 2025 revalorisation announcement."
+    },
+    "brackets_2026": {
+      "source_url": "https://www.impots.gouv.fr/particulier/le-bareme-de-limpot",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Estimated +1.5% indexation on 2025 values. Subject to PLF 2026 confirmation."
+    },
+    "abattement_forfaitaire_2024": {
+      "source_url": "https://www.impots.gouv.fr/particulier/les-frais-reels",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "10% abattement on salaires, capped at €4,321, floored at €495 (§ 83 CGI, art. 5 LFR 2023)."
+    },
+    "quotient_familial_2024": {
+      "source_url": "https://www.impots.gouv.fr/particulier/le-quotient-familial",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Plafonnement du quotient familial: benefit capped at €1,759 per half-part beyond 1 for 2024."
+    },
+    "quotient_familial_2025": {
+      "source_url": "https://www.impots.gouv.fr/particulier/le-quotient-familial",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Plafond estimated at €1,791 (+1.8%) for 2025. To be confirmed by PLF 2025 decree."
+    },
+    "decote_2024": {
+      "source_url": "https://www.impots.gouv.fr/particulier/la-decote",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Décote for singles: ceiling €1,929; for couples: €3,191. Factor 0.4525. Art. 197 CGI."
+    },
+    "pass_2024": {
+      "source_url": "https://www.urssaf.fr/accueil/outils-et-services/fiches-pratiques/plafond-securite-sociale.html",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "PASS 2024 = €46,368 (arrêté du 19 décembre 2023)."
+    },
+    "pass_2025": {
+      "source_url": "https://www.urssaf.fr/accueil/outils-et-services/fiches-pratiques/plafond-securite-sociale.html",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "PASS 2025 estimated €47,100. Confirm from URSSAF official decree."
+    },
+    "csg_crds_rates": {
+      "source_url": "https://www.service-public.fr/particuliers/vosdroits/F2971",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "CSG 9.2% (déductible 6.8% + non-déductible 2.4%) + CRDS 0.5%. Loi de financement de la sécurité sociale."
+    },
+    "agirc_arrco_rates_2024": {
+      "source_url": "https://www.agirc-arrco.fr/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Tranche 1: employee 3.15%, employer 4.72%. Tranche 2: employee 8.64%, employer 12.95%."
+    },
+    "micro_bic_bnc_abattements": {
+      "source_url": "https://www.impots.gouv.fr/professionnel/le-regime-de-la-micro-entreprise",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Micro-BIC (commerce) 50%, Micro-BNC (services) 34%. Art. 50-0 and 102 ter CGI."
+    },
+    "per_deductibility": {
+      "source_url": "https://www.impots.gouv.fr/particulier/questions/comment-fonctionne-le-plan-depargne-retraite-per",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "PER versements volontaires deductible up to 10% of prior year net professional income, capped at 8× PASS. Art. 163 quatervicies CGI."
+    }
+  }
+}

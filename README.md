@@ -12,10 +12,10 @@ Part of [Finance Assistant](https://github.com/googlarz/finance-assistant-skill)
 locales/
 ├── de/     # Germany — bundled, full 2024-2026 support
 ├── uk/     # United Kingdom — bundled, full 2024-2026 support
+├── fr/     # France — bundled, full 2024-2026 support
+├── nl/     # Netherlands — bundled, full 2024-2026 support
 ├── at/     # Austria — not yet implemented
-├── ch/     # Switzerland — not yet implemented
-├── fr/     # France — not yet implemented
-└── nl/     # Netherlands — not yet implemented
+└── ch/     # Switzerland — not yet implemented
 ```
 
 Each locale lives in its own subdirectory named by ISO 3166-1 alpha-2 country code.
@@ -234,6 +234,59 @@ Key UK-specific areas covered:
 - **Pension annual allowance** — £60,000 (raised from £40,000 in April 2023)
 - **Working from home** — HMRC flat rate £6/week (£312/year) for employees required to work from home
 - **Gift Aid** — 25% uplift flagged; higher-rate reclaim via Self Assessment noted
+
+Sources and verification dates for all parameters are tracked in `provenance.json`.
+
+---
+
+### France (`fr`)
+
+Full support for tax years 2024, 2025, and 2026. All parameters are filled — no `None` values for any supported year. Tax year = calendar year. 2025 and 2026 parameters are estimated by indexation and marked `"Likely"`.
+
+| Module | Content |
+|--------|---------|
+| `tax_rules.py` | `TAX_YEAR_RULES` for 2024, 2025, 2026 — IR brackets, abattement forfaitaire, quotient familial parts and plafonnement, décote thresholds, CSG/CRDS rates, PASS |
+| `tax_calculator.py` | IR (progressive brackets with quotient familial), abattement 10%, décote, prélèvements sociaux (CSG + CRDS = 9.7%), confidence |
+| `tax_dates.py` | Online declaration openings, Zone 1/2/3 online deadlines, paper deadline, solde payment deadline, prélèvement à la source note |
+| `social_contributions.py` | Assurance maladie, CNAV retraite de base, AGIRC-ARRCO retraite complémentaire (tranche 1 & 2), chômage, CSG, CRDS — employee and employer shares |
+| `claim_rules.py` | Abattement forfaitaire 10%, frais réels, pension alimentaire, dons aux associations (66%/75%), emploi à domicile (50% credit), PER déductibility, micro-entrepreneur abattement and CA threshold alert, quotient familial note |
+
+Key French-specific areas covered:
+
+- **Quotient familial** — 1 part per adult, 0.5 per child for first two, 1 per child from third onwards; benefit capped at plafond du quotient familial per half-part
+- **Abattement forfaitaire 10%** — automatic for salaried workers; can be replaced by frais réels if higher
+- **Décote** — low-income tax reduction applied when IR falls below the ceiling (single ~€1,929; couple ~€3,191)
+- **Prélèvement à la source** — monthly withholding throughout the year; spring declaration adjusts final balance
+- **Micro-entrepreneur** — micro-BIC (50%) and micro-BNC (34%) abattements; CA threshold alerts
+- **PER (Plan d'Épargne Retraite)** — contributions deductible up to 10% of income, capped at 8× PASS
+
+Sources and verification dates for all parameters are tracked in `provenance.json`.
+
+---
+
+### Netherlands (`nl`)
+
+Full support for tax years 2024, 2025, and 2026. All parameters are filled — no `None` values for any supported year. Tax year = calendar year. 2025 rates reflect the Belastingplan 2025 reduction of the first Box 1 bracket to 35.82%. 2026 parameters are estimated and marked `"Likely"`.
+
+**Important:** Box 3 (savings and investments) is under ongoing legal challenge following the Kerstarrest (HR 24-12-2021). Box 3 results are returned with `"Debatable"` confidence when significant assets are present.
+
+| Module | Content |
+|--------|---------|
+| `tax_rules.py` | `TAX_YEAR_RULES` for 2024, 2025, 2026 — Box 1 rates and threshold, heffingskorting, arbeidskorting, Box 2 rates, Box 3 deemed returns and exemption, ZVW |
+| `tax_calculator.py` | Box 1 tax with heffingskorting + arbeidskorting; Box 2 (DGA/BV) if flagged; Box 3 deemed-return tax; confidence scoring |
+| `tax_dates.py` | Aangifte deadline (1 May), extension option (1 Sept), M-form deadline, voorlopige aanslag, Box 3 peildatum (1 Jan), payment deadline |
+| `social_contributions.py` | Volksverzekeringen (AOW, ANW, WLZ) split out from Box 1 rate; ZVW employer contribution; WW and WAO/WIA employer premiums; embedded-in-Box-1 note |
+| `claim_rules.py` | Heffingskorting, arbeidskorting, hypotheekrenteaftrek, alimentatie, zorgkosten, giftenaftrek, lijfrentepremies, Box 3 vrijstelling alert, 30%-regeling (expat ruling) |
+
+Key Dutch-specific areas covered:
+
+- **Three-box system** — Box 1 (work/home), Box 2 (substantial shareholding ≥5%), Box 3 (savings/investments)
+- **Heffingskorting** — general tax credit; phases out above the taper threshold
+- **Arbeidskorting** — employment credit; phases in then phases out; higher-income earners receive less
+- **Volksverzekeringen embedded** — AOW (17.90%), ANW (0.10%), WLZ (9.65%) are included in the Box 1 first-bracket rate; not double-counted
+- **Box 3 deemed return** — fixed rates on savings (1.44%) and other investments (6.04%); rate 36%; exemption €57,000 per person; marked `"Debatable"` due to Kerstarrest
+- **Box 2** — DGA/BV owner substantial-shareholding income taxed at 24.5%/33%
+- **30%-regeling** — expat ruling detected from profile; up to 30% of salary paid tax-free as ET cost reimbursement
 
 Sources and verification dates for all parameters are tracked in `provenance.json`.
 
