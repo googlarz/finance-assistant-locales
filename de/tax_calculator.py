@@ -167,12 +167,6 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
     donations = sum(r.get("amount", 0) for r in receipts if r.get("category") == "donation")
     sonderausgaben += donations
 
-    kirchensteuer_paid = 0.0
-    if g["kirchensteuer"] and gross > 0:
-        kt_rate = 0.08 if g["bundesland"] in ("Baden-Württemberg", "Bayern") else 0.09
-        kirchensteuer_paid = gross * 0.22 * kt_rate
-        sonderausgaben += kirchensteuer_paid
-
     # ── Außergewöhnliche Belastungen ─────────────────────────────────────
     agb = 0.0
     disability_grade = g["disability_grade"]
@@ -195,6 +189,15 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
     zve = max(0, total_income - total_werbungskosten - sonderausgaben - agb - bav_deductible)
     tax = calculate_income_tax(zve / 2, year) * 2 if married else calculate_income_tax(zve, year)
 
+    # ── Kirchensteuer (based on actual income tax, not gross) ────────────
+    if g["kirchensteuer"] and tax > 0:
+        kt_rate = 0.08 if g["bundesland"] in ("Baden-Württemberg", "Bayern") else 0.09
+        kirchensteuer_actual = round(tax * kt_rate, 2)
+        # Add back to sonderausgaben and recompute ZVE and tax
+        sonderausgaben += kirchensteuer_actual
+        zve = max(0, total_income - total_werbungskosten - sonderausgaben - agb - bav_deductible)
+        tax = calculate_income_tax(zve / 2, year) * 2 if married else calculate_income_tax(zve, year)
+
     if children:
         zve_kfb = max(0, zve - kinderfreibetrag_total)
         tax_kfb = calculate_income_tax(zve_kfb / 2, year) * 2 if married else calculate_income_tax(zve_kfb, year)
@@ -216,13 +219,13 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
     confidence = max(0, min(100, confidence))
 
     if confidence >= 85:
-        label = "Very High"
+        label = "Definitive"
     elif confidence >= 70:
-        label = "High"
+        label = "Likely"
     elif confidence >= 50:
-        label = "Medium"
+        label = "Debatable"
     else:
-        label = "Low"
+        label = "Low Confidence"
 
     return {
         "estimated_refund": round(estimated_refund, 2),
