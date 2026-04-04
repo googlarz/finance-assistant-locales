@@ -14,6 +14,7 @@ locales/
 ├── uk/     # United Kingdom — bundled, full 2024-2026 support
 ├── fr/     # France — bundled, full 2024-2026 support
 ├── nl/     # Netherlands — bundled, full 2024-2026 support
+├── pl/     # Poland — bundled, full 2024-2026 support
 ├── at/     # Austria — not yet implemented
 └── ch/     # Switzerland — not yet implemented
 ```
@@ -287,6 +288,34 @@ Key Dutch-specific areas covered:
 - **Box 3 deemed return** — fixed rates on savings (1.44%) and other investments (6.04%); rate 36%; exemption €57,000 per person; marked `"Debatable"` due to Kerstarrest
 - **Box 2** — DGA/BV owner substantial-shareholding income taxed at 24.5%/33%
 - **30%-regeling** — expat ruling detected from profile; up to 30% of salary paid tax-free as ET cost reimbursement
+
+Sources and verification dates for all parameters are tracked in `provenance.json`.
+
+---
+
+### Poland (`pl`)
+
+Full support for tax years 2024, 2025, and 2026. All parameters are filled — no `None` values for any supported year. Tax year = calendar year. The **Polski Ład** reform (effective 1 January 2022) introduced the current 12%/32% bracket structure, a 30,000 PLN tax-free amount, and removed the health insurance deductibility from PIT. 2025 parameters (IKZE limit) are estimated by indexation and marked `"Likely"`. 2026 parameters are projected and calculations are marked `"Debatable"`.
+
+| Module | Content |
+|--------|---------|
+| `tax_rules.py` | `TAX_YEAR_RULES` for 2024, 2025, 2026 — PIT brackets, tax-free amount (kwota wolna), work cost deductions, IKZE/ulga limits, ZUS rates, ZUS annual cap |
+| `tax_calculator.py` | Polish PIT (skala podatkowa), ZUS employee contributions, health insurance (składka zdrowotna), ulga dla młodych exemption, joint-filing estimate, net pay |
+| `tax_dates.py` | Twój e-PIT availability (Feb 15), PIT-37/36 deadline (Apr 30), PIT-11 / PIT-8C issuance dates, quarterly self-employed advance payment deadlines |
+| `social_contributions.py` | Employee ZUS (emerytalne 9.76% + rentowe 1.5% + chorobowe 2.45% = 13.71%), employer ZUS (~20.48%), składka zdrowotna 9% (not deductible), ZUS annual cap |
+| `claim_rules.py` | Deduction discovery: koszty uzyskania przychodu, ulga dla młodych, ulga na dzieci, IKZE, ulga internetowa, darowizny, ulga rehabilitacyjna, ulga na powrót, wspólne rozliczenie z małżonkiem |
+
+Key Polish-specific areas covered:
+
+- **12%/32% PIT brackets (Polski Ład)** — 30,000 PLN tax-free amount applied as a 3,600 PLN flat tax reduction; 32% rate on income above 120,000 PLN
+- **Składka zdrowotna** — 9% health insurance on (gross − ZUS) is **not deductible** from PIT since Polski Ład 2022; calculator separates this clearly
+- **Ulga dla młodych** — full PIT exemption for employees under 26 earning up to 85,528 PLN/year; applies automatically via Twój e-PIT
+- **Twój e-PIT auto-acceptance** — pre-filled return available from February 15; auto-accepted on April 30 if not modified or rejected
+- **IKZE deduction** — annual pension contributions deductible up to 9,388 PLN (2024); indexed each year (1.2× average salary)
+- **Ulga na dzieci** — 1,112.04 PLN (child 1–2), 2,000.04 PLN (child 3), 2,700 PLN (child 4+); refundable if tax insufficient
+- **Wspólne rozliczenie** — joint filing with spouse halves combined income; `calculate_tax` returns estimated saving when `spouse_gross` is provided
+- **Self-employed flag** — działalność gospodarcza can choose skala podatkowa, 19% podatek liniowy, or ryczałt; calculator uses skala podatkowa and returns `"Likely"` confidence when `employment_type=self_employed`
+- **ZUS annual cap** — pension and disability contributions capped at 30× average monthly salary (~234,720 PLN for 2024)
 
 Sources and verification dates for all parameters are tracked in `provenance.json`.
 

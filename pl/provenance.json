@@ -1,0 +1,114 @@
+{
+  "locale": "pl",
+  "last_reviewed": "2026-04-03",
+  "rules": {
+    "pit_brackets_2024": {
+      "source_url": "https://www.podatki.gov.pl/pit/twoj-e-pit/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "12%/32% brackets with 30,000 PLN tax-free amount — Polski Ład since 2022. Bracket threshold 120,000 PLN. Tax reduction 3,600 PLN (= 30,000 × 12%)."
+    },
+    "pit_brackets_2025": {
+      "source_url": "https://www.podatki.gov.pl/pit/twoj-e-pit/",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Same bracket structure as 2024. No legislation announced changing the 12%/32% rates or 120,000 PLN threshold for 2025."
+    },
+    "pit_brackets_2026": {
+      "source_url": "https://www.podatki.gov.pl/pit/twoj-e-pit/",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Projected same structure as 2024–2025. 2026 PIT law not yet published. Mark Debatable in tax_calculator confidence."
+    },
+    "zus_rates_2024": {
+      "source_url": "https://www.zus.pl/pracujacy/skladki-na-ubezpieczenia-spoleczne",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Employee: emerytalne 9.76% + rentowe 1.5% + chorobowe 2.45% = 13.71% total. Employer: emerytalne 9.76% + rentowe 6.5% + wypadkowe ~1.67% + Fundusz Pracy 2.45% + FGŚP 0.1% ≈ 20.48%."
+    },
+    "zus_cap_2024": {
+      "source_url": "https://www.zus.pl/baza-wiedzy/skladki-wskazniki-odsetki/skladki/wysokosc-skladek-na-ubezpieczenia-spoleczne",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Annual ZUS cap (roczna podstawa wymiaru składek) for pension and disability = 30× average monthly salary. 2024 cap: ~234,720 PLN."
+    },
+    "health_insurance_2024": {
+      "source_url": "https://www.zus.pl/pracujacy/skladki-na-ubezpieczenia-spoleczne",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Składka zdrowotna: 9% of (gross − employee ZUS). NOT deductible from PIT since Polski Ład effective 1 January 2022. Before 2022: 7.75% was deductible, 1.25% was not."
+    },
+    "ulga_dla_mlodych": {
+      "source_url": "https://www.podatki.gov.pl/pit/ulgi-odliczenia-i-zwolnienia/ulga-dla-mlodych/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "PIT exemption for employees under 26 years old with income up to 85,528 PLN per year. Applies to employment contracts (umowa o pracę) and specified civil-law contracts."
+    },
+    "ulga_na_dzieci": {
+      "source_url": "https://www.podatki.gov.pl/pit/ulgi-odliczenia-i-zwolnienia/ulga-na-dzieci/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "1,112.04 PLN per child (1st and 2nd), 2,000.04 PLN (3rd child), 2,700.00 PLN (4th and subsequent). Refundable if tax is insufficient. Unchanged since 2013."
+    },
+    "ikze_limit_2024": {
+      "source_url": "https://www.knf.gov.pl/dla_konsumenta/IKE_i_IKZE",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "IKZE deduction cap indexed annually to 1.2× average monthly salary. 9,388 PLN for 2024. 2025 estimate ~9,700 PLN, 2026 estimate ~10,080 PLN — based on published salary growth trends."
+    },
+    "ikze_limit_2025": {
+      "source_url": "https://www.knf.gov.pl/dla_konsumenta/IKE_i_IKZE",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Estimated 9,700 PLN for 2025 based on 1.2× projected average monthly salary. Confirm when KNF publishes the official limit."
+    },
+    "ikze_limit_2026": {
+      "source_url": "https://www.knf.gov.pl/dla_konsumenta/IKE_i_IKZE",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Estimated 10,080 PLN for 2026 based on continued indexation. Confirm when KNF publishes the official limit."
+    },
+    "koszty_uzyskania_przychodu": {
+      "source_url": "https://www.podatki.gov.pl/pit/ulgi-odliczenia-i-zwolnienia/koszty-uzyskania-przychodow/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Standard (podstawowe): 3,000 PLN/year for one employer. Elevated (podwyższone): 3,600 PLN/year if employee commutes from a different city. Unchanged since 2020."
+    },
+    "pracownicze_koszty_2024_2026": {
+      "source_url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU19910800350",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Art. 22 ust. 2 ustawy o PIT. Basic 3,000 PLN (250 PLN/month), elevated 3,600 PLN (300 PLN/month). No announced changes for 2025–2026."
+    },
+    "ulga_internetowa": {
+      "source_url": "https://www.podatki.gov.pl/pit/ulgi-odliczenia-i-zwolnienia/ulga-na-internet/",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "Deductible up to 760 PLN/year for documented internet costs. Eligible only in 2 consecutive tax years — cannot be claimed for a third year in a row."
+    },
+    "darowizny": {
+      "source_url": "https://www.podatki.gov.pl/pit/ulgi-odliczenia-i-zwolnienia/ulga-na-darowizny/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Donations to OPP (public-benefit organisations) and other eligible recipients deductible up to 6% of income. Keep bank transfer confirmations."
+    },
+    "ulga_na_powrot": {
+      "source_url": "https://www.podatki.gov.pl/pit/ulgi-odliczenia-i-zwolnienia/ulga-na-powrot/",
+      "verified_date": "2026-04-03",
+      "confidence": "Likely",
+      "notes": "4-year PIT exemption for persons returning to Poland after at least 3 years of tax residence abroad. Income exempt up to 85,528 PLN/year. Requires formal transfer-of-tax-residence documentation."
+    },
+    "wspolne_rozliczenie": {
+      "source_url": "https://www.podatki.gov.pl/pit/wspolne-rozliczenie-malzonkow/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Joint filing splits combined income and taxes each half at the progressive rates. Applicable to married couples (not separated). Filed on PIT-36 or PIT-37 with the 'wspólne rozliczenie' box ticked."
+    },
+    "twoj_e_pit": {
+      "source_url": "https://www.podatki.gov.pl/pit/twoj-e-pit/",
+      "verified_date": "2026-04-03",
+      "confidence": "Definitive",
+      "notes": "Pre-filled PIT available from 15 February. If not rejected or modified by 30 April, it is automatically accepted. Based on data from employers (PIT-11) and ZUS."
+    }
+  }
+}
