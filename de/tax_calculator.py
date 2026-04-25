@@ -204,7 +204,7 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
         if (tax - tax_kfb - kindergeld_annual) > 0:
             tax = tax_kfb
 
-    soli = calculate_soli(tax, year)
+    soli = calculate_soli(tax, year, married=married)
     total_tax_due = tax + soli
 
     steuerklasse = g["steuerklasse"]

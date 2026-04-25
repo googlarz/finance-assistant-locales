@@ -179,9 +179,17 @@ def calculate_income_tax(zve: float, year: int) -> float:
     return 0.45 * x - rules["reichensteuersatz_offset"]
 
 
-def calculate_soli(income_tax: float, year: int) -> float:
+def calculate_soli(income_tax: float, year: int, married: bool = False) -> float:
+    """Calculate Solidaritätszuschlag.
+
+    For jointly-assessed (married) filers, §3 SolzG doubles the Freigrenze —
+    so `married=True` uses freigrenze × 2. For all other filers the single
+    threshold applies.
+    """
     rules = get_tax_year_rules(year)
     freigrenze = rules["soli_freigrenze_single"]
+    if married:
+        freigrenze = freigrenze * 2  # §3 SolzG — joint assessment doubles threshold
     if income_tax <= freigrenze:
         return 0.0
     return min(income_tax * 0.055, (income_tax - freigrenze) * 0.119)

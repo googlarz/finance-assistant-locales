@@ -180,10 +180,22 @@ def calculate_income_tax(gross: float, rules: dict) -> float:
 
 
 def calculate_marginal_rate(gross: float, rules: dict) -> float:
-    """Return the marginal income tax rate for a given gross income."""
-    # In the taper zone (£100k–£125,140), effective marginal rate is 60%
-    # because losing £1 of allowance for every £2 over £100k adds extra basic-rate
-    # tax — effectively 40% (higher rate) + 20% (lost allowance taxed at 20%) = 60%.
+    """Return the marginal income tax rate for a given gross income.
+
+    The 60% trap (£100,000 – £125,140):
+      For each £2 earned above £100k, £1 of personal allowance is lost.
+      On £1 of extra income in this zone, you pay:
+        • 40% higher-rate tax on that £1                             = £0.40
+        • 40% higher-rate tax on the £0.50 of lost allowance        = £0.20
+      Total marginal rate = 60%  (confirmed statutory rate — NOT an error)
+
+    Outside the taper zone the bands are straightforward:
+      £0        – personal allowance:  0%
+      PA        – £50,270:            20% (basic rate)
+      £50,270   – £100,000:           40% (higher rate)
+      £100,000  – £125,140:           60% (taper zone — see above)
+      > £125,140:                     45% (additional rate)
+    """
     taper_threshold = rules["personal_allowance_taper_threshold"]
     higher_ceiling = rules["higher_rate_limit"]
     basic_ceiling = rules["basic_rate_limit"]
@@ -195,6 +207,6 @@ def calculate_marginal_rate(gross: float, rules: dict) -> float:
     if gross <= taper_threshold:
         return rules["higher_rate"]
     if gross <= higher_ceiling:
-        # Taper zone — effective marginal rate 60%
+        # Taper zone — effective marginal rate 60% (see docstring for derivation)
         return 0.60
     return rules["additional_rate"]

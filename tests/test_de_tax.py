@@ -105,6 +105,26 @@ def test_calculate_tax_with_ruerup():
     assert result_with["breakdown"]["estimated_tax"] < result_without["breakdown"]["estimated_tax"]
 
 
+def test_soli_married_freigrenze_doubled():
+    """Married filers get double the Soli Freigrenze (§3 SolzG joint assessment).
+
+    income_tax of €18,200 is above the single threshold (~€18,130–€20,350)
+    but below the doubled married threshold — so single pays Soli, married pays none.
+    We use 2024 rules (single Freigrenze = €18,130).
+    """
+    # Single filer: income_tax €19,000 > single Freigrenze €18,130 → Soli charged
+    soli_single = calculate_soli(19_000, year=2024, married=False)
+    assert soli_single > 0.0, "Single filer above Freigrenze should pay Soli"
+
+    # Married filer: same income_tax €19,000 < doubled Freigrenze €36,260 → no Soli
+    soli_married = calculate_soli(19_000, year=2024, married=True)
+    assert soli_married == 0.0, "Married filer below doubled Freigrenze should pay no Soli"
+
+    # Both pay Soli when income_tax is above the doubled threshold
+    soli_both = calculate_soli(40_000, year=2024, married=True)
+    assert soli_both > 0.0, "Married filer above doubled Freigrenze should pay Soli"
+
+
 def test_all_2026_params_filled():
     ctx = LocaleContext(
         tax_year=2026,

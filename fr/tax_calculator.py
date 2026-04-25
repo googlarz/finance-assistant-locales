@@ -112,11 +112,18 @@ def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
     income_tax = round(income_tax, 2)
 
     # ── Prélèvements sociaux ──────────────────────────────────────────────
-    # CSG (9.2%) + CRDS (0.5%) = 9.7% on gross for salaried
+    # CSG (9.2%) + CRDS (0.5%) = 9.7%.
+    # For salaried employees, the legal base is gross × 0.9825 — the 1.75%
+    # professional abatement (assiette réduite) per Art. L136-2 CSS.
+    # TNS / auto-entrepreneurs have no abatement; full gross is the base.
     # Note: the CSG déductible portion (6.8%) normally reduces the IR base
     # for the following year; we note it in breakdown but do not apply it
     # here (it would require prior-year gross, which we do not have).
-    prelevements_sociaux = round(gross * (rules["csg_rate"] + rules["crds_rate"]), 2)
+    if employment_type in ("employed", "salaried", None):
+        csg_base = gross * 0.9825  # assiette réduite — Art. L136-2 CSS
+    else:
+        csg_base = gross  # TNS / auto-entrepreneur: no abatement
+    prelevements_sociaux = round(csg_base * (rules["csg_rate"] + rules["crds_rate"]), 2)
 
     net = round(gross - income_tax - prelevements_sociaux, 2)
     effective_rate = round(income_tax / gross, 4) if gross > 0 else 0.0
@@ -142,8 +149,8 @@ def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
             "married": married,
             "raw_ir_before_decote": round(raw_ir, 2),
             "income_tax_after_decote": income_tax,
-            "csg": round(gross * rules["csg_rate"], 2),
-            "crds": round(gross * rules["crds_rate"], 2),
+            "csg": round(csg_base * rules["csg_rate"], 2),
+            "crds": round(csg_base * rules["crds_rate"], 2),
             "prelevements_sociaux": prelevements_sociaux,
             "net": net,
         },

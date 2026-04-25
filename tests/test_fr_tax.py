@@ -107,7 +107,7 @@ def test_salaried_40k_single():
     assert result["gross"] == pytest.approx(40_000.0, abs=1.0)
     assert result["net"] < result["gross"]
     assert result["income_tax"] == pytest.approx(3_800.0, abs=400.0)
-    assert result["prelevements_sociaux"] == pytest.approx(3_880.0, abs=50.0)
+    assert result["prelevements_sociaux"] == pytest.approx(3_812.0, abs=50.0)
     assert result["net"] == pytest.approx(32_320.0, abs=500.0)
     assert result["confidence"] == "Definitive"
     assert result["parts"] == 1.0
