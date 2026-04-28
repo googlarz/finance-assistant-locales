@@ -1,0 +1,69 @@
+{
+  "_note": "Source citations for every numeric rule in the US locale. Update this whenever you change a value.",
+  "standard_deduction_single_2024": {
+    "value": 14600,
+    "source": "IRS Rev. Proc. 2023-34",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-23-34.pdf",
+    "verified": "2024-01-15"
+  },
+  "standard_deduction_mfj_2024": {
+    "value": 29200,
+    "source": "IRS Rev. Proc. 2023-34",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-23-34.pdf",
+    "verified": "2024-01-15"
+  },
+  "standard_deduction_single_2025": {
+    "value": 15000,
+    "source": "IRS Rev. Proc. 2024-40",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-24-40.pdf",
+    "verified": "2024-11-01"
+  },
+  "standard_deduction_mfj_2025": {
+    "value": 30000,
+    "source": "IRS Rev. Proc. 2024-40",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-24-40.pdf",
+    "verified": "2024-11-01"
+  },
+  "social_security_wage_base_2024": {
+    "value": 168600,
+    "source": "SSA Fact Sheet 2024",
+    "url": "https://www.ssa.gov/news/press/factsheets/colafacts2024.pdf",
+    "verified": "2024-01-15"
+  },
+  "social_security_wage_base_2025": {
+    "value": 176100,
+    "source": "SSA Fact Sheet 2025",
+    "url": "https://www.ssa.gov/news/press/factsheets/colafacts2025.pdf",
+    "verified": "2024-11-01"
+  },
+  "401k_limit_2024": {
+    "value": 23000,
+    "source": "IRS Notice 2023-75",
+    "url": "https://www.irs.gov/pub/irs-drop/n-23-75.pdf",
+    "verified": "2024-01-15"
+  },
+  "401k_limit_2025": {
+    "value": 23500,
+    "source": "IRS Notice 2024-80",
+    "url": "https://www.irs.gov/pub/irs-drop/n-24-80.pdf",
+    "verified": "2024-11-01"
+  },
+  "ira_limit_2024": {
+    "value": 7000,
+    "source": "IRS Notice 2023-75",
+    "url": "https://www.irs.gov/pub/irs-drop/n-23-75.pdf",
+    "verified": "2024-01-15"
+  },
+  "hsa_individual_2024": {
+    "value": 4150,
+    "source": "IRS Rev. Proc. 2023-23",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-23-23.pdf",
+    "verified": "2024-01-15"
+  },
+  "hsa_individual_2025": {
+    "value": 4300,
+    "source": "IRS Rev. Proc. 2024-25",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-24-25.pdf",
+    "verified": "2024-11-01"
+  }
+}
