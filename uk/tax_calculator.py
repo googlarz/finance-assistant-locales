@@ -63,8 +63,29 @@ def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
     gross = float(ctx.annual_gross or 0.0)
     is_self_employed = ctx.employment_type in ("self_employed", "freelancer")
 
+    # ── Determine region / Scottish taxpayer ─────────────────────────────
+    region = getattr(ctx, "region", None) or (ctx.get("personal", {}).get("region") if isinstance(ctx, dict) else None)
+    is_scottish = bool(region and region.strip().lower() in ("scotland", "scot", "sco"))
+
     # ── Income tax ────────────────────────────────────────────────────────
-    income_tax = calculate_income_tax(gross, rules)
+    if is_scottish and "scottish_bands" in rules:
+        scottish_bands = rules["scottish_bands"]
+        from .tax_rules import calculate_personal_allowance
+        allowance = calculate_personal_allowance(gross, rules)
+        taxable_income = max(0.0, gross - allowance)
+        income_tax = 0.0
+        remaining = taxable_income
+        for rate, lower, upper in scottish_bands:
+            if remaining <= 0:
+                break
+            in_band = (min(remaining, upper - lower) if upper is not None else remaining)
+            income_tax += in_band * rate
+            remaining -= in_band
+        income_tax = max(0.0, round(income_tax, 2))
+        tax_system = "Scottish"
+    else:
+        income_tax = calculate_income_tax(gross, rules)
+        tax_system = "UK (rUK)"
     marginal = calculate_marginal_rate(gross, rules)
 
     # ── National Insurance ────────────────────────────────────────────────
@@ -115,6 +136,8 @@ def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
         },
         "ni_detail": ni_data,
         "is_self_employed": is_self_employed,
+        "tax_system": tax_system,
+        "region": region,
     }
 
 

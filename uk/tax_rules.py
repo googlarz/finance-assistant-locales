@@ -47,6 +47,16 @@ TAX_YEAR_RULES = {
         "ni_employer_rate": 0.138,              # 13.8% above secondary threshold
         # ── Currency ──────────────────────────────────────────────────────
         "currency": "GBP",
+        # ── Scottish income tax bands (2024/25) ──────────────────────────
+        "scottish_bands": [
+            # (rate, lower, upper) — taxable income thresholds (after personal allowance)
+            (0.19, 0,       2_306),    # Starter rate
+            (0.20, 2_306,   13_991),   # Basic rate
+            (0.21, 13_991,  31_092),   # Intermediate rate
+            (0.42, 31_092,  62_430),   # Higher rate
+            (0.45, 62_430,  125_140),  # Advanced rate
+            (0.48, 125_140, None),     # Top rate
+        ],
         # ── Confidence ────────────────────────────────────────────────────
         "confidence": "Definitive",
     },
@@ -72,6 +82,16 @@ TAX_YEAR_RULES = {
         "ni_employer_secondary_threshold": 9_100,
         "ni_employer_rate": 0.138,
         "currency": "GBP",
+        # ── Scottish income tax bands (2025/26) ──────────────────────────
+        "scottish_bands": [
+            # (rate, lower, upper) — taxable income thresholds (after personal allowance)
+            (0.19, 0,       2_827),    # Starter rate
+            (0.20, 2_827,   14_921),   # Basic rate
+            (0.21, 14_921,  31_092),   # Intermediate rate
+            (0.42, 31_092,  62_430),   # Higher rate
+            (0.45, 62_430,  125_140),  # Advanced rate
+            (0.48, 125_140, None),     # Top rate
+        ],
         "confidence": "Definitive",
     },
     2026: {

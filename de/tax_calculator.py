@@ -190,6 +190,8 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
     tax = calculate_income_tax(zve / 2, year) * 2 if married else calculate_income_tax(zve, year)
 
     # ── Kirchensteuer (based on actual income tax, not gross) ────────────
+    kirchensteuer_actual = 0.0
+    kt_rate = 0.0
     if g["kirchensteuer"] and tax > 0:
         kt_rate = 0.08 if g["bundesland"] in ("Baden-Württemberg", "Bayern") else 0.09
         kirchensteuer_actual = round(tax * kt_rate, 2)
@@ -205,7 +207,7 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
             tax = tax_kfb
 
     soli = calculate_soli(tax, year, married=married)
-    total_tax_due = tax + soli
+    total_tax_due = tax + soli + (kirchensteuer_actual if g["kirchensteuer"] else 0)
 
     steuerklasse = g["steuerklasse"]
     bereits_gezahlt = _estimate_lohnsteuer_paid(gross, steuerklasse, married, year, p)
@@ -248,6 +250,8 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
             "zu_versteuerndes_einkommen": round(zve, 2),
             "estimated_tax": round(tax, 2),
             "soli": round(soli, 2),
+            "kirchensteuer": round(kirchensteuer_actual if g["kirchensteuer"] else 0, 2),
+            "kirchensteuer_rate": (kt_rate if g["kirchensteuer"] else 0),
             "total_tax_due": round(total_tax_due, 2),
             "bereits_gezahlte_lohnsteuer": round(bereits_gezahlt, 2),
             "estimated_refund": round(estimated_refund, 2),
