@@ -2,7 +2,7 @@
 
 > Country-specific locale plugins for Finance Assistant — tax rules, social contributions, filing deadlines, and deduction discovery.
 
-Part of [Finance Assistant](https://github.com/googlarz/finance-assistant-skill) — the personal finance copilot for Claude Code.
+Part of [Finance Assistant](https://github.com/googlarz/finance-assistant) — the personal finance copilot for Claude Code.
 
 ---
 

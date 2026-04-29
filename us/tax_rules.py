@@ -56,6 +56,8 @@ _2024 = {
         "medicare_rate": 0.0145,
         "additional_medicare_rate": 0.009,   # on wages > $200k single / $250k MFJ
         "additional_medicare_threshold_single": 200_000,
+        "additional_medicare_threshold_mfj": 250_000,
+        "additional_medicare_threshold_mfs": 125_000,
     },
     "amt": {
         "exemption_single": 85_700,
@@ -113,6 +115,8 @@ _2025 = {
         "medicare_rate": 0.0145,
         "additional_medicare_rate": 0.009,
         "additional_medicare_threshold_single": 200_000,
+        "additional_medicare_threshold_mfj": 250_000,
+        "additional_medicare_threshold_mfs": 125_000,
     },
     "amt": {
         "exemption_single": 88_100,

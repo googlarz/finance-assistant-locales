@@ -1,0 +1,121 @@
+[
+  {
+    "id": "pl_2024_single_65k_employed",
+    "description": "Single employee, 65,000 PLN gross, 2024",
+    "source": {
+      "url": "https://www.podatki.gov.pl/pit/twoj-e-pit/",
+      "description": "podatki.gov.pl Twój e-PIT 2024 — skala podatkowa. ZUS: 13.71% employee. Work costs: 3,000 PLN. Tax-free: 30,000 PLN.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "pl",
+    "inputs": {
+      "gross_annual_income": 65000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "age": 30,
+      "children_count": 0
+    },
+    "expected": {
+      "income_tax": 2771,
+      "zus_employee": 8912,
+      "health_insurance": 5049,
+      "net": 48268,
+      "tolerance_abs": 300
+    },
+    "notes": "ZUS: 65,000×13.71%=8,912. Work costs: 3,000. Tax base = 65,000−8,912−3,000 = 53,088. Tax: 53,088×12% − 3,600 = 2,771. Health: (65,000−8,912)×9% = 5,049. Net = 48,268."
+  },
+  {
+    "id": "pl_2024_under26_70k_ulga_mlodych",
+    "description": "Under 26, 70,000 PLN gross, employed, 2024 — ulga dla młodych (PIT-zero)",
+    "source": {
+      "url": "https://www.podatki.gov.pl/pit/ulgi-i-odliczenia/ulga-dla-mlodych/",
+      "description": "podatki.gov.pl ulga dla młodych — income below 85,528 PLN and age < 26 → PIT = 0",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "pl",
+    "inputs": {
+      "gross_annual_income": 70000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "age": 24,
+      "children_count": 0
+    },
+    "expected": {
+      "income_tax": 0,
+      "ulga_mlodych_applied": true,
+      "tolerance_abs": 0
+    },
+    "notes": "Income 70,000 < limit 85,528 and age 24 < 26. PIT = 0. ZUS and health insurance still apply."
+  },
+  {
+    "id": "pl_2024_single_180k_high_earner",
+    "description": "Single employee, 180,000 PLN gross, 2024 — second bracket (32%) applies",
+    "source": {
+      "url": "https://www.podatki.gov.pl/pit/twoj-e-pit/",
+      "description": "podatki.gov.pl — second bracket 32% above 120,000 PLN. ZUS capped at 208,050 PLN for emerytalne/rentowe but uncapped for chorobowe.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "pl",
+    "inputs": {
+      "gross_annual_income": 180000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "age": 40,
+      "children_count": 0
+    },
+    "expected": {
+      "income_tax": 21143,
+      "tolerance_abs": 500
+    },
+    "notes": "ZUS employee: ~24,678 PLN (high due to uncapped chorobowe). Tax base = 180,000−24,678−3,000 = 152,322. Tax = 10,800 + (152,322−120,000)×32% = 10,800+10,343 = 21,143. 32% bracket applies."
+  },
+  {
+    "id": "pl_2024_zus_breakdown_65k",
+    "description": "ZUS contribution breakdown, 65,000 PLN employed, 2024",
+    "source": {
+      "url": "https://www.zus.pl/pracujacy/pracownicy/skladki",
+      "description": "ZUS official rates 2024: emerytalne 9.76%, rentowe 1.5%, chorobowe 2.45% — total employee 13.71%",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "pl",
+    "inputs": {
+      "gross_annual_income": 65000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "age": 30,
+      "children_count": 0
+    },
+    "expected_social": {
+      "employee_total": 8912,
+      "tolerance_abs": 200
+    },
+    "notes": "emerytalne: 65,000×9.76%=6,344. rentowe: 65,000×1.5%=975. chorobowe: 65,000×2.45%=1,593. Total: 8,912."
+  },
+  {
+    "id": "pl_2024_married_65k_2children_ulga_na_dzieci",
+    "description": "2 children, 65,000 PLN gross, married, 2024 — ulga na dzieci reduces tax",
+    "source": {
+      "url": "https://www.podatki.gov.pl/pit/ulgi-i-odliczenia/ulga-na-dzieci/",
+      "description": "podatki.gov.pl ulga na dzieci 2024: 1,112.04 PLN per child per year",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "pl",
+    "inputs": {
+      "gross_annual_income": 65000,
+      "employment_type": "employed",
+      "marital_status": "married",
+      "age": 35,
+      "children_count": 2
+    },
+    "expected": {
+      "income_tax_max": 2771,
+      "tolerance_abs": 300
+    },
+    "notes": "Without ulga: 2,771. With ulga na dzieci (2×1,112.04 = 2,224.08): tax = max(0, 2,771−2,224) = 547. Checking income_tax <= 2,771 (no increase from baseline)."
+  }
+]

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "fr_2024_single_30k_salarie",
+    "description": "Single salarié, €30,000 gross, 2024",
+    "source": {
+      "url": "https://www.impots.gouv.fr/simulateur-ir",
+      "description": "impots.gouv.fr official IR simulator 2024. Barème officiel.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "fr",
+    "inputs": {
+      "gross_annual_income": 30000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "children_count": 0
+    },
+    "expected": {
+      "income_tax": 1728,
+      "prelevements_sociaux": 2856,
+      "tolerance_abs": 100
+    },
+    "notes": "Abattement = min(3,000, 4,321) = 3,000. Net = 27,000. Tax: 11%×(27,000−11,294) = 1,728. Prél.: 30,000×0.9825×9.7% = 2,856."
+  },
+  {
+    "id": "fr_2024_single_60k_salarie",
+    "description": "Single salarié, €60,000 gross, 2024",
+    "source": {
+      "url": "https://www.impots.gouv.fr/simulateur-ir",
+      "description": "impots.gouv.fr simulator 2024",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "fr",
+    "inputs": {
+      "gross_annual_income": 60000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "children_count": 0
+    },
+    "expected": {
+      "income_tax": 9990,
+      "prelevements_sociaux": 5717,
+      "tolerance_abs": 200
+    },
+    "notes": "Abattement = min(6,000, 4,321) = 4,321. Net = 55,679. Tax: 11%×(28,797−11,294) + 30%×(55,679−28,797) = 9,990. Prél.: 60,000×0.9825×9.7% = 5,717."
+  },
+  {
+    "id": "fr_2024_married_2children_60k_joint",
+    "description": "Married couple, 2 children (3 parts), €60,000 joint gross, 2024",
+    "source": {
+      "url": "https://www.impots.gouv.fr/simulateur-ir",
+      "description": "impots.gouv.fr quotient familial 2024 — married + 2 children = 3 parts",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "fr",
+    "inputs": {
+      "gross_annual_income": 60000,
+      "employment_type": "employed",
+      "marital_status": "married",
+      "children_count": 2
+    },
+    "expected": {
+      "income_tax_max": 4000,
+      "tolerance_abs": 500
+    },
+    "notes": "3 parts. Substantially lower than single €60k (€9,990). income_tax < €4,000."
+  },
+  {
+    "id": "fr_2024_auto_entrepreneur_30k_bic_commerce",
+    "description": "Auto-entrepreneur, €30,000 CA, BIC commerce, 2024",
+    "source": {
+      "url": "https://www.service-public.fr/professionnels-entreprises/vosdroits/F23267",
+      "description": "service-public.fr — micro-BIC abattement 50% for commerce. Net income = 15,000. However engine also applies standard 10% abattement on gross for salaried path. AE uses ae_abattement (50% = 15,000), net = 15,000. Tax on 15,000 single 1 part.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "fr",
+    "inputs": {
+      "gross_annual_income": 30000,
+      "employment_type": "auto_entrepreneur",
+      "marital_status": "single",
+      "children_count": 0,
+      "ae_type": "commerce"
+    },
+    "expected": {
+      "income_tax": 0,
+      "tolerance_abs": 50
+    },
+    "notes": "AE commerce: 50% abattement → net = 15,000. Raw tax: 11%×(15,000−11,294) = 408. Décote formula (873−0.4521×408 = 689) > raw tax → tax = 0. Source: service-public.fr micro-BIC + impots.gouv.fr décote.",
+    "confidence": "Likely"
+  },
+  {
+    "id": "fr_2024_single_20k_decote",
+    "description": "Single salarié, €20,000 gross, 2024 — décote applies",
+    "source": {
+      "url": "https://www.impots.gouv.fr/particulier/questions/quest-ce-que-la-decote",
+      "description": "impots.gouv.fr décote 2024: seuil single €1,929; formula: 873 − 0.4521×raw_tax",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "fr",
+    "inputs": {
+      "gross_annual_income": 20000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "children_count": 0
+    },
+    "expected": {
+      "income_tax": 198,
+      "tolerance_abs": 100
+    },
+    "notes": "Net = 18,000. Raw IR = 11%×(18,000−11,294) = 738. Décote: 873−0.4521×738 = 539. Tax after décote = max(0, 738−539) = 199 ≈ 198."
+  }
+]

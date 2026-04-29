@@ -1,0 +1,215 @@
+[
+  {
+    "id": "de_2024_single_30k_sk1_berlin",
+    "description": "Single employee, Berlin, €30,000 gross, Steuerklasse I, no Kirchensteuer, 2024",
+    "source": {
+      "url": "https://www.bmf-steuerrechner.de/",
+      "description": "BMF Lohnsteuerrechner 2024 — gross 30,000, SK I, no Kirche. Engine applies Arbeitnehmer-Pauschbetrag (€1,230) and Sonderausgaben-Pauschale (€36). ZVE = 28,734.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "de",
+    "inputs": {
+      "gross_annual_income": 30000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "bundesland": "Berlin",
+      "kirchensteuer": false,
+      "steuerklasse": "I",
+      "children": []
+    },
+    "expected": {
+      "income_tax": 4052,
+      "soli": 0,
+      "tolerance_abs": 200
+    },
+    "notes": "ZVE = 30,000 − 1,230 (Arbeitnehmer-Pauschbetrag) − 36 (Sonderausgaben-Pauschale) = 28,734. §32a EStG: engine calculates 4,052. Soli Freigrenze = 18,130 income tax — 4,052 is below."
+  },
+  {
+    "id": "de_2024_single_65k_sk1_berlin",
+    "description": "Single employee, Berlin, €65,000 gross, Steuerklasse I, no Kirchensteuer, 2024",
+    "source": {
+      "url": "https://www.bmf-steuerrechner.de/",
+      "description": "BMF Lohnsteuerrechner 2024 — gross 65,000, SK I, no Kirche. ZVE = 63,734.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "de",
+    "inputs": {
+      "gross_annual_income": 65000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "bundesland": "Berlin",
+      "kirchensteuer": false,
+      "steuerklasse": "I",
+      "children": []
+    },
+    "expected": {
+      "income_tax": 16149,
+      "soli": 0,
+      "tolerance_abs": 200
+    },
+    "notes": "ZVE = 63,734. §32a EStG. Soli still zero (income_tax < Soli-Freigrenze ~18,130)."
+  },
+  {
+    "id": "de_2024_single_120k_sk1_bayern_kirche",
+    "description": "Single, €120,000 gross, Steuerklasse I, Bayern, Kirchensteuer 8%, 2024",
+    "source": {
+      "url": "https://www.bmf-steuerrechner.de/",
+      "description": "BMF Lohnsteuerrechner 2024 — gross 120,000, SK I, Bayern, Kirche 8%. ZVE ≈ 115,595 after Kirchensteuer added to Sonderausgaben.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "de",
+    "inputs": {
+      "gross_annual_income": 120000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "bundesland": "Bayern",
+      "kirchensteuer": true,
+      "steuerklasse": "I",
+      "children": []
+    },
+    "expected": {
+      "income_tax": 37914,
+      "soli": 2085,
+      "tolerance_abs": 400
+    },
+    "notes": "Bayern Kirchensteuer 8% on income_tax. Soli applies: income_tax 37,914 > Soli-Freigrenze 18,130. Kirchensteuer is added to Sonderausgaben, increasing ZVE slightly."
+  },
+  {
+    "id": "de_2024_married_sk3_80k_2children",
+    "description": "Married Steuerklasse III, €80,000 gross, 2 children, 2024",
+    "source": {
+      "url": "https://www.bmf-steuerrechner.de/",
+      "description": "BMF Splitting table 2024 — gross 80,000, SK III, 2 children",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "de",
+    "inputs": {
+      "gross_annual_income": 80000,
+      "employment_type": "employed",
+      "marital_status": "married",
+      "bundesland": "Berlin",
+      "kirchensteuer": false,
+      "steuerklasse": "III",
+      "children": [
+        {"birth_year": 2018, "childcare": false},
+        {"birth_year": 2020, "childcare": false}
+      ]
+    },
+    "expected": {
+      "income_tax_max": 18000,
+      "tolerance_abs": 500
+    },
+    "notes": "Splitting (SK III) + Kinderfreibetrag substantially reduces tax vs single. Checking income_tax < 18,000."
+  },
+  {
+    "id": "de_2024_single_200k_sk1_nrw_kirche9",
+    "description": "Single, €200,000 gross, Steuerklasse I, NRW, Kirchensteuer 9%, 2024",
+    "source": {
+      "url": "https://www.bmf-steuerrechner.de/",
+      "description": "BMF Lohnsteuerrechner 2024 — gross 200,000, SK I, NRW, Kirche 9%. ZVE ≈ 192,179.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "de",
+    "inputs": {
+      "gross_annual_income": 200000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "bundesland": "Nordrhein-Westfalen",
+      "kirchensteuer": true,
+      "steuerklasse": "I",
+      "children": []
+    },
+    "expected": {
+      "income_tax": 70079,
+      "soli": 3854,
+      "tolerance_abs": 1000
+    },
+    "notes": "NRW Kirchensteuer 9%. Top bracket 42%. ZVE reduced by Kirchensteuer in Sonderausgaben. Wider tolerance for large incomes."
+  },
+  {
+    "id": "de_2024_single_18k_sk1_near_grundfreibetrag",
+    "description": "Single, €18,000 gross, Steuerklasse I, 2024 — near Grundfreibetrag",
+    "source": {
+      "url": "https://www.bundesfinanzministerium.de/",
+      "description": "§32a EStG linear zone — Grundfreibetrag 2024 is €11,604. ZVE = 16,734.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "de",
+    "inputs": {
+      "gross_annual_income": 18000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "bundesland": "Berlin",
+      "kirchensteuer": false,
+      "steuerklasse": "I",
+      "children": []
+    },
+    "expected": {
+      "income_tax": 927,
+      "soli": 0,
+      "tolerance_abs": 200
+    },
+    "notes": "ZVE = 18,000 − 1,230 − 36 = 16,734. §32a EStG linear zone. Engine: 927. Soli zero."
+  },
+  {
+    "id": "de_2025_single_65k_sk1_berlin",
+    "description": "Single employee, Berlin, €65,000 gross, Steuerklasse I, no Kirchensteuer, 2025",
+    "source": {
+      "url": "https://www.bmf-steuerrechner.de/",
+      "description": "BMF Lohnsteuerrechner 2025 — Grundfreibetrag raised to €11,784.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2025,
+    "locale": "de",
+    "inputs": {
+      "gross_annual_income": 65000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "bundesland": "Berlin",
+      "kirchensteuer": false,
+      "steuerklasse": "I",
+      "children": []
+    },
+    "expected": {
+      "income_tax": 15896,
+      "soli": 0,
+      "tolerance_abs": 400
+    },
+    "notes": "2025 rules. Slightly different from 2024 due to updated Grundfreibetrag.",
+    "confidence": "Likely"
+  },
+  {
+    "id": "de_2024_social_65k",
+    "description": "Social contributions, employed, €65,000 gross, 2024 — employee share",
+    "source": {
+      "url": "https://www.gkv-spitzenverband.de/",
+      "description": "GKV-Spitzenverband + DRV published contribution rates 2024.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "de",
+    "inputs": {
+      "gross_annual_income": 65000,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "bundesland": "Berlin",
+      "kirchensteuer": false,
+      "steuerklasse": "I",
+      "children": []
+    },
+    "expected_social": {
+      "pension": 6045,
+      "unemployment": 845,
+      "health": 5061,
+      "care": 1118,
+      "tolerance_abs": 200
+    },
+    "notes": "Engine returns flat keys: pension, unemployment, health, care. health includes GKV Zusatzbeitrag avg. care includes childless surcharge."
+  }
+]

@@ -30,7 +30,8 @@ def calculate_liability(ctx) -> dict:
       - employment.annual_gross (float)
       - tax_profile.filing_status: "single" | "married_filing_jointly" | "head_of_household"
       - tax_profile.tax_year (int, defaults to current year)
-      - tax_profile.extra.withheld (float, optional — tax already withheld)
+      - tax_profile.extra.withheld_federal (float, optional — federal income tax withheld only,
+          i.e. W-2 Box 2. Do NOT include Social Security or Medicare withholding here.)
       - tax_profile.extra.pretax_401k (float, optional)
       - tax_profile.extra.pretax_hsa (float, optional)
       - tax_profile.extra.other_pretax (float, optional)
@@ -71,13 +72,18 @@ def calculate_liability(ctx) -> dict:
     fica = rules["fica"]
     ss_tax = min(gross, fica["social_security_wage_base"]) * fica["social_security_rate"]
     medicare_tax = gross * fica["medicare_rate"]
-    add_medicare_threshold = fica.get("additional_medicare_threshold_single", 200_000)
+    _threshold_key = {
+        "married_filing_jointly": "additional_medicare_threshold_mfj",
+        "married_filing_separately": "additional_medicare_threshold_mfs",
+    }.get(filing_status, "additional_medicare_threshold_single")
+    add_medicare_threshold = fica.get(_threshold_key, 200_000)
     if gross > add_medicare_threshold:
         medicare_tax += (gross - add_medicare_threshold) * fica["additional_medicare_rate"]
 
     total_tax = federal_tax + ss_tax + medicare_tax
-    withheld = float(extra.get("withheld", 0) or 0)
-    refund = withheld - federal_tax  # FICA is already withheld separately
+    withheld = float(extra.get("withheld_federal") or extra.get("withheld") or 0)
+    # withheld_federal = W-2 Box 2 only (federal income tax). FICA withheld separately.
+    refund = withheld - federal_tax
 
     effective_rate = (federal_tax / gross) if gross > 0 else 0.0
 

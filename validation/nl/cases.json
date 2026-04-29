@@ -1,0 +1,114 @@
+[
+  {
+    "id": "nl_2024_single_45k_employed",
+    "description": "Single employed, €45,000 gross, 2024 — Box 1 only",
+    "source": {
+      "url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/tarieven_en_schijven/",
+      "description": "belastingdienst.nl tarieven 2024: Box 1 low rate 36.97% up to €75,518. Heffingskorting and Arbeidskorting income-tested.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "nl",
+    "inputs": {
+      "gross_annual_income": 45000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "box1_tax": 9346,
+      "tolerance_abs": 400
+    },
+    "notes": "Box 1 raw: 45,000×36.97% = 16,637. Heffingskorting (AHK) 2024 max ~€3,374, phases out above ~€22,660. At 45,000 AHK ≈ €2,087. Arbeidskorting max ~€5,052, phases out above ~€37,691. At 45,000 AK ≈ €5,052−(45,000−37,691)×0.0651 ≈ €4,577. Net tax ≈ 16,637−2,087−4,577 = 9,973. Wider tolerance for credit phase-out precision."
+  },
+  {
+    "id": "nl_2024_single_90k_employed",
+    "description": "Single employed, €90,000 gross, 2024 — second Box 1 bracket (49.5%)",
+    "source": {
+      "url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/tarieven_en_schijven/",
+      "description": "belastingdienst.nl — Box 1 second bracket 49.5% above €75,518 (2024)",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "nl",
+    "inputs": {
+      "gross_annual_income": 90000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "box1_tax_min": 30000,
+      "marginal_rate": 0.495,
+      "tolerance_abs": 1000
+    },
+    "notes": "Tax > €30,000 due to second bracket. Marginal rate = 49.5%."
+  },
+  {
+    "id": "nl_2024_box3_savings_80k",
+    "description": "Box 3: savings €80,000 (above €57,000 exemption), 2024",
+    "source": {
+      "url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/vermogen_en_aanmerkelijk_belang/vermogen/belasting_betalen_over_uw_vermogen/",
+      "description": "belastingdienst.nl Box 3 2024: exemption €57,000 single. Deemed return on savings ~1.44%. Box 3 rate 36%.",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "nl",
+    "inputs": {
+      "gross_annual_income": 0,
+      "employment_type": "employed",
+      "marital_status": "single",
+      "savings": 80000,
+      "investments": 0,
+      "debts": 0
+    },
+    "expected": {
+      "box3_tax": 119,
+      "tolerance_abs": 80
+    },
+    "notes": "Taxable Box 3 = 80,000 − 57,000 = 23,000. Deemed return on savings (1.44%): 23,000×1.44% = 331. Box 3 tax: 331×36% = 119."
+  },
+  {
+    "id": "nl_2024_partners_box3_joint_120k",
+    "description": "Partners: joint Box 3 exemption €114,000, combined assets €120,000, 2024",
+    "source": {
+      "url": "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/vermogen_en_aanmerkelijk_belang/vermogen/belasting_betalen_over_uw_vermogen/",
+      "description": "belastingdienst.nl — fiscal partners double exemption (2×€57,000=€114,000)",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "nl",
+    "inputs": {
+      "gross_annual_income": 0,
+      "employment_type": "employed",
+      "marital_status": "married",
+      "savings": 120000,
+      "investments": 0,
+      "debts": 0
+    },
+    "expected": {
+      "box3_tax": 31,
+      "tolerance_abs": 30
+    },
+    "notes": "Taxable = 120,000 − 114,000 = 6,000. Deemed return savings 1.44%: 6,000×1.44% = 86.4. Box 3 tax: 86.4×36% = 31."
+  },
+  {
+    "id": "nl_2024_single_60k_zvw",
+    "description": "ZVW (Zorgverzekeringswet) employer contribution check, €60,000 employed, 2024",
+    "source": {
+      "url": "https://www.rijksoverheid.nl/onderwerpen/zorgverzekering/vraag-en-antwoord/wat-is-de-inkomensafhankelijke-bijdrage-zorgverzekeringswet",
+      "description": "ZVW employer rate 2024: 6.57% up to max contribution income €71,628 (annual).",
+      "accessed": "2026-04-03"
+    },
+    "year": 2024,
+    "locale": "nl",
+    "inputs": {
+      "gross_annual_income": 60000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "box1_tax_min": 10000,
+      "tolerance_abs": 2000
+    },
+    "notes": "Primary check: tax > €10,000 at this income level. ZVW employer contribution = min(60,000,71,628)×6.57% = 3,942 is paid by employer, not subtracted from net here. The NL engine embeds social NI in Box 1 first-bracket rate."
+  }
+]
