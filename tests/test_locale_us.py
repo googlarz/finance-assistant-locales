@@ -191,3 +191,30 @@ def test_get_deduction_categories_min_5_items():
 def test_generate_tax_claims_empty_profile_returns_list():
     result = locale_us.generate_tax_claims({}, 2024)
     assert isinstance(result, list)
+
+
+# ── Additional Medicare Tax (SE) ──────────────────────────────────────────────
+
+def test_se_tax_additional_medicare_applies():
+    """High-income SE filer should pay 0.9% Additional Medicare on amount over threshold."""
+    result = estimate_self_employment_tax(250_000, 2024, filing_status="single")
+    # se_base = 250_000 * 0.9235 = 230_875
+    # Additional Medicare applies on: 230_875 - 200_000 = 30_875
+    # Extra: 30_875 * 0.009 = 277.88
+    assert result["medicare_tax"] > 230_875 * 0.0145 * 2  # more than base Medicare
+
+
+def test_se_tax_mfj_higher_threshold():
+    """MFJ filer at $240k should NOT pay Additional Medicare (threshold $250k)."""
+    single_result = estimate_self_employment_tax(240_000, 2024, filing_status="single")
+    mfj_result = estimate_self_employment_tax(240_000, 2024, filing_status="married_filing_jointly")
+    # MFJ threshold is $250k — no additional Medicare
+    # Single threshold is $200k — additional Medicare applies
+    assert mfj_result["medicare_tax"] < single_result["medicare_tax"]
+
+
+def test_estimate_fica_mfj_threshold():
+    """MFJ employee at $240k should NOT pay Additional Medicare (threshold $250k)."""
+    single = estimate_fica(240_000, 2024, filing_status="single")
+    mfj = estimate_fica(240_000, 2024, filing_status="married_filing_jointly")
+    assert mfj["medicare"] < single["medicare"]

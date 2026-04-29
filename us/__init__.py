@@ -49,9 +49,9 @@ def get_filing_deadlines(year: int) -> list[dict]:
     ]
 
 
-def get_social_contributions(gross: float, year: int) -> dict:
+def get_social_contributions(gross: float, year: int, filing_status: str = "single") -> dict:
     from .social_contributions import estimate_fica
-    return estimate_fica(gross, year)
+    return estimate_fica(gross, year, filing_status=filing_status)
 
 
 def get_deduction_categories() -> list[dict]:
