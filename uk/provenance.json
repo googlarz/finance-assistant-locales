@@ -31,6 +31,42 @@
       "verified_date": "2026-04-03",
       "confidence": "Definitive",
       "notes": "Raised to £60,000 from April 2023, unchanged since"
+    },
+    "ssp_weekly_rate_2024_2025": {
+      "source_url": "https://www.gov.uk/statutory-sick-pay",
+      "verified_date": "2026-05-17",
+      "confidence": "Definitive",
+      "notes": "£116.75/week for 2024/25 and 2025/26; paid by employer for up to 28 weeks; self-employed not eligible"
+    },
+    "ni_lower_earnings_limit_2024": {
+      "source_url": "https://www.gov.uk/national-insurance-rates-letters",
+      "verified_date": "2026-05-17",
+      "confidence": "Definitive",
+      "notes": "£123/week in 2024/25; must earn at least this to qualify for SSP"
+    },
+    "ni_lower_earnings_limit_2025": {
+      "source_url": "https://www.gov.uk/national-insurance-rates-letters",
+      "verified_date": "2026-05-17",
+      "confidence": "Definitive",
+      "notes": "£125/week in 2025/26"
+    },
+    "income_protection_coverage_range": {
+      "source_url": "https://www.abi.org.uk/products-and-issues/topics-and-issues/income-protection/",
+      "verified_date": "2026-05-17",
+      "confidence": "Industry guidance",
+      "notes": "ABI guidance: 50–70% of gross salary; no fixed premium benchmark as premiums vary by age, health, and occupation"
+    },
+    "life_insurance_salary_multiple": {
+      "source_url": "https://www.moneyhelper.org.uk/en/insurance/life-insurance/how-much-life-insurance-do-i-need",
+      "verified_date": "2026-05-17",
+      "confidence": "Industry rule of thumb",
+      "notes": "10× annual gross salary is the widely cited MoneyHelper / ABI rule of thumb; actual need depends on mortgage and dependants"
+    },
+    "employer_liability_minimum_cover": {
+      "source_url": "https://www.gov.uk/employers-liability-insurance",
+      "verified_date": "2026-05-17",
+      "confidence": "Definitive",
+      "notes": "Minimum £5 million cover required under Employers' Liability (Compulsory Insurance) Act 1969; most policies provide £10 million"
     }
   }
 }

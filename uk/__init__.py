@@ -14,6 +14,11 @@ from .tax_calculator import calculate_tax
 from .social_contributions import get_social_contributions
 from .tax_dates import get_filing_deadlines, get_upcoming_deadlines
 from .claim_rules import generate_uk_claims
+from .insurance_rules import (
+    ESSENTIAL_INSURANCE_TYPES,
+    get_income_protection_guidance,
+    get_life_insurance_guidance,
+)
 
 try:
     from ..context import LocaleContext
