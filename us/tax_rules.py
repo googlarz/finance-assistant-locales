@@ -65,6 +65,21 @@ _2024 = {
         "phase_out_single": 609_350,
         "phase_out_mfj": 1_218_700,
     },
+    # §199A QBI deduction — source: IRS Rev. Proc. 2023-34
+    "qbi": {
+        "rate": 0.20,
+        "threshold_single": 182_050,
+        "threshold_mfj": 364_100,
+        "phase_out_range_single": 50_000,   # phase-out completes at threshold + range
+        "phase_out_range_mfj": 100_000,
+    },
+    # Estimated tax quarterly deadlines — source: IRS Publication 505
+    "quarterly_deadlines": [
+        {"quarter": 1, "period": "Jan 1 – Mar 31", "due": "2024-04-15"},
+        {"quarter": 2, "period": "Apr 1 – May 31", "due": "2024-06-17"},
+        {"quarter": 3, "period": "Jun 1 – Aug 31", "due": "2024-09-16"},
+        {"quarter": 4, "period": "Sep 1 – Dec 31", "due": "2025-01-15"},
+    ],
 }
 
 # ── 2025 ─────────────────────────────────────────────────────────────────────
@@ -124,6 +139,21 @@ _2025 = {
         "phase_out_single": 626_350,
         "phase_out_mfj": 1_252_700,
     },
+    # §199A QBI deduction — source: IRS Rev. Proc. 2024-40
+    "qbi": {
+        "rate": 0.20,
+        "threshold_single": 197_300,
+        "threshold_mfj": 394_600,
+        "phase_out_range_single": 50_000,
+        "phase_out_range_mfj": 100_000,
+    },
+    # Estimated tax quarterly deadlines — source: IRS Publication 505
+    "quarterly_deadlines": [
+        {"quarter": 1, "period": "Jan 1 – Mar 31", "due": "2025-04-15"},
+        {"quarter": 2, "period": "Apr 1 – May 31", "due": "2025-06-16"},
+        {"quarter": 3, "period": "Jun 1 – Aug 31", "due": "2025-09-15"},
+        {"quarter": 4, "period": "Sep 1 – Dec 31", "due": "2026-01-15"},
+    ],
 }
 
 TAX_YEAR_RULES: dict[int, dict] = {

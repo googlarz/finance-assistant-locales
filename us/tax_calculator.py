@@ -4,7 +4,8 @@ US federal income tax calculator.
 Computes estimated federal tax liability / refund for W-2 and self-employed filers.
 Does NOT cover state taxes — that's a separate locale concern.
 
-TODO: itemized deductions (currently always uses standard), AMT, QBI deduction (§199A)
+Self-employed additions (§199A QBI, SE tax, quarterly deadlines) implemented below.
+TODO: itemized deductions (currently always uses standard), AMT
 """
 
 from __future__ import annotations
@@ -104,3 +105,195 @@ def calculate_liability(ctx) -> dict:
         "currency": "USD",
         "note": "Federal only. State taxes not included. Itemized deductions not yet supported.",
     }
+
+
+def calculate_self_employment_tax(
+    net_se_income: float,
+    year: int = 2024,
+    filing_status: str = "single",
+) -> dict:
+    """
+    Calculate self-employment (SE) tax for 1099/freelance/sole-proprietor filers.
+
+    SE tax combines both the employee and employer FICA halves (15.3% up to the SS
+    wage base, then 2.9% Medicare on amounts above). SE tax is applied to 92.35% of
+    net SE income — the 7.65% reduction represents the notional "employer" share.
+
+    The deductible_half (50% of SS + Medicare components) is an above-the-line
+    deduction from gross income on Form 1040, reducing AGI before income tax.
+    Additional Medicare tax (0.9%) is NOT deductible.
+
+    Sources:
+      IRS Schedule SE, IRS Publication 334
+      2024 SS wage base: $168,600 (IRS Rev. Proc. 2023-34)
+      2025 SS wage base: $176,100 (IRS Rev. Proc. 2024-40)
+
+    Args:
+        net_se_income: Net profit from self-employment after business expenses
+        year: Tax year (2024 or 2025)
+        filing_status: Used for the Additional Medicare Tax threshold
+
+    Returns:
+        net_se_earnings: 92.35% of net_se_income (taxable base)
+        social_security_tax: 12.4% on earnings ≤ SS wage base
+        medicare_tax: 2.9% on all net SE earnings
+        additional_medicare_tax: 0.9% on earnings above threshold
+        total_se_tax: sum of all SE tax components
+        deductible_half: above-the-line deduction (half of SS + Medicare only)
+        currency: "USD"
+    """
+    rules = get_tax_year_rules(year)
+    fica = rules["fica"]
+
+    # 92.35% factor: IRS SE calculation multiplier (= 1 - 0.0765)
+    net_se_earnings = net_se_income * 0.9235
+
+    # Social Security: 12.4% (both halves) up to wage base
+    ss_earnings = min(net_se_earnings, fica["social_security_wage_base"])
+    ss_tax = ss_earnings * (fica["social_security_rate"] * 2)
+
+    # Medicare: 2.9% (both halves) on all SE earnings
+    medicare_tax = net_se_earnings * (fica["medicare_rate"] * 2)
+
+    # Additional Medicare: 0.9% on SE earnings above threshold
+    _threshold_key = {
+        "married_filing_jointly": "additional_medicare_threshold_mfj",
+        "married_filing_separately": "additional_medicare_threshold_mfs",
+    }.get(filing_status, "additional_medicare_threshold_single")
+    add_threshold = fica.get(_threshold_key, 200_000)
+    add_medicare = max(0.0, net_se_earnings - add_threshold) * fica["additional_medicare_rate"]
+
+    total_se_tax = ss_tax + medicare_tax + add_medicare
+    # Only the SS + Medicare halves are deductible; Additional Medicare is not
+    deductible_half = (ss_tax + medicare_tax) / 2
+
+    return {
+        "net_se_earnings": round(net_se_earnings, 2),
+        "social_security_tax": round(ss_tax, 2),
+        "medicare_tax": round(medicare_tax, 2),
+        "additional_medicare_tax": round(add_medicare, 2),
+        "total_se_tax": round(total_se_tax, 2),
+        "deductible_half": round(deductible_half, 2),
+        "currency": "USD",
+    }
+
+
+def calculate_qbi_deduction(
+    qbi: float,
+    taxable_income_before_qbi: float,
+    filing_status: str = "single",
+    year: int = 2024,
+    is_sstb: bool = False,
+) -> dict:
+    """
+    Estimate the §199A Qualified Business Income (QBI) deduction.
+
+    The deduction is 20% of QBI, subject to:
+      1. The taxable income cap: cannot exceed 20% of taxable income
+         (computed before the QBI deduction itself)
+      2. A phase-out for Specified Service Trades or Businesses (SSTBs —
+         consultants, lawyers, accountants, financial advisors, etc.) when
+         taxable income exceeds the threshold.
+
+    W-2 wages / UBIA limitation (for high-income non-SSTBs) is NOT implemented
+    here — it requires payroll records. Mark such cases in the note field.
+
+    Sources:
+      IRS §199A, IRS Form 8995-A instructions
+      2024 thresholds: $182,050 single / $364,100 MFJ (IRS Rev. Proc. 2023-34)
+      2025 thresholds: $197,300 single / $394,600 MFJ (IRS Rev. Proc. 2024-40)
+
+    Args:
+        qbi: Qualified Business Income (net profit from pass-through business)
+        taxable_income_before_qbi: Taxable income BEFORE applying the QBI deduction
+        filing_status: "single" | "married_filing_jointly"
+        year: Tax year (2024 or 2025)
+        is_sstb: True for specified service trades or businesses
+
+    Returns:
+        qbi_deduction: The allowed §199A deduction amount
+        tentative_deduction: 20% of QBI before limits
+        taxable_income_cap: 20% of taxable_income_before_qbi
+        phase_out_reduction: Amount reduced by phase-out (SSTBs only)
+        note: Explanation of any limitations applied
+        currency: "USD"
+    """
+    rules = get_tax_year_rules(year)
+    qbi_rules = rules.get("qbi", {})
+
+    rate = qbi_rules.get("rate", 0.20)
+    if filing_status == "married_filing_jointly":
+        threshold = qbi_rules.get("threshold_mfj", 364_100)
+        phase_out_range = qbi_rules.get("phase_out_range_mfj", 100_000)
+    else:
+        threshold = qbi_rules.get("threshold_single", 182_050)
+        phase_out_range = qbi_rules.get("phase_out_range_single", 50_000)
+
+    tentative = qbi * rate
+    taxable_cap = taxable_income_before_qbi * rate  # 20% of taxable income ceiling
+
+    # Phase-out for SSTBs above threshold
+    phase_out_reduction = 0.0
+    note_parts = []
+    if is_sstb and taxable_income_before_qbi > threshold:
+        if taxable_income_before_qbi >= threshold + phase_out_range:
+            # Fully phased out
+            deduction = 0.0
+            note_parts.append(
+                "SSTB deduction fully phased out: taxable income exceeds phase-out range."
+            )
+        else:
+            # Partial phase-out
+            excess = taxable_income_before_qbi - threshold
+            reduction_pct = excess / phase_out_range
+            phase_out_reduction = tentative * reduction_pct
+            deduction = min(tentative - phase_out_reduction, taxable_cap)
+            note_parts.append(
+                f"SSTB partial phase-out applied ({reduction_pct:.0%} reduction)."
+            )
+    else:
+        deduction = min(tentative, taxable_cap)
+
+    deduction = max(0.0, deduction)
+
+    if taxable_income_before_qbi > threshold and not is_sstb:
+        note_parts.append(
+            "W-2 wages / UBIA limitation may apply for non-SSTBs above the threshold — "
+            "consult a tax professional or Form 8995-A."
+        )
+
+    if not note_parts:
+        note_parts.append("Standard 20% QBI deduction, below phase-out threshold.")
+
+    return {
+        "qbi_deduction": round(deduction, 2),
+        "tentative_deduction": round(tentative, 2),
+        "taxable_income_cap": round(taxable_cap, 2),
+        "phase_out_reduction": round(phase_out_reduction, 2),
+        "note": " ".join(note_parts),
+        "currency": "USD",
+    }
+
+
+def get_quarterly_deadlines(year: int = 2024) -> list[dict]:
+    """
+    Return IRS estimated tax payment deadlines for the given year.
+
+    Quarterly estimated taxes are due in April, June, September of the
+    filing year, and January of the following year (Form 1040-ES).
+
+    Due dates are adjusted for weekends/holidays per IRS rules.
+
+    Sources:
+      IRS Publication 505, IRS Form 1040-ES instructions
+      2024 dates: Rev. Proc. 2023-34 calendar adjustments
+      2025 dates: Rev. Proc. 2024-40 calendar adjustments
+
+    Args:
+        year: The tax year for which to return estimated payment deadlines
+
+    Returns:
+        List of dicts: [{"quarter": int, "period": str, "due": "YYYY-MM-DD"}, ...]
+    """
+    rules = get_tax_year_rules(year)
+    return rules.get("quarterly_deadlines", [])
