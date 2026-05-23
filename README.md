@@ -15,8 +15,8 @@ locales/
 ├── fr/     # France — bundled, full 2024-2026 support
 ├── nl/     # Netherlands — bundled, full 2024-2026 support
 ├── pl/     # Poland — bundled, full 2024-2026 support
-├── at/     # Austria — not yet implemented
-└── ch/     # Switzerland — not yet implemented
+├── at/     # Austria — not yet implemented · scaffold: `python3 scripts/scaffold_locale.py AT`
+└── ch/     # Switzerland — not yet implemented · scaffold: `python3 scripts/scaffold_locale.py CH`
 ```
 
 Each locale lives in its own subdirectory named by ISO 3166-1 alpha-2 country code.

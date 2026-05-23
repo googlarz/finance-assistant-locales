@@ -156,9 +156,25 @@ _2025 = {
     ],
 }
 
+# ── 2026 ─────────────────────────────────────────────────────────────────────
+
+_2026: dict = {
+    **_2025,
+    "year": 2026,
+    # Estimated tax quarterly deadlines for tax year 2026 (Form 1040-ES).
+    # Source: IRS Publication 505 calendar rules; no weekend adjustments needed.
+    "quarterly_deadlines": [
+        {"quarter": 1, "period": "Jan 1 – Mar 31", "due": "2026-04-15"},
+        {"quarter": 2, "period": "Apr 1 – May 31", "due": "2026-06-15"},
+        {"quarter": 3, "period": "Jun 1 – Aug 31", "due": "2026-09-15"},
+        {"quarter": 4, "period": "Sep 1 – Dec 31", "due": "2027-01-15"},
+    ],
+}
+
 TAX_YEAR_RULES: dict[int, dict] = {
     2024: _2024,
     2025: _2025,
+    2026: _2026,
 }
 
 
