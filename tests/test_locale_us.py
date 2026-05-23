@@ -164,9 +164,10 @@ def test_2025_ss_wage_base():
 
 
 def test_future_year_falls_back_to_most_recent():
+    from locales.us.tax_rules import TAX_YEAR_RULES
     rules_2099 = get_tax_year_rules(2099)
-    rules_2025 = get_tax_year_rules(2025)
-    assert rules_2099["year"] == rules_2025["year"]
+    latest_year = max(TAX_YEAR_RULES)
+    assert rules_2099["year"] == latest_year
 
 
 # ── Locale interface ──────────────────────────────────────────────────────────
