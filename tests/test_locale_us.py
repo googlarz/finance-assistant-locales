@@ -99,6 +99,74 @@ def test_filing_status_defaults_to_single():
     assert r_default["filing_status"] == "single"
 
 
+# ── LocaleContext path (regression: used to crash via tax_engine) ─────────────
+
+def test_calculate_liability_accepts_localecontext():
+    """The main skill path passes a LocaleContext, not a dict. Must not crash
+    and must match the equivalent dict input for a W-2 employee."""
+    from context import LocaleContext
+    ctx = LocaleContext(tax_year=2024, employment_type="employed", annual_gross=60_000)
+    r = calculate_liability(ctx)
+    assert r["gross_income"] == 60_000
+    assert r["filing_status"] == "single"
+    # Matches the dict path
+    assert r["federal_income_tax"] == pytest.approx(_calc(60_000)["federal_income_tax"], abs=1)
+
+
+def test_localecontext_married_derives_mfj():
+    from context import LocaleContext
+    ctx = LocaleContext(tax_year=2024, employment_type="employed", annual_gross=225_000, married=True)
+    r = calculate_liability(ctx)
+    assert r["filing_status"] == "married_filing_jointly"
+
+
+def test_localecontext_filing_status_from_extra_wins():
+    from context import LocaleContext
+    ctx = LocaleContext(tax_year=2024, annual_gross=80_000, married=True,
+                        extra={"filing_status": "head_of_household"})
+    r = calculate_liability(ctx)
+    assert r["filing_status"] == "head_of_household"
+
+
+# ── Self-employment: SE tax + QBI (regression: main path ignored them) ────────
+
+def test_self_employed_gets_se_tax_and_qbi():
+    from context import LocaleContext
+    ctx = LocaleContext(tax_year=2024, employment_type="self_employed", annual_gross=80_000)
+    r = calculate_liability(ctx)
+    assert r["self_employment_tax"] > 0
+    assert r["qbi_deduction"] > 0
+    # SE tax ≈ 80000 * 0.9235 * 15.3% (below SS wage base) ≈ 11,304
+    assert r["self_employment_tax"] == pytest.approx(11_304, abs=50)
+    # QBI = 20% of profit, capped by 20% taxable income — must be positive & ≤ 16k
+    assert 0 < r["qbi_deduction"] <= 16_000
+    # SE filer pays no W-2 FICA
+    assert r["social_security_tax"] == 0
+    assert r["medicare_tax"] == 0
+
+
+def test_employed_no_se_fields():
+    """A plain W-2 employee result must not carry SE/QBI keys."""
+    r = _calc(60_000)
+    assert "self_employment_tax" not in r
+    assert "qbi_deduction" not in r
+
+
+def test_us_tax_via_tax_engine_does_not_error():
+    """Integration: the real product path through tax_engine must work end-to-end."""
+    import sys, os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "scripts"))
+    from tax_engine import calculate_tax_estimate
+    profile = {
+        "meta": {"locale": "us", "tax_year": 2024},
+        "tax_profile": {"locale": "us", "filing_status": "single"},
+        "employment": {"type": "employed", "annual_gross": 80_000},
+    }
+    r = calculate_tax_estimate(profile, 2024)
+    assert "error" not in r, f"US tax via tax_engine errored: {r.get('error')}"
+    assert r["federal_income_tax"] > 0
+
+
 # ── Filing deadlines ──────────────────────────────────────────────────────────
 
 def test_filing_deadline_2024_is_april_15_2025():

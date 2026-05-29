@@ -39,12 +39,20 @@ def calculate_liability(ctx) -> dict:
     """
     from datetime import date
 
-    # Resolve inputs from ctx
-    if hasattr(ctx, "gross_income"):
-        gross = float(ctx.gross_income or 0)
-        filing_status = getattr(ctx, "filing_status", "single") or "single"
-        year = getattr(ctx, "tax_year", None) or date.today().year
+    # Resolve inputs from ctx. Accept both a LocaleContext (the main skill path,
+    # built by LocaleContext.from_finance_profile) and a plain dict (standalone
+    # callers / tests).
+    if hasattr(ctx, "annual_gross"):  # LocaleContext
+        gross = float(getattr(ctx, "annual_gross", 0) or 0)
         extra = getattr(ctx, "extra", {}) or {}
+        # filing_status isn't a first-class LocaleContext field — prefer an
+        # explicit value carried in extra, else derive from marital status.
+        filing_status = extra.get("filing_status") or (
+            "married_filing_jointly" if getattr(ctx, "married", False) else "single"
+        )
+        year = getattr(ctx, "tax_year", None) or date.today().year
+        employment_type = getattr(ctx, "employment_type", "employed") or "employed"
+        side_income = float(getattr(ctx, "side_income", 0) or 0)
     else:
         emp = ctx.get("employment", {}) or {}
         tp = ctx.get("tax_profile", {}) or {}
@@ -52,43 +60,76 @@ def calculate_liability(ctx) -> dict:
         filing_status = tp.get("filing_status", "single") or "single"
         year = tp.get("tax_year") or date.today().year
         extra = tp.get("extra", {}) or {}
+        employment_type = emp.get("type", "employed") or "employed"
+        side_income = float(emp.get("side_income", 0) or 0)
 
     rules = get_tax_year_rules(year)
+    is_self_employed = employment_type in ("self_employed", "freelancer", "self-employed")
+
+    # Split income into W-2 wages vs self-employment net profit.
+    #   self-employed: the whole gross is SE net profit (+ any side income)
+    #   employed:      gross is W-2 wages; side_income (if any) is SE
+    if is_self_employed:
+        w2_wages = 0.0
+        se_profit = gross + side_income
+    else:
+        w2_wages = gross
+        se_profit = side_income
+
+    # ── Self-employment tax (both FICA halves) + ½ above-the-line deduction ──
+    se = None
+    se_tax = 0.0
+    se_deductible_half = 0.0
+    if se_profit > 0:
+        se = calculate_self_employment_tax(se_profit, year, filing_status)
+        se_tax = se["total_se_tax"]
+        se_deductible_half = se["deductible_half"]
 
     # Pre-tax deductions
     pretax_401k = float(extra.get("pretax_401k", 0) or 0)
     pretax_hsa = float(extra.get("pretax_hsa", 0) or 0)
     other_pretax = float(extra.get("other_pretax", 0) or 0)
-    agi = gross - pretax_401k - pretax_hsa - other_pretax
+
+    # AGI = all income − pretax − ½ SE tax (above the line)
+    agi = (w2_wages + se_profit) - pretax_401k - pretax_hsa - other_pretax - se_deductible_half
 
     # Standard deduction (itemized not yet implemented)
     std_deduction = rules["standard_deduction"].get(filing_status, rules["standard_deduction"]["single"])
-    taxable_income = max(0.0, agi - std_deduction)
+    taxable_before_qbi = max(0.0, agi - std_deduction)
+
+    # ── §199A QBI deduction (20% of pass-through profit, capped) ──
+    qbi = None
+    qbi_deduction = 0.0
+    if se_profit > 0:
+        qbi = calculate_qbi_deduction(se_profit, taxable_before_qbi, filing_status, year=year)
+        qbi_deduction = qbi["qbi_deduction"]
+
+    taxable_income = max(0.0, taxable_before_qbi - qbi_deduction)
 
     # Federal income tax
     bracket_key = filing_status if filing_status in rules["brackets"] else "single"
     federal_tax = _apply_brackets(taxable_income, rules["brackets"][bracket_key])
 
-    # FICA (W-2 employee share)
+    # FICA — W-2 employee share only (SE income is covered by SE tax above)
     fica = rules["fica"]
-    ss_tax = min(gross, fica["social_security_wage_base"]) * fica["social_security_rate"]
-    medicare_tax = gross * fica["medicare_rate"]
+    ss_tax = min(w2_wages, fica["social_security_wage_base"]) * fica["social_security_rate"]
+    medicare_tax = w2_wages * fica["medicare_rate"]
     _threshold_key = {
         "married_filing_jointly": "additional_medicare_threshold_mfj",
         "married_filing_separately": "additional_medicare_threshold_mfs",
     }.get(filing_status, "additional_medicare_threshold_single")
     add_medicare_threshold = fica.get(_threshold_key, 200_000)
-    if gross > add_medicare_threshold:
-        medicare_tax += (gross - add_medicare_threshold) * fica["additional_medicare_rate"]
+    if w2_wages > add_medicare_threshold:
+        medicare_tax += (w2_wages - add_medicare_threshold) * fica["additional_medicare_rate"]
 
-    total_tax = federal_tax + ss_tax + medicare_tax
+    total_tax = federal_tax + ss_tax + medicare_tax + se_tax
     withheld = float(extra.get("withheld_federal") or extra.get("withheld") or 0)
     # withheld_federal = W-2 Box 2 only (federal income tax). FICA withheld separately.
     refund = withheld - federal_tax
 
     effective_rate = (federal_tax / gross) if gross > 0 else 0.0
 
-    return {
+    result = {
         "year": year,
         "gross_income": gross,
         "agi": round(agi, 2),
@@ -105,6 +146,15 @@ def calculate_liability(ctx) -> dict:
         "currency": "USD",
         "note": "Federal only. State taxes not included. Itemized deductions not yet supported.",
     }
+    # Self-employment detail — only present for self-employed / side-income filers
+    if se_profit > 0:
+        result["employment_type"] = employment_type
+        result["self_employment_net_profit"] = round(se_profit, 2)
+        result["self_employment_tax"] = round(se_tax, 2)
+        result["self_employment_tax_deductible_half"] = round(se_deductible_half, 2)
+        result["qbi_deduction"] = round(qbi_deduction, 2)
+        result["note"] += " Includes self-employment tax (Schedule SE) and §199A QBI deduction."
+    return result
 
 
 def calculate_self_employment_tax(
