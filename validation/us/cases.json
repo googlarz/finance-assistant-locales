@@ -1,0 +1,90 @@
+[
+  {
+    "id": "us_2024_single_60k_employed",
+    "description": "Single W-2 employee, $60,000 gross, 2024",
+    "source": {
+      "url": "https://www.irs.gov/pub/irs-drop/rp-23-34.pdf",
+      "description": "IRS Rev. Proc. 2023-34 — 2024 single brackets (10% to $11,600, 12% to $47,150, 22% to $100,525), standard deduction $14,600",
+      "accessed": "2026-05-29"
+    },
+    "year": 2024,
+    "locale": "us",
+    "inputs": {
+      "gross_annual_income": 60000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "federal_income_tax": 5216,
+      "social_security_tax": 3720,
+      "medicare_tax": 870,
+      "tolerance_abs": 5
+    },
+    "notes": "Taxable = 60,000 − 14,600 = 45,400. Tax = 10%×11,600 + 12%×(45,400−11,600) = 1,160 + 4,056 = 5,216. FICA: SS 6.2%×60,000 = 3,720; Medicare 1.45%×60,000 = 870."
+  },
+  {
+    "id": "us_2024_single_100k_employed",
+    "description": "Single W-2 employee, $100,000 gross, 2024",
+    "source": {
+      "url": "https://www.irs.gov/pub/irs-drop/rp-23-34.pdf",
+      "description": "IRS Rev. Proc. 2023-34 — 2024 single brackets, standard deduction $14,600",
+      "accessed": "2026-05-29"
+    },
+    "year": 2024,
+    "locale": "us",
+    "inputs": {
+      "gross_annual_income": 100000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "federal_income_tax": 13841,
+      "social_security_tax": 6200,
+      "medicare_tax": 1450,
+      "tolerance_abs": 5
+    },
+    "notes": "Taxable = 100,000 − 14,600 = 85,400. Tax = 1,160 + 12%×35,550 + 22%×(85,400−47,150) = 1,160 + 4,266 + 8,415 = 13,841. SS 6.2%×100,000 = 6,200; Medicare 1.45%×100,000 = 1,450."
+  },
+  {
+    "id": "us_2024_mfj_150k_employed",
+    "description": "Married filing jointly, $150,000 combined gross, 2024",
+    "source": {
+      "url": "https://www.irs.gov/pub/irs-drop/rp-23-34.pdf",
+      "description": "IRS Rev. Proc. 2023-34 — 2024 MFJ brackets (10% to $23,200, 12% to $94,300, 22% to $201,050), standard deduction $29,200",
+      "accessed": "2026-05-29"
+    },
+    "year": 2024,
+    "locale": "us",
+    "inputs": {
+      "gross_annual_income": 150000,
+      "employment_type": "employed",
+      "marital_status": "married"
+    },
+    "expected": {
+      "federal_income_tax": 16682,
+      "tolerance_abs": 5
+    },
+    "notes": "Taxable = 150,000 − 29,200 = 120,800. Tax = 10%×23,200 + 12%×(94,300−23,200) + 22%×(120,800−94,300) = 2,320 + 8,532 + 5,830 = 16,682."
+  },
+  {
+    "id": "us_2024_single_80k_freelance",
+    "description": "Single 1099 freelancer, $80,000 net profit, 2024 (SE tax)",
+    "source": {
+      "url": "https://www.irs.gov/forms-pubs/about-schedule-se-form-1040",
+      "description": "IRS Schedule SE — SE tax on 92.35% of net profit (12.4% Social Security up to $168,600 wage base + 2.9% Medicare)",
+      "accessed": "2026-05-29"
+    },
+    "year": 2024,
+    "locale": "us",
+    "inputs": {
+      "gross_annual_income": 80000,
+      "employment_type": "self_employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "self_employment_tax": 11304,
+      "tolerance_abs": 5
+    },
+    "notes": "Net SE earnings = 80,000 × 0.9235 = 73,880. SE tax = 73,880 × 15.3% (below SS wage base) = 11,303.64. Half is deductible above the line; §199A QBI also applies to federal income tax."
+  }
+]
