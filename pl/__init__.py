@@ -24,6 +24,7 @@ except ImportError:
 LOCALE_CODE = "pl"
 LOCALE_NAME = "Poland"
 SUPPORTED_YEARS = [2024, 2025, 2026]
+CURRENCY = "PLN"
 
 
 def get_tax_rules(year: int) -> dict:
