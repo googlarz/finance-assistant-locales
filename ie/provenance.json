@@ -1,0 +1,67 @@
+{
+  "locale": "ie",
+  "locale_name": "Ireland",
+  "last_reviewed": "2026-07-03",
+  "rules": {
+    "income_tax_bands_and_rates": {
+      "source_url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/tax-relief-charts/index.aspx",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "Standard rate 20%, higher rate 40%. Bands confirmed for 2024-2026 from Revenue tax relief charts and Budget announcements."
+    },
+    "tax_credits": {
+      "source_url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/tax-relief-charts/index.aspx",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "Personal, employee (PAYE), earned income, home carer, SPCCC credits confirmed from Revenue. 2025/2026 increases from Budget 2025."
+    },
+    "usc_rates_and_bands": {
+      "source_url": "https://www.revenue.ie/en/jobs-and-pensions/usc/standard-rates-thresholds.aspx",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "USC bands and rates for 2024-2026. Third band reduced from 4% to 3% in 2025 (Budget 2025). Exempt threshold remains €13,000."
+    },
+    "prsi_class_a": {
+      "source_url": "https://www.gov.ie/en/publication/prsi-class-a-rates/",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "Employee 4% (2024-2025), increasing to 4.2% (2026). Employer rates: 8.75%/11.05% (2024-2025), 9%/11.25% (2026). Weekly threshold €352."
+    },
+    "prsi_class_s": {
+      "source_url": "https://www.citizensinformation.ie/en/social-welfare/irish-social-welfare-system/social-insurance-prsi/self-employed-contributions/",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "Class S: 4% of all income, minimum contribution €500. Nil if income ≤ €5,000."
+    },
+    "pension_relief": {
+      "source_url": "https://www.revenue.ie/en/jobs-and-pensions/pension/tax-relief-for-pension-contributions/index.aspx",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "Age-related limits (15-40%), earnings cap €115,000. Relief at marginal rate. No change 2024-2026."
+    },
+    "filing_deadlines": {
+      "source_url": "https://www.revenue.ie/en/self-assessment-and-self-employment/filing-deadlines/index.aspx",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "Pay & File: 31 Oct (paper), mid-Nov (ROS). Preliminary tax due 31 Oct of current year. 4-year claim window."
+    },
+    "rent_credit": {
+      "source_url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/land-and-property/rent-tax-credit/index.aspx",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "€1,000 per person (€2,000 married). Introduced 2022. Available 2022-2027."
+    },
+    "medical_expenses": {
+      "source_url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/health-and-age/medical-expenses/index.aspx",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "Relief at 20% on unreimbursed qualifying expenses. No upper limit. Claim via Form Med 1 or myAccount."
+    },
+    "income_protection_relief": {
+      "source_url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/insurance-policies/income-protection/index.aspx",
+      "verified_date": "2026-07-03",
+      "confidence": "high",
+      "notes": "Relief at marginal rate on premiums (max 10% of total income). Benefit is taxable as income."
+    }
+  }
+}

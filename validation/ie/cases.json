@@ -1,0 +1,135 @@
+[
+  {
+    "id": "ie_2025_single_50k_employed",
+    "description": "Single PAYE employee, €50,000 gross, 2025",
+    "source": {
+      "url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/tax-relief-charts/index.aspx",
+      "description": "Revenue.ie tax relief charts 2025. Standard band €44,000, credits: personal €2,000 + PAYE €2,000.",
+      "accessed": "2026-07-03"
+    },
+    "year": 2025,
+    "locale": "ie",
+    "inputs": {
+      "gross_annual_income": 50000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "income_tax": 7200,
+      "usc": 1032,
+      "prsi_employee": 2000,
+      "tolerance_abs": 50
+    },
+    "notes": "IT: (44,000×20% + 6,000×40%) - (2,000+2,000) = 11,200 - 4,000 = 7,200. USC: 12,012×0.5% + 15,370×2% + 22,618×3% = 60.06 + 307.40 + 678.54 = 1,046 (approx). PRSI: 50,000×4% = 2,000."
+  },
+  {
+    "id": "ie_2025_single_30k_employed",
+    "description": "Single PAYE employee, €30,000 gross, 2025 — standard rate only",
+    "source": {
+      "url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/tax-relief-charts/index.aspx",
+      "description": "Revenue.ie 2025 rates. All income within standard band.",
+      "accessed": "2026-07-03"
+    },
+    "year": 2025,
+    "locale": "ie",
+    "inputs": {
+      "gross_annual_income": 30000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "income_tax": 2000,
+      "prsi_employee": 1200,
+      "tolerance_abs": 50
+    },
+    "notes": "IT: 30,000×20% = 6,000 - credits 4,000 = 2,000. PRSI: 30,000×4% = 1,200."
+  },
+  {
+    "id": "ie_2025_single_100k_employed",
+    "description": "Single PAYE employee, €100,000 gross, 2025 — higher rate",
+    "source": {
+      "url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/tax-relief-charts/index.aspx",
+      "description": "Revenue.ie 2025. Higher rate band applies above €44,000.",
+      "accessed": "2026-07-03"
+    },
+    "year": 2025,
+    "locale": "ie",
+    "inputs": {
+      "gross_annual_income": 100000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "income_tax": 27200,
+      "prsi_employee": 4000,
+      "tolerance_abs": 100
+    },
+    "notes": "IT: (44,000×20% + 56,000×40%) - 4,000 = (8,800+22,400) - 4,000 = 27,200. PRSI: 100,000×4% = 4,000."
+  },
+  {
+    "id": "ie_2025_single_12k_no_tax",
+    "description": "Single PAYE employee, €12,000 gross, 2025 — credits exceed tax, USC exempt",
+    "source": {
+      "url": "https://www.revenue.ie/en/jobs-and-pensions/usc/standard-rates-thresholds.aspx",
+      "description": "Revenue.ie USC exemption threshold €13,000. Credits exceed tax at this income.",
+      "accessed": "2026-07-03"
+    },
+    "year": 2025,
+    "locale": "ie",
+    "inputs": {
+      "gross_annual_income": 12000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "income_tax": 0,
+      "usc": 0,
+      "prsi_employee": 0,
+      "tolerance_abs": 1
+    },
+    "notes": "IT: 12,000×20% = 2,400 < credits 4,000 → 0. USC: exempt (≤13,000). PRSI: weekly ≤ €352 → 0."
+  },
+  {
+    "id": "ie_2025_self_employed_60k",
+    "description": "Self-employed, €60,000 gross, 2025 — Class S PRSI",
+    "source": {
+      "url": "https://www.citizensinformation.ie/en/social-welfare/irish-social-welfare-system/social-insurance-prsi/self-employed-contributions/",
+      "description": "Class S: 4% on all income, min €500.",
+      "accessed": "2026-07-03"
+    },
+    "year": 2025,
+    "locale": "ie",
+    "inputs": {
+      "gross_annual_income": 60000,
+      "employment_type": "self_employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "income_tax": 11200,
+      "prsi_employee": 2400,
+      "tolerance_abs": 50
+    },
+    "notes": "IT: (44,000×20% + 16,000×40%) - (personal 2,000 + earned income 2,000) = 15,200 - 4,000 = 11,200. PRSI Class S: 60,000×4% = 2,400."
+  },
+  {
+    "id": "ie_2024_single_42k_at_band_edge",
+    "description": "Single PAYE employee, €42,000 gross, 2024 — exactly at standard band limit",
+    "source": {
+      "url": "https://www.revenue.ie/en/personal-tax-credits-reliefs-and-exemptions/tax-relief-charts/index.aspx",
+      "description": "Revenue.ie 2024 rates. Standard band €42,000 for single person.",
+      "accessed": "2026-07-03"
+    },
+    "year": 2024,
+    "locale": "ie",
+    "inputs": {
+      "gross_annual_income": 42000,
+      "employment_type": "employed",
+      "marital_status": "single"
+    },
+    "expected": {
+      "income_tax": 4650,
+      "tolerance_abs": 50
+    },
+    "notes": "IT: 42,000×20% = 8,400 - credits (1,875+1,875) = 8,400 - 3,750 = 4,650."
+  }
+]
