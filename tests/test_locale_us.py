@@ -152,6 +152,55 @@ def test_employed_no_se_fields():
     assert "qbi_deduction" not in r
 
 
+# ── SSTB phase-out wiring (regression: is_sstb never reached calculate_qbi_deduction) ──
+
+def test_sstb_above_threshold_gets_zero_qbi_deduction():
+    """A consultant/lawyer/advisor (SSTB) above the 2025 single threshold ($197,300 +
+    $50k phase-out range) must get $0 QBI, not the full 20% deduction."""
+    from context import LocaleContext
+    ctx = LocaleContext(tax_year=2025, employment_type="self_employed", annual_gross=400_000,
+                        extra={"is_sstb": True})
+    r = calculate_liability(ctx)
+    assert r["qbi_deduction"] == 0.0, (
+        f"SSTB above phase-out should get $0 QBI, got {r['qbi_deduction']}"
+    )
+    assert "fully phased out" in r["qbi_note"].lower()
+
+
+def test_non_sstb_above_threshold_still_gets_qbi():
+    """A non-SSTB business (e.g. a shop, agency) above the threshold keeps the QBI
+    deduction — only SSTBs phase out. (W-2/UBIA cap is a separate, documented gap.)"""
+    from context import LocaleContext
+    ctx = LocaleContext(tax_year=2025, employment_type="self_employed", annual_gross=400_000,
+                        extra={"is_sstb": False})
+    r = calculate_liability(ctx)
+    assert r["qbi_deduction"] > 0, "Non-SSTB above threshold should still get a QBI deduction"
+
+
+def test_sstb_unset_above_threshold_warns_in_qbi_note():
+    """When is_sstb isn't provided and taxable income is above threshold, the engine
+    must not silently assume non-SSTB — qbi_note has to say so."""
+    from context import LocaleContext
+    ctx = LocaleContext(tax_year=2025, employment_type="self_employed", annual_gross=400_000)
+    r = calculate_liability(ctx)
+    assert r["qbi_deduction"] > 0  # same number as before this fix — assumption is non-SSTB
+    assert "is_sstb" in r["qbi_note"] or "SSTB status not provided" in r["qbi_note"], (
+        f"Missing SSTB ambiguity warning in qbi_note: {r['qbi_note']!r}"
+    )
+
+
+def test_sstb_below_threshold_gets_full_qbi_regardless():
+    """Below the phase-out threshold, SSTB status doesn't matter — full deduction either way."""
+    from context import LocaleContext
+    ctx_sstb = LocaleContext(tax_year=2025, employment_type="self_employed", annual_gross=80_000,
+                             extra={"is_sstb": True})
+    ctx_non = LocaleContext(tax_year=2025, employment_type="self_employed", annual_gross=80_000,
+                            extra={"is_sstb": False})
+    r_sstb = calculate_liability(ctx_sstb)
+    r_non = calculate_liability(ctx_non)
+    assert r_sstb["qbi_deduction"] == r_non["qbi_deduction"] > 0
+
+
 def test_us_tax_via_tax_engine_does_not_error():
     """Integration: the real product path through tax_engine must work end-to-end."""
     import sys, os
