@@ -36,6 +36,11 @@ def calculate_liability(ctx) -> dict:
       - tax_profile.extra.pretax_401k (float, optional)
       - tax_profile.extra.pretax_hsa (float, optional)
       - tax_profile.extra.other_pretax (float, optional)
+      - tax_profile.extra.is_sstb (bool, optional): whether the self-employed income is
+          from a Specified Service Trade or Business (consulting, law, health, financial
+          services, etc.) for §199A QBI phase-out purposes. If omitted and taxable income
+          is above the phase-out threshold, non-SSTB is assumed and the QBI note says so —
+          set this explicitly for an accurate deduction.
     """
     from datetime import date
 
@@ -98,11 +103,25 @@ def calculate_liability(ctx) -> dict:
     taxable_before_qbi = max(0.0, agi - std_deduction)
 
     # ── §199A QBI deduction (20% of pass-through profit, capped) ──
+    # is_sstb must come from the caller (extra.extra.is_sstb) — there is no way to infer
+    # specified-service-trade-or-business status from income alone. When it's not set
+    # and taxable income is above the phase-out threshold, we say so explicitly instead
+    # of silently assuming non-SSTB (which would overstate the deduction for anyone
+    # who actually is one — consultants, lawyers, doctors, financial advisors, etc.).
     qbi = None
     qbi_deduction = 0.0
     if se_profit > 0:
-        qbi = calculate_qbi_deduction(se_profit, taxable_before_qbi, filing_status, year=year)
+        is_sstb = extra.get("is_sstb")
+        qbi = calculate_qbi_deduction(se_profit, taxable_before_qbi, filing_status, year=year,
+                                       is_sstb=bool(is_sstb))
         qbi_deduction = qbi["qbi_deduction"]
+        if is_sstb is None and qbi.get("above_threshold"):
+            qbi["note"] = (
+                "SSTB status not provided — assumed non-SSTB. If this is a specified "
+                "service trade or business (consulting, law, health, financial services, "
+                "etc.), the deduction may be $0 instead of the amount shown. Set "
+                "tax_profile.extra.is_sstb to get an accurate number. " + qbi["note"]
+            )
 
     taxable_income = max(0.0, taxable_before_qbi - qbi_deduction)
 
@@ -153,6 +172,7 @@ def calculate_liability(ctx) -> dict:
         result["self_employment_tax"] = round(se_tax, 2)
         result["self_employment_tax_deductible_half"] = round(se_deductible_half, 2)
         result["qbi_deduction"] = round(qbi_deduction, 2)
+        result["qbi_note"] = qbi["note"]
         result["note"] += " Includes self-employment tax (Schedule SE) and §199A QBI deduction."
     return result
 
@@ -320,6 +340,7 @@ def calculate_qbi_deduction(
         "tentative_deduction": round(tentative, 2),
         "taxable_income_cap": round(taxable_cap, 2),
         "phase_out_reduction": round(phase_out_reduction, 2),
+        "above_threshold": taxable_income_before_qbi > threshold,
         "note": " ".join(note_parts),
         "currency": "USD",
     }
