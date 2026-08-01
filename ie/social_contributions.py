@@ -79,6 +79,7 @@ def _class_a(gross: float, rules: dict, year: int) -> dict:
         "prsi_employee": prsi_employee,
         "prsi_employer": prsi_employer,
         "total_prsi": total,
+        "total": total,
         "class": "A",
         "rates": {
             "employee": employee_rate,
@@ -113,6 +114,7 @@ def _class_s(gross: float, rules: dict, year: int) -> dict:
         "prsi_employee": prsi_employee,
         "prsi_employer": 0.0,
         "total_prsi": prsi_employee,
+        "total": prsi_employee,
         "class": "S",
         "rates": {
             "employee": rate,

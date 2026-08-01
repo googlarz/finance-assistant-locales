@@ -3,7 +3,11 @@ Validation runner for the Irish (ie) locale.
 
 Loads cases.json, builds LocaleContext for each case, runs calculate_tax,
 and compares results against expected values within tolerance.
+
+run_cases() returns a list of per-case dicts matching the shared runner contract:
+  [{"id": str, "locale": "ie", "status": "pass"|"fail"|"skip", "failures": [...], "result": ...}]
 """
+from __future__ import annotations
 
 import json
 import sys
@@ -17,17 +21,18 @@ from context import LocaleContext
 from ie import calculate_tax
 
 
-def run_cases(verbose: bool = False) -> dict:
+def run_cases(verbose: bool = False) -> list[dict]:
     """
-    Run all Irish validation cases and return a summary.
+    Run all Irish validation cases.
 
-    Returns dict with: total, passed, failed, errors, details.
+    Returns a list of result dicts (one per case) with:
+      id, locale, status ("pass"|"fail"|"skip"), failures, result
     """
     cases_path = Path(__file__).parent / "cases.json"
     with open(cases_path) as f:
         cases = json.load(f)
 
-    results = {"total": len(cases), "passed": 0, "failed": 0, "errors": [], "details": []}
+    results = []
 
     for case in cases:
         case_id = case["id"]
@@ -51,47 +56,51 @@ def run_cases(verbose: bool = False) -> dict:
                     continue
                 actual = result.get(key, 0)
                 exp = expected[key]
-                if abs(actual - exp) > tolerance:
-                    failures.append(
-                        f"  {key}: expected {exp}, got {actual} "
-                        f"(diff {abs(actual - exp):.2f}, tolerance {tolerance})"
-                    )
+                diff = abs(actual - exp)
+                if diff > tolerance:
+                    failures.append({
+                        "field": key,
+                        "expected": exp,
+                        "actual": actual,
+                        "diff": diff,
+                    })
 
-            if failures:
-                results["failed"] += 1
-                detail = {"id": case_id, "status": "FAIL", "failures": failures}
-                results["errors"].append(f"{case_id}: FAIL")
-                for f_line in failures:
-                    results["errors"].append(f_line)
-            else:
-                results["passed"] += 1
-                detail = {"id": case_id, "status": "PASS"}
-
-            results["details"].append(detail)
+            results.append({
+                "id": case_id,
+                "locale": "ie",
+                "status": "fail" if failures else "pass",
+                "failures": failures,
+                "result": result,
+            })
 
             if verbose:
                 status = "PASS" if not failures else "FAIL"
                 print(f"  [{status}] {case_id}: {case['description']}")
-                if failures:
-                    for f_line in failures:
-                        print(f_line)
+                for f_ in failures:
+                    print(f"         {f_['field']}: expected={f_['expected']}, actual={f_['actual']:.2f}, diff={f_['diff']:.2f}")
 
         except Exception as e:
-            results["failed"] += 1
-            results["errors"].append(f"{case_id}: ERROR — {e}")
-            results["details"].append({"id": case_id, "status": "ERROR", "error": str(e)})
+            results.append({
+                "id": case_id,
+                "locale": "ie",
+                "status": "skip",
+                "failures": [],
+                "error": str(e),
+                "result": None,
+            })
             if verbose:
-                print(f"  [ERROR] {case_id}: {e}")
+                print(f"  [SKIP] {case_id}: {e}")
 
     return results
 
 
 if __name__ == "__main__":
-    verbose = "--verbose" in sys.argv or "-v" in sys.argv
     print("Irish (ie) locale validation")
-    print("=" * 40)
+    print("=" * 60)
     results = run_cases(verbose=True)
-    print("=" * 40)
-    print(f"Total: {results['total']} | Passed: {results['passed']} | Failed: {results['failed']}")
-    if results["failed"] > 0:
+    passed = sum(1 for r in results if r["status"] == "pass")
+    failed = sum(1 for r in results if r["status"] == "fail")
+    skipped = sum(1 for r in results if r["status"] == "skip")
+    print(f"\nIE: {passed}/{len(results)} passed ({failed} failed, {skipped} skipped)")
+    if failed > 0:
         sys.exit(1)
