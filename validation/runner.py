@@ -19,7 +19,7 @@ _LOCALES_ROOT = os.path.join(os.path.dirname(__file__), "..")
 if _LOCALES_ROOT not in sys.path:
     sys.path.insert(0, _LOCALES_ROOT)
 
-_ALL_LOCALES = ["de", "uk", "fr", "nl", "pl", "us"]
+_ALL_LOCALES = ["de", "ie", "uk", "fr", "nl", "pl", "us"]
 
 
 def _load_locale_runner(locale: str):
