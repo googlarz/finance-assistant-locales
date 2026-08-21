@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "us"))
 
 from us.tax_rules import TAX_YEAR_RULES, get_tax_year_rules
-from us.tax_calculator import calculate_liability
+from us.tax_calculator import calculate_liability, calculate_qbi_deduction
 from us.tax_dates import get_filing_deadline, get_extension_deadline, get_estimated_tax_deadlines
 from us.social_contributions import estimate_fica, estimate_self_employment_tax
 import us as locale_us
@@ -167,14 +167,31 @@ def test_sstb_above_threshold_gets_zero_qbi_deduction():
     assert "fully phased out" in r["qbi_note"].lower()
 
 
-def test_non_sstb_above_threshold_still_gets_qbi():
-    """A non-SSTB business (e.g. a shop, agency) above the threshold keeps the QBI
-    deduction — only SSTBs phase out. (W-2/UBIA cap is a separate, documented gap.)"""
+def test_non_sstb_above_threshold_no_wage_data_gets_zero_qbi():
+    """Regression: a non-SSTB sole proprietor with no employees and no
+    business property (the common case) is capped at $0 QBI once fully
+    above the phase-in range — the W-2/UBIA limit's greater-of test is
+    max(50% of $0 wages, 25% of $0 + 2.5% of $0 UBIA) = $0. Overstating
+    this was issue #5's second, previously-unfixed gap."""
     from context import LocaleContext
     ctx = LocaleContext(tax_year=2025, employment_type="self_employed", annual_gross=400_000,
                         extra={"is_sstb": False})
     r = calculate_liability(ctx)
-    assert r["qbi_deduction"] > 0, "Non-SSTB above threshold should still get a QBI deduction"
+    assert r["qbi_deduction"] == 0.0
+    assert "wage" in r["qbi_note"].lower()
+
+
+def test_non_sstb_above_threshold_with_wages_gets_wage_limited_qbi():
+    """When the business's own W-2 wages are supplied, the deduction is
+    capped at the greater-of-50%-wages-or-25%-wages-plus-2.5%-UBIA test,
+    not $0 and not the unlimited 20% figure."""
+    from context import LocaleContext
+    ctx = LocaleContext(tax_year=2025, employment_type="self_employed", annual_gross=400_000,
+                        extra={"is_sstb": False, "business_w2_wages_paid": 100_000})
+    r = calculate_liability(ctx)
+    # wage_limit = max(100_000*0.50, 100_000*0.25 + 0) = 50_000
+    assert 0 < r["qbi_deduction"] <= 50_000
+    assert "wage" in r["qbi_note"].lower()
 
 
 def test_sstb_unset_above_threshold_warns_in_qbi_note():
@@ -183,10 +200,34 @@ def test_sstb_unset_above_threshold_warns_in_qbi_note():
     from context import LocaleContext
     ctx = LocaleContext(tax_year=2025, employment_type="self_employed", annual_gross=400_000)
     r = calculate_liability(ctx)
-    assert r["qbi_deduction"] > 0  # same number as before this fix — assumption is non-SSTB
+    assert r["qbi_deduction"] == 0.0  # assumption is non-SSTB, no wage data -> $0 wage limit
     assert "is_sstb" in r["qbi_note"] or "SSTB status not provided" in r["qbi_note"], (
         f"Missing SSTB ambiguity warning in qbi_note: {r['qbi_note']!r}"
     )
+
+
+def test_qbi_wage_limit_phase_in_blends_toward_wage_limited_amount():
+    """In the partial phase-in range, the deduction blends between the
+    unlimited 20% figure and the wage-limited amount — not a hard cliff."""
+    # 2025 single threshold $197,300, range $50,000 -> fully phased in at $247,300.
+    # Halfway through: $222,300.
+    result = calculate_qbi_deduction(
+        qbi=300_000, taxable_income_before_qbi=222_300, filing_status="single", year=2025,
+        is_sstb=False, w2_wages_paid=0.0, ubia_qualified_property=0.0,
+    )
+    tentative = 300_000 * 0.20  # 60,000
+    # Halfway through the range with a $0 wage limit: ~50% reduction toward 0.
+    assert 0 < result["qbi_deduction"] < tentative
+
+
+def test_qbi_below_threshold_ignores_wage_limit_even_with_zero_wages():
+    """Below the threshold, the wage/UBIA limit doesn't apply at all —
+    zero wages must not zero out the deduction."""
+    result = calculate_qbi_deduction(
+        qbi=50_000, taxable_income_before_qbi=100_000, filing_status="single", year=2025,
+        is_sstb=False, w2_wages_paid=0.0,
+    )
+    assert result["qbi_deduction"] == 50_000 * 0.20
 
 
 def test_sstb_below_threshold_gets_full_qbi_regardless():
@@ -237,6 +278,25 @@ def test_quarterly_estimated_deadlines_returns_4_entries():
     assert len(deadlines) == 4
     quarters = [d["quarter"] for d in deadlines]
     assert quarters == ["Q1", "Q2", "Q3", "Q4"]
+
+
+def test_quarterly_estimated_deadlines_2024_matches_real_irs_dates():
+    """2024's Q2/Q3 happen to fall on a weekend and shift — this is the
+    exact pair that was previously hardcoded for every year."""
+    deadlines = {d["quarter"]: d["deadline"] for d in get_estimated_tax_deadlines(2024)}
+    assert deadlines["Q2"] == "2024-06-17"  # June 15 is a Saturday
+    assert deadlines["Q3"] == "2024-09-16"  # September 15 is a Sunday
+
+
+def test_quarterly_estimated_deadlines_2025_matches_real_irs_dates():
+    """Regression: Q2/Q3 were hardcoded to 2024's shifted dates for EVERY
+    tax_year — 2025's real IRS dates are June 16 and September 15, a day
+    earlier than what was previously returned for both quarters."""
+    deadlines = {d["quarter"]: d["deadline"] for d in get_estimated_tax_deadlines(2025)}
+    assert deadlines["Q1"] == "2025-04-15"
+    assert deadlines["Q2"] == "2025-06-16"  # June 15 is a Sunday
+    assert deadlines["Q3"] == "2025-09-15"  # September 15 is a Monday — no shift
+    assert deadlines["Q4"] == "2026-01-15"
 
 
 # ── Social contributions (FICA) ───────────────────────────────────────────────

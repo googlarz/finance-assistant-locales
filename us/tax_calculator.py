@@ -112,8 +112,13 @@ def calculate_liability(ctx) -> dict:
     qbi_deduction = 0.0
     if se_profit > 0:
         is_sstb = extra.get("is_sstb")
-        qbi = calculate_qbi_deduction(se_profit, taxable_before_qbi, filing_status, year=year,
-                                       is_sstb=bool(is_sstb))
+        raw_wages = extra.get("business_w2_wages_paid")
+        qbi = calculate_qbi_deduction(
+            se_profit, taxable_before_qbi, filing_status, year=year,
+            is_sstb=bool(is_sstb),
+            w2_wages_paid=(float(raw_wages) if raw_wages is not None else None),
+            ubia_qualified_property=float(extra.get("business_ubia_qualified_property", 0) or 0),
+        )
         qbi_deduction = qbi["qbi_deduction"]
         if is_sstb is None and qbi.get("above_threshold"):
             qbi["note"] = (
@@ -254,6 +259,8 @@ def calculate_qbi_deduction(
     filing_status: str = "single",
     year: int = 2024,
     is_sstb: bool = False,
+    w2_wages_paid: float | None = None,
+    ubia_qualified_property: float = 0.0,
 ) -> dict:
     """
     Estimate the §199A Qualified Business Income (QBI) deduction.
@@ -265,8 +272,15 @@ def calculate_qbi_deduction(
          consultants, lawyers, accountants, financial advisors, etc.) when
          taxable income exceeds the threshold.
 
-    W-2 wages / UBIA limitation (for high-income non-SSTBs) is NOT implemented
-    here — it requires payroll records. Mark such cases in the note field.
+    W-2 wages / UBIA limitation for non-SSTBs above the threshold: the
+    deduction is capped at the GREATER of 50% of W-2 wages paid by the
+    business, or 25% of W-2 wages + 2.5% of the unadjusted basis (UBIA) of
+    qualified property, phased in over the same range as the SSTB
+    phase-out. w2_wages_paid defaults to 0.0 (not None → not provided) when
+    the caller doesn't supply it — the common case for a sole proprietor
+    with no employees and no significant depreciable business property,
+    which is exactly the case where an unlimited deduction would overstate
+    it (issue #5's "second gap").
 
     Sources:
       IRS §199A, IRS Form 8995-A instructions
@@ -279,6 +293,11 @@ def calculate_qbi_deduction(
         filing_status: "single" | "married_filing_jointly"
         year: Tax year (2024 or 2025)
         is_sstb: True for specified service trades or businesses
+        w2_wages_paid: W-2 wages PAID BY THE BUSINESS (payroll), not the
+            taxpayer's own wage income. None (not provided) is treated as 0.0
+            for the wage-limit calculation, with a note explaining why.
+        ubia_qualified_property: Unadjusted basis immediately after
+            acquisition of qualified business property (depreciable assets)
 
     Returns:
         qbi_deduction: The allowed §199A deduction amount
@@ -321,16 +340,38 @@ def calculate_qbi_deduction(
             note_parts.append(
                 f"SSTB partial phase-out applied ({reduction_pct:.0%} reduction)."
             )
+    elif not is_sstb and taxable_income_before_qbi > threshold:
+        wages_provided = w2_wages_paid is not None
+        wages = w2_wages_paid or 0.0
+        wage_limit = max(wages * 0.50, wages * 0.25 + ubia_qualified_property * 0.025)
+
+        if taxable_income_before_qbi >= threshold + phase_out_range:
+            # Fully phased in — capped at the wage/UBIA limit outright.
+            deduction = min(tentative, taxable_cap, wage_limit)
+        else:
+            # Partial phase-in: blend between the unlimited amount and the
+            # wage-limited amount, proportional to how far into the range.
+            excess = taxable_income_before_qbi - threshold
+            phase_in_pct = excess / phase_out_range
+            reduction = phase_in_pct * max(0.0, tentative - wage_limit)
+            deduction = min(tentative - reduction, taxable_cap)
+
+        if wages_provided or ubia_qualified_property:
+            note_parts.append(
+                f"W-2 wages/UBIA limitation applied (wage_limit=${wage_limit:,.0f})."
+            )
+        else:
+            note_parts.append(
+                "No business W-2 wages or UBIA provided — treated as $0 for the wage "
+                "limitation (the common no-employee sole-proprietor case). If the "
+                "business pays W-2 wages or owns significant depreciable property, set "
+                "tax_profile.extra.business_w2_wages_paid / "
+                "business_ubia_qualified_property for an accurate (likely higher) figure."
+            )
     else:
         deduction = min(tentative, taxable_cap)
 
     deduction = max(0.0, deduction)
-
-    if taxable_income_before_qbi > threshold and not is_sstb:
-        note_parts.append(
-            "W-2 wages / UBIA limitation may apply for non-SSTBs above the threshold — "
-            "consult a tax professional or Form 8995-A."
-        )
 
     if not note_parts:
         note_parts.append("Standard 20% QBI deduction, below phase-out threshold.")
