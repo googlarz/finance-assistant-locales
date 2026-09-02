@@ -454,3 +454,24 @@ def test_tax_increases_with_income():
         result = calculate_tax(ctx)
         taxes.append(result["income_tax"])
     assert taxes == sorted(taxes), "Income tax should be monotonically increasing"
+
+
+def test_plafonnement_does_not_cap_uncapped_marital_splitting():
+    """Regression: the plafonnement du quotient familial only caps the
+    benefit from dependent half-parts — the base marital splitting (2
+    parts vs 1 for married/PACS) is unlimited under French law. Comparing
+    against a flat 1-part reference regardless of marital status wrongly
+    capped the marital benefit itself for high earners with no children."""
+    net_income = 400_000.0
+    parts = 2.0  # married, no children
+
+    capped_wrongly = calculate_income_tax(net_income, parts, 2024)  # married=False default
+    correct = calculate_income_tax(net_income, parts, 2024, married=True)
+
+    # The old flat-1-part reference must produce a HIGHER (wrongly capped) tax
+    # than the correct married-baseline calculation.
+    assert capped_wrongly > correct
+    # Full, uncapped married splitting: tax at half-income x2, no cap applies
+    # to a childless couple since there are no extra half-parts to cap.
+    expected = calculate_income_tax(net_income / 2, 1.0, 2024) * 2
+    assert correct == pytest.approx(expected, abs=0.02)

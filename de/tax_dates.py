@@ -36,13 +36,14 @@ from datetime import date, timedelta
 ADVISED_DEADLINES = {
     False: {
         2023: date(2025, 6, 2),    # § 149 Abs. 2 AO (extended due to COVID precedent)
-        2024: date(2026, 4, 30),   # BMF-Schreiben; standard deadline: 31 Jul 2025
-        2025: date(2027, 7, 31),   # standard deadline § 149 Abs. 2 AO
+        2024: date(2025, 7, 31),   # standard deadline § 149 Abs. 2 AO (31 Jul of year+1) — was
+                                   # hardcoded to 2026-04-30, contradicting this line's own comment
+        2025: date(2026, 7, 31),   # standard deadline § 149 Abs. 2 AO — was 2027-07-31 (a year late)
     },
     True: {
         2023: date(2025, 11, 3),   # § 149 Abs. 3 AO, extended
-        2024: date(2026, 9, 30),   # § 149 Abs. 3 AO
-        2025: date(2028, 2, 28),   # § 149 Abs. 3 AO — last day Feb 2028
+        2024: date(2026, 2, 28),   # § 149 Abs. 3 AO — last day Feb of year+2
+        2025: date(2027, 2, 28),   # § 149 Abs. 3 AO — was 2028-02-28 (a year late)
     },
 }
 

@@ -116,6 +116,19 @@ TAX_YEAR_RULES = {
         "ni_employer_secondary_threshold": 9_100,
         "ni_employer_rate": 0.138,
         "currency": "GBP",
+        # Scottish bands were missing entirely for this year — tax_calculator.py's
+        # `"scottish_bands" in rules` check silently fell back to rUK bands/rates
+        # for any Scottish taxpayer on this tax year, with no confidence penalty
+        # or note. Projected forward from 2025/26 (frozen policy, same as the
+        # rUK thresholds above) pending Scottish Budget confirmation.
+        "scottish_bands": [
+            (0.19, 0,       2_827),    # Starter rate
+            (0.20, 2_827,   14_921),   # Basic rate
+            (0.21, 14_921,  31_092),   # Intermediate rate
+            (0.42, 31_092,  62_430),   # Higher rate
+            (0.45, 62_430,  125_140),  # Advanced rate
+            (0.48, 125_140, None),     # Top rate
+        ],
         "confidence": "Likely",  # Frozen thresholds confirmed to 2028; 2026/27 projection
     },
 }

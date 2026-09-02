@@ -1,6 +1,6 @@
 """Tests for German tax calculations using LocaleContext directly."""
 import pytest
-from context import LocaleContext, ReceiptItem
+from context import LocaleContext, ReceiptItem, ChildInfo
 from de import calculate_tax
 from de.tax_rules import TAX_YEAR_RULES, calculate_income_tax, calculate_soli
 
@@ -141,3 +141,34 @@ def test_all_2026_params_filled():
     ]
     for key in critical_keys:
         assert bd[key] is not None, f"breakdown.{key} is None"
+
+
+def test_kinderfreibetrag_guenstigerpruefung_adds_back_kindergeld():
+    """Regression: § 31 EStG requires Kindergeld already received to be
+    added back when the Kinderfreibetrag proves more favorable — it isn't
+    free once the Freibetrag is used instead. Was dropped entirely,
+    overstating the refund by exactly the annual Kindergeld amount."""
+    from de.tax_rules import calculate_income_tax as _cit, TAX_YEAR_RULES
+
+    p = TAX_YEAR_RULES[2025]
+    kindergeld_annual = 1 * p["kindergeld_per_child"] * 12
+    kinderfreibetrag_total = 1 * (p["kinderfreibetrag_child"] + p["kinderfreibetrag_bea"]) * 2  # married: both parents
+
+    ctx = LocaleContext(
+        tax_year=2025, employment_type="employed", annual_gross=600_000.0,
+        married=True, tax_class="III",
+        children=[ChildInfo(birth_year=2015)],
+    )
+    result = calculate_tax(ctx)
+    tax = result["breakdown"]["estimated_tax"]
+    zve = result["breakdown"]["zu_versteuerndes_einkommen"]
+
+    zve_kfb = max(0, zve - kinderfreibetrag_total)
+    tax_kfb = _cit(zve_kfb / 2, 2025) * 2
+    tax_no_kfb = _cit(zve / 2, 2025) * 2
+
+    # The Kinderfreibetrag branch must have fired for this income level
+    assert (tax_no_kfb - tax_kfb - kindergeld_annual) > 0
+    # And the resulting tax must include the clawed-back Kindergeld, not
+    # just the Kinderfreibetrag-reduced figure on its own.
+    assert tax == pytest.approx(tax_kfb + kindergeld_annual, abs=0.02)

@@ -74,8 +74,16 @@ def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
     employment_type = ctx.employment_type
     partner = ctx.married
 
+    # 30%-regeling: was detected and surfaced in the breakdown as
+    # "expat_30_ruling_detected" but never actually reduced the Box 1
+    # taxable base — every 30%-ruling expat was taxed on 100% of gross
+    # with no reduction. Up to 30% of gross may be paid as a tax-free
+    # allowance (salary cap not modeled here — a conservative simplification).
+    expat_30pct = ctx.expat and ctx.extra.get("has_30_ruling", False)
+    box1_taxable = gross * 0.70 if expat_30pct else gross
+
     # ── Box 1 ──────────────────────────────────────────────────────────────
-    box1_raw = calculate_box1_tax(gross, rules)
+    box1_raw = calculate_box1_tax(box1_taxable, rules)
 
     # Heffingskortingen
     hk = calculate_heffingskorting(gross, rules)
@@ -125,8 +133,6 @@ def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
         confidence = "Likely"
     else:
         confidence = base_confidence
-
-    expat_30pct = ctx.expat and ctx.extra.get("has_30_ruling", False)
 
     return {
         "gross": gross,

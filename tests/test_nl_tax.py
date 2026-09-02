@@ -517,3 +517,25 @@ def test_2026_confidence_likely_or_definitive():
     )
     result = calculate_tax(ctx)
     assert result["confidence"] in ("Likely", "Definitive")
+
+
+def test_30_ruling_reduces_box1_taxable_income():
+    """Regression: the 30%-ruling was detected (`expat_30_ruling_detected`
+    surfaced in the breakdown) but never actually applied — every ruling
+    expat was taxed on 100% of gross with no reduction, despite the field
+    implying otherwise."""
+    ctx = LocaleContext(
+        tax_year=2024, employment_type="employed", annual_gross=100_000.0,
+        expat=True, extra={"has_30_ruling": True},
+    )
+    ctx_no_ruling = LocaleContext(
+        tax_year=2024, employment_type="employed", annual_gross=100_000.0,
+        expat=True, extra={"has_30_ruling": False},
+    )
+    result = calculate_tax(ctx)
+    result_no_ruling = calculate_tax(ctx_no_ruling)
+
+    assert result["breakdown"]["expat_30_ruling_detected"] is True
+    # With the ruling applied, Box 1 tax before credits must be lower —
+    # computed on 70% of gross, not the full amount.
+    assert result["breakdown"]["box1_raw_tax"] < result_no_ruling["breakdown"]["box1_raw_tax"]

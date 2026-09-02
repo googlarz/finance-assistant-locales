@@ -469,3 +469,17 @@ def test_generate_tax_claims_accepts_dict_profile():
     assert len(claims) >= 1
     pa = [c for c in claims if c["id"] == "personal_allowance"]
     assert len(pa) == 1
+
+
+def test_scottish_bands_present_for_2026():
+    """Regression: 2026's rules had no "scottish_bands" key at all —
+    tax_calculator's `"scottish_bands" in rules` check silently fell back
+    to rUK bands for any Scottish taxpayer on this tax year, mislabeled as
+    tax_system="UK (rUK)" with no confidence penalty or note."""
+    assert "scottish_bands" in TAX_YEAR_RULES[2026]
+
+
+def test_scottish_taxpayer_2026_uses_scottish_bands_not_ruk():
+    ctx = LocaleContext(tax_year=2026, employment_type="employed", annual_gross=70_000.0, region="Scotland")
+    result = calculate_tax(ctx)
+    assert result["tax_system"] != "UK (rUK)"

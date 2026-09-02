@@ -105,7 +105,7 @@ def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
     parts = calculate_parts(married, children_count)
 
     # ── Raw income tax (after plafonnement) ───────────────────────────────
-    raw_ir = calculate_income_tax(net_income, parts, resolved_year)
+    raw_ir = calculate_income_tax(net_income, parts, resolved_year, married=married)
 
     # ── Décote ────────────────────────────────────────────────────────────
     income_tax = apply_decote(raw_ir, married, resolved_year)

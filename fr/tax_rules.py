@@ -166,13 +166,15 @@ def apply_brackets(income_per_part: float, brackets: list[dict]) -> float:
     return tax
 
 
-def calculate_income_tax(net_income: float, parts: float, year: int) -> float:
+def calculate_income_tax(net_income: float, parts: float, year: int, married: bool = False) -> float:
     """
     Calculate raw IR (before décote, after plafonnement du quotient familial).
 
     The function applies the bracket schedule to (net_income / parts),
     multiplies back by parts, then enforces the plafonnement du quotient
-    familial cap compared to the single-person calculation.
+    familial cap compared to the household's BASE quotient (1 part single,
+    2 parts married/PACS — the marital splitting itself is uncapped under
+    French law; only the extra half-parts from dependents are capped).
     """
     rules = get_tax_year_rules(year)
     brackets = rules["brackets"]
@@ -182,14 +184,18 @@ def calculate_income_tax(net_income: float, parts: float, year: int) -> float:
     tax_per_part = apply_brackets(income_per_part, brackets)
     raw_tax = tax_per_part * parts
 
-    # Tax for a single person (1 part) to compute the plafonnement
-    tax_single_person = apply_brackets(net_income, brackets)
+    # Tax at the household's BASE quotient (1 part single, 2 parts married) —
+    # the plafonnement only caps the benefit ABOVE this baseline. Comparing
+    # against a flat 1-part reference regardless of marital status wrongly
+    # capped the uncapped marital-splitting benefit itself.
+    base_parts = 2.0 if married else 1.0
+    tax_base_parts = apply_brackets(net_income / base_parts, brackets) * base_parts
 
-    # The benefit from extra parts must not exceed plafond_demi_part × extra_half_parts
-    extra_half_parts = (parts - 1.0) * 2  # each extra half-part
+    # The benefit from parts beyond the base must not exceed plafond_demi_part × extra_half_parts
+    extra_half_parts = (parts - base_parts) * 2  # each extra half-part
     max_benefit = rules["plafond_demi_part"] * extra_half_parts
-    if (tax_single_person - raw_tax) > max_benefit:
-        raw_tax = tax_single_person - max_benefit
+    if (tax_base_parts - raw_tax) > max_benefit:
+        raw_tax = tax_base_parts - max_benefit
 
     return max(0.0, raw_tax)
 

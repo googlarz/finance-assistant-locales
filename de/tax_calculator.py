@@ -203,8 +203,11 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
     if children:
         zve_kfb = max(0, zve - kinderfreibetrag_total)
         tax_kfb = calculate_income_tax(zve_kfb / 2, year) * 2 if married else calculate_income_tax(zve_kfb, year)
+        # Günstigerprüfung (§ 31 EStG): if the Kinderfreibetrag is more
+        # favorable, the Kindergeld already received must be added back —
+        # it isn't free once the Freibetrag is used instead.
         if (tax - tax_kfb - kindergeld_annual) > 0:
-            tax = tax_kfb
+            tax = tax_kfb + kindergeld_annual
 
     soli = calculate_soli(tax, year, married=married)
     total_tax_due = tax + soli + (kirchensteuer_actual if g["kirchensteuer"] else 0)
