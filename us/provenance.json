@@ -65,5 +65,41 @@
     "source": "IRS Rev. Proc. 2024-25",
     "url": "https://www.irs.gov/pub/irs-drop/rp-24-25.pdf",
     "verified": "2024-11-01"
+  },
+  "standard_deduction_single_2026": {
+    "value": 16100,
+    "source": "IRS Rev. Proc. 2025-32",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+    "verified": "2026-10-19"
+  },
+  "standard_deduction_mfj_2026": {
+    "value": 32200,
+    "source": "IRS Rev. Proc. 2025-32",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+    "verified": "2026-10-19"
+  },
+  "social_security_wage_base_2026": {
+    "value": 184500,
+    "source": "SSA 2026 COLA Fact Sheet",
+    "url": "https://www.ssa.gov/news/en/cola/factsheets/2026.html",
+    "verified": "2026-10-19"
+  },
+  "401k_limit_2026": {
+    "value": 24500,
+    "source": "IRS Notice 2025-67",
+    "url": "https://www.irs.gov/pub/irs-drop/n-25-67.pdf",
+    "verified": "2026-10-19"
+  },
+  "ira_limit_2026": {
+    "value": 7500,
+    "source": "IRS Notice 2025-67",
+    "url": "https://www.irs.gov/pub/irs-drop/n-25-67.pdf",
+    "verified": "2026-10-19"
+  },
+  "hsa_individual_2026": {
+    "value": 4400,
+    "source": "IRS Rev. Proc. 2025-19",
+    "url": "https://www.irs.gov/irb/2025-21_IRB",
+    "verified": "2026-10-19"
   }
 }

@@ -340,6 +340,25 @@ def test_2025_ss_wage_base():
     assert rules["fica"]["social_security_wage_base"] == 176_100
 
 
+def test_2026_uses_2026_figures_not_2025():
+    """Regression: 2026 used to inherit every 2025 figure via **_2025."""
+    rules = get_tax_year_rules(2026)
+    assert rules["standard_deduction"]["single"] == 16_100
+    assert rules["standard_deduction"]["married_filing_jointly"] == 32_200
+    assert rules["brackets"]["single"][0] == (0.10, 0, 12_400)
+    assert rules["contribution_limits"]["401k_employee"] == 24_500
+    assert rules["contribution_limits"]["ira"] == 7_500
+    assert rules["contribution_limits"]["hsa_family"] == 8_750
+    assert rules["fica"]["social_security_wage_base"] == 184_500
+    assert rules["qbi"]["phase_out_range_single"] == 75_000
+
+
+def test_2026_brackets_are_contiguous():
+    for status, brackets in get_tax_year_rules(2026)["brackets"].items():
+        for (_, _, upper), (_, lower, _) in zip(brackets, brackets[1:]):
+            assert upper == lower, status
+
+
 def test_future_year_falls_back_to_most_recent():
     from locales.us.tax_rules import TAX_YEAR_RULES
     rules_2099 = get_tax_year_rules(2099)
