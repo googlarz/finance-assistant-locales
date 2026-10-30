@@ -1,7 +1,7 @@
 """
 US federal income tax rules — brackets, standard deductions, contribution limits.
 
-Sources: IRS Rev. Proc. 2023-34 (2024), IRS Rev. Proc. 2024-40 (2025)
+Sources: IRS Rev. Proc. 2023-34 (2024), IRS Rev. Proc. 2024-40 (2025), IRS Rev. Proc. 2025-32 (2026)
 All dollar amounts are for the federal return only; state taxes are handled separately.
 """
 
@@ -158,9 +158,72 @@ _2025 = {
 
 # ── 2026 ─────────────────────────────────────────────────────────────────────
 
-_2026: dict = {
-    **_2025,
+_2026 = {
     "year": 2026,
+    # Source: IRS Rev. Proc. 2025-32 (2026 inflation adjustments, as amended by the OBBBA)
+    "standard_deduction": {
+        "single": 16_100,
+        "married_filing_jointly": 32_200,
+        "married_filing_separately": 16_100,
+        "head_of_household": 24_150,
+    },
+    "brackets": {
+        "single": [
+            (0.10,  0,       12_400),
+            (0.12,  12_400,  50_400),
+            (0.22,  50_400,  105_700),
+            (0.24,  105_700, 201_775),
+            (0.32,  201_775, 256_225),
+            (0.35,  256_225, 640_600),
+            (0.37,  640_600, None),
+        ],
+        "married_filing_jointly": [
+            (0.10,  0,       24_800),
+            (0.12,  24_800,  100_800),
+            (0.22,  100_800, 211_400),
+            (0.24,  211_400, 403_550),
+            (0.32,  403_550, 512_450),
+            (0.35,  512_450, 768_700),
+            (0.37,  768_700, None),
+        ],
+    },
+    "long_term_capital_gains": {
+        "single": [(0.0, 0, 49_450), (0.15, 49_450, 545_500), (0.20, 545_500, None)],
+        "married_filing_jointly": [(0.0, 0, 98_900), (0.15, 98_900, 613_700), (0.20, 613_700, None)],
+    },
+    # Retirement limits: IRS Notice 2025-67; HSA limits: IRS Rev. Proc. 2025-19
+    "contribution_limits": {
+        "401k_employee": 24_500,
+        "401k_catchup_50plus": 8_000,
+        "ira": 7_500,
+        "ira_catchup_50plus": 1_100,
+        "hsa_individual": 4_400,
+        "hsa_family": 8_750,
+    },
+    # Wage base: SSA 2026 COLA fact sheet
+    "fica": {
+        "social_security_rate": 0.062,
+        "social_security_wage_base": 184_500,
+        "medicare_rate": 0.0145,
+        "additional_medicare_rate": 0.009,
+        "additional_medicare_threshold_single": 200_000,
+        "additional_medicare_threshold_mfj": 250_000,
+        "additional_medicare_threshold_mfs": 125_000,
+    },
+    "amt": {
+        "exemption_single": 90_100,
+        "exemption_mfj": 140_200,
+        "phase_out_single": 500_000,
+        "phase_out_mfj": 1_000_000,
+    },
+    # §199A QBI deduction — source: IRS Rev. Proc. 2025-32 (OBBBA widened the phase-in range)
+    "qbi": {
+        "rate": 0.20,
+        "threshold_single": 201_750,
+        "threshold_mfj": 403_500,
+        "phase_out_range_single": 75_000,
+        "phase_out_range_mfj": 150_000,
+    },
     # Estimated tax quarterly deadlines for tax year 2026 (Form 1040-ES).
     # Source: IRS Publication 505 calendar rules; no weekend adjustments needed.
     "quarterly_deadlines": [
