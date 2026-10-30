@@ -332,7 +332,10 @@ def test_2024_standard_deduction_single():
 
 def test_2025_standard_deduction_single():
     rules = get_tax_year_rules(2025)
-    assert rules["standard_deduction"]["single"] == 15_000
+    assert rules["standard_deduction"] == {
+        "single": 15_750, "married_filing_jointly": 31_500,
+        "married_filing_separately": 15_750, "head_of_household": 23_625,
+    }
 
 
 def test_2025_ss_wage_base():

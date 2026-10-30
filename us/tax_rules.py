@@ -87,10 +87,12 @@ _2024 = {
 _2025 = {
     "year": 2025,
     "standard_deduction": {
-        "single": 15_000,
-        "married_filing_jointly": 30_000,
-        "married_filing_separately": 15_000,
-        "head_of_household": 22_500,
+        # Raised by the OBBBA after Rev. Proc. 2024-40 (15,000 / 30,000 / 22,500);
+        # amounts per IRS IR-2025-103.
+        "single": 15_750,
+        "married_filing_jointly": 31_500,
+        "married_filing_separately": 15_750,
+        "head_of_household": 23_625,
     },
     "brackets": {
         "single": [
