@@ -18,7 +18,7 @@ for _p in (_PROJECT_ROOT, _LOCALES_ROOT):
 
 from context import LocaleContext
 
-ALL_LOCALES = ["de", "uk", "fr", "nl", "pl", "us"]
+ALL_LOCALES = ["de", "uk", "fr", "nl", "pl", "us", "ie", "ca"]
 
 _PROFILES = {
     "de": LocaleContext(tax_year=2024, employment_type="employed", annual_gross=60000.0, tax_class="I"),
@@ -28,9 +28,11 @@ _PROFILES = {
     "pl": LocaleContext(tax_year=2024, employment_type="employed", annual_gross=80000.0),
     "us": LocaleContext(tax_year=2024, employment_type="employed", annual_gross=80000.0,
                         extra={"filing_status": "single"}),
+    "ie": LocaleContext(tax_year=2024, employment_type="employed", annual_gross=50000.0),
+    "ca": LocaleContext(tax_year=2024, employment_type="employed", annual_gross=65000.0, region="ON"),
 }
 
-_GROSS = {"de": 60000, "uk": 50000, "fr": 45000, "nl": 50000, "pl": 80000, "us": 80000}
+_GROSS = {"de": 60000, "uk": 50000, "fr": 45000, "nl": 50000, "pl": 80000, "us": 80000, "ie": 50000, "ca": 65000}
 
 
 @pytest.mark.parametrize("code", ALL_LOCALES)
