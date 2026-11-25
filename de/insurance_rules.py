@@ -19,7 +19,8 @@ from __future__ import annotations
 JAEG = {
     2024: 69_300,   # official — Bundesanzeiger 2023
     2025: 73_800,   # official — Bundesanzeiger 2024
-    2026: 77_100,   # estimated — based on BBG/JAEG progression
+    2026: 77_400,   # official — Sozialversicherungsrechengrößen-Verordnung 2026
+    2027: 84_150,   # Sozialversicherungsrechengrößen-Verordnung 2027 (Bundesrat Drs. 576/26, consent 20.11.2026)
 }
 
 # ── Beitragsbemessungsgrenze GKV/PV ───────────────────────────────────────
@@ -27,7 +28,8 @@ JAEG = {
 GKV_BBG = {
     2024: 62_100,   # official
     2025: 66_150,   # official
-    2026: 69_750,   # estimated
+    2026: 69_750,   # official
+    2027: 76_500,   # KV-BBG, Verordnung 2027 (PV-BBG 2027 is 72,900 — see social_contributions.SOCIAL_CAPS)
 }
 
 # ── Durchschnittlicher GKV-Zusatzbeitragssatz ─────────────────────────────
@@ -35,7 +37,8 @@ GKV_BBG = {
 GKV_ZUSATZBEITRAG = {
     2024: 0.017,    # 1.7% — BMG Bekanntmachung Dez 2023
     2025: 0.025,    # 2.5% — BMG Bekanntmachung Dez 2024
-    2026: 0.025,    # 2.5% — estimated (assumed unchanged)
+    2026: 0.029,    # 2.9% — BAnz AT 10.11.2025 B7 (Bekanntmachung vom 07.11.2025)
+    2027: 0.029,    # 2.9% — BMG press release 30.10.2026 (Bundesanzeiger notice not yet located)
 }
 
 # ── GKV allgemeiner Beitragssatz ──────────────────────────────────────────
@@ -113,7 +116,7 @@ def get_insurance_thresholds(year: int) -> dict:
         "jaeg": JAEG[year],
         "gkv_bbg": GKV_BBG[year],
         "gkv_zusatzbeitrag_avg": GKV_ZUSATZBEITRAG[year],
-        "pkv_mindestbeitrag_monthly": PKV_MINDESTBEITRAG_MONTHLY[year],
+        "pkv_mindestbeitrag_monthly": PKV_MINDESTBEITRAG_MONTHLY.get(year),  # None for 2027: no official figure
         "gkv_base_rate": GKV_BASE_RATE,
         "essential_insurance_types": ESSENTIAL_INSURANCE_TYPES,
         "note": (

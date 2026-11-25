@@ -1,7 +1,8 @@
 """
 US federal income tax rules — brackets, standard deductions, contribution limits.
 
-Sources: IRS Rev. Proc. 2023-34 (2024), IRS Rev. Proc. 2024-40 (2025), IRS Rev. Proc. 2025-32 (2026)
+Sources: IRS Rev. Proc. 2023-34 (2024), IRS Rev. Proc. 2024-40 (2025), IRS Rev. Proc. 2025-32 (2026),
+IRS Rev. Proc. 2026-35 (2027)
 All dollar amounts are for the federal return only; state taxes are handled separately.
 """
 
@@ -49,6 +50,7 @@ _2024 = {
         "ira_catchup_50plus": 1_000,
         "hsa_individual": 4_150,
         "hsa_family": 8_300,
+        "sep_ira_max": 69_000,   # IRC §415(c)(1)(A)
     },
     "fica": {
         "social_security_rate": 0.062,
@@ -125,6 +127,7 @@ _2025 = {
         "ira_catchup_50plus": 1_000,
         "hsa_individual": 4_300,
         "hsa_family": 8_550,
+        "sep_ira_max": 70_000,
     },
     "fica": {
         "social_security_rate": 0.062,
@@ -201,6 +204,7 @@ _2026 = {
         "ira_catchup_50plus": 1_100,
         "hsa_individual": 4_400,
         "hsa_family": 8_750,
+        "sep_ira_max": 72_000,
     },
     # Wage base: SSA 2026 COLA fact sheet
     "fica": {
@@ -236,16 +240,135 @@ _2026 = {
     ],
 }
 
+# ── 2027 ─────────────────────────────────────────────────────────────────────
+
+_2027 = {
+    "year": 2027,
+    # Source: IRS Rev. Proc. 2026-35 (2027 inflation adjustments); the PDF still
+    # carries a "[Release Date, 2026]" placeholder, see also IR-2026-133.
+    "standard_deduction": {
+        "single": 16_600,
+        "married_filing_jointly": 33_200,
+        "married_filing_separately": 16_600,
+        "head_of_household": 24_925,
+    },
+    "brackets": {
+        "single": [
+            (0.10,  0,       12_800),
+            (0.12,  12_800,  52_025),
+            (0.22,  52_025,  109_125),
+            (0.24,  109_125, 208_325),
+            (0.32,  208_325, 264_550),
+            (0.35,  264_550, 661_375),
+            (0.37,  661_375, None),
+        ],
+        "married_filing_jointly": [
+            (0.10,  0,       25_600),
+            (0.12,  25_600,  104_050),
+            (0.22,  104_050, 218_250),
+            (0.24,  218_250, 416_650),
+            (0.32,  416_650, 529_100),
+            (0.35,  529_100, 793_650),
+            (0.37,  793_650, None),
+        ],
+        "head_of_household": [
+            (0.10,  0,       18_250),
+            (0.12,  18_250,  69_650),
+            (0.22,  69_650,  109_100),
+            (0.24,  109_100, 208_300),
+            (0.32,  208_300, 264_550),
+            (0.35,  264_550, 661_350),
+            (0.37,  661_350, None),
+        ],
+        "married_filing_separately": [
+            (0.10,  0,       12_800),
+            (0.12,  12_800,  52_025),
+            (0.22,  52_025,  109_125),
+            (0.24,  109_125, 208_325),
+            (0.32,  208_325, 264_550),
+            (0.35,  264_550, 396_825),
+            (0.37,  396_825, None),
+        ],
+    },
+    "long_term_capital_gains": {
+        "single": [(0.0, 0, 51_050), (0.15, 51_050, 563_200), (0.20, 563_200, None)],
+        "married_filing_jointly": [(0.0, 0, 102_100), (0.15, 102_100, 633_600), (0.20, 633_600, None)],
+        "head_of_household": [(0.0, 0, 68_350), (0.15, 68_350, 598_400), (0.20, 598_400, None)],
+        "married_filing_separately": [(0.0, 0, 51_050), (0.15, 51_050, 316_800), (0.20, 316_800, None)],
+    },
+    # Retirement limits: IRS Notice 2026-66; HSA limits: IRS Rev. Proc. 2026-24
+    "contribution_limits": {
+        "401k_employee": 25_500,
+        "401k_catchup_50plus": 8_500,
+        "401k_catchup_60_63": 11_750,
+        "ira": 7_500,
+        "ira_catchup_50plus": 1_100,
+        "hsa_individual": 4_500,
+        "hsa_family": 9_000,
+        "sep_ira_max": 75_000,   # §415(c)(1)(A), Notice 2026-66
+    },
+    # Wage base: SSA OACT contribution and benefit base; rates/thresholds per statute
+    "fica": {
+        "social_security_rate": 0.062,
+        "social_security_wage_base": 192_300,
+        "medicare_rate": 0.0145,
+        "additional_medicare_rate": 0.009,
+        "additional_medicare_threshold_single": 200_000,
+        "additional_medicare_threshold_mfj": 250_000,
+        "additional_medicare_threshold_mfs": 125_000,
+    },
+    "amt": {
+        "exemption_single": 93_000,
+        "exemption_mfj": 144_700,
+        "phase_out_single": 515_950,
+        "phase_out_mfj": 1_031_900,
+    },
+    # §199A QBI deduction — source: IRS Rev. Proc. 2026-35; phase-in ranges per P.L. 119-21
+    "qbi": {
+        "rate": 0.20,
+        "threshold_single": 208_300,
+        "threshold_mfj": 416_600,
+        "phase_out_range_single": 75_000,
+        "phase_out_range_mfj": 150_000,
+    },
+    # Not used by the calculator yet (credits/estate/gift are not modelled)
+    "child_tax_credit": {
+        "max_per_child": 2_300,
+        "refundable_portion": 1_800,
+    },
+    "estate_gift": {
+        "estate_basic_exclusion": 15_480_000,
+        "gift_annual_exclusion": 20_000,
+    },
+    # Estimated tax quarterly deadlines for tax year 2027 (Form 1040-ES).
+    # Q4: Jan 15 2028 is a Saturday and Jan 17 2028 is Martin Luther King Jr. Day.
+    "quarterly_deadlines": [
+        {"quarter": 1, "period": "Jan 1 – Mar 31", "due": "2027-04-15"},
+        {"quarter": 2, "period": "Apr 1 – May 31", "due": "2027-06-15"},
+        {"quarter": 3, "period": "Jun 1 – Aug 31", "due": "2027-09-15"},
+        {"quarter": 4, "period": "Sep 1 – Dec 31", "due": "2028-01-18"},
+    ],
+}
+
 TAX_YEAR_RULES: dict[int, dict] = {
     2024: _2024,
     2025: _2025,
     2026: _2026,
+    2027: _2027,
 }
 
 
 def get_tax_year_rules(year: int) -> dict:
     if year in TAX_YEAR_RULES:
         return TAX_YEAR_RULES[year]
-    # Fall back to most recent known year
+    # No table for this year: fall back to the most recent known year, but say so
+    # loudly — the figures are NOT the rules for `year`.
     latest = max(TAX_YEAR_RULES)
-    return TAX_YEAR_RULES[latest]
+    return {
+        **TAX_YEAR_RULES[latest],
+        "confidence": "low",
+        "fallback_for_year": year,
+        "warnings": [
+            f"No US tax table for {year}; using {latest} figures as a low-confidence estimate."
+        ],
+    }

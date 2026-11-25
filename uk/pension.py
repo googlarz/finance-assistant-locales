@@ -10,7 +10,7 @@ Key rules (2023/24 onwards):
       Earliest year used first; requires pension scheme membership in prior years
   - Salary sacrifice: employer pays pension contributions from gross pay
       Saves employee income tax at marginal rate + NI at main/upper rate
-      Saves employer NI at 13.8%
+      Saves employer NI at 15% (13.8% before 6 April 2025)
 
 Sources:
   https://www.gov.uk/tax-on-your-private-pension/annual-allowance
@@ -215,7 +215,7 @@ def calculate_salary_sacrifice(
     pension. This means:
       - Employee pays income tax on the reduced salary (saves tax at marginal rate)
       - Employee pays NI on the reduced salary (saves NI at applicable rate)
-      - Employer pays NI on the reduced salary (saves employer NI at 13.8%)
+      - Employer pays NI on the reduced salary (saves employer NI at the year's employer rate, 15% from 6 April 2025)
 
     The employer's NI saving is sometimes passed on to employees or used to
     increase the pension contribution. This function shows both scenarios.
@@ -237,7 +237,7 @@ def calculate_salary_sacrifice(
           "employee_ni_saving": float,       # NI saved at applicable rate
           "total_employee_saving": float,
           "net_cost_to_employee": float,     # sacrifice - total saving
-          "employer_ni_saving": float,       # employer NI saved (13.8%)
+          "employer_ni_saving": float,       # employer NI saved (15% from Apr 2025)
           "effective_pension_contribution": float,  # sacrifice + optional employer NI pass-through
           "marginal_income_tax_rate": float,
           "employee_ni_rate_on_sacrifice": float,

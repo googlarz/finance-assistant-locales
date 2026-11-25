@@ -2,7 +2,7 @@
 UK income tax calculator.
 
 Calculates income tax, National Insurance, and net pay for employed
-and self-employed individuals in the UK for 2024-2026.
+and self-employed individuals in the UK for 2024-2027.
 
 Tax year convention: year=2024 → 2024/25 (6 Apr 2024 – 5 Apr 2025).
 
@@ -103,10 +103,13 @@ def calculate_tax(ctx: "LocaleContext | dict", year: int = None) -> dict:
         confidence = "Likely"
     elif is_self_employed:
         confidence = "Likely"  # simplified — does not account for allowable expenses
-    elif resolved_year == 2026:
-        confidence = rules.get("confidence", "Likely")
     else:
-        confidence = "Definitive"
+        confidence = rules.get("confidence", "Definitive")
+
+    # Year-level caveat (e.g. values carried forward because not yet legislated)
+    rules_note = rules.get("note")
+    if rules_note:
+        year_note = f"{year_note} {rules_note}" if year_note else rules_note
 
     return {
         "gross": round(gross, 2),

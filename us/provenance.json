@@ -101,5 +101,238 @@
     "source": "IRS Rev. Proc. 2025-19",
     "url": "https://www.irs.gov/irb/2025-21_IRB",
     "verified": "2026-10-19"
+  },
+  "brackets_single_2026": {
+    "value": "10% to 12,400; 12% to 50,400; 22% to 105,700; 24% to 201,775; 32% to 256,225; 35% to 640,600; 37% above",
+    "source": "IRS Rev. Proc. 2025-32",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+    "checked": "2026-11-24",
+    "note": "Matches tax_rules.py; not independently re-verified against the primary source in the 2026-11-24 pass."
+  },
+  "brackets_mfj_2026": {
+    "value": "10% to 24,800; 12% to 100,800; 22% to 211,400; 24% to 403,550; 32% to 512,450; 35% to 768,700; 37% above",
+    "source": "IRS Rev. Proc. 2025-32",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+    "checked": "2026-11-24",
+    "note": "Matches tax_rules.py; not independently re-verified against the primary source in the 2026-11-24 pass."
+  },
+  "401k_catchup_50plus_2026": {
+    "value": 8000,
+    "source": "IRS Notice 2025-67",
+    "url": "https://www.irs.gov/pub/irs-drop/n-25-67.pdf",
+    "checked": "2026-11-24",
+    "note": "Matches tax_rules.py; not independently re-verified against the primary source in the 2026-11-24 pass."
+  },
+  "sep_ira_max_2026": {
+    "value": 72000,
+    "source": "IRS Notice 2026-66 (IRC 415(c)(1)(A): 'increased in 2027 from $72,000 to $75,000')",
+    "url": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
+    "verified": "2026-11-24"
+  },
+  "qbi_thresholds_2026": {
+    "value": "single 201,750 / mfj 403,500; phase-out range 75,000 / 150,000",
+    "source": "IRS Rev. Proc. 2025-32; P.L. 119-21",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+    "checked": "2026-11-24",
+    "note": "Matches tax_rules.py; not independently re-verified against the primary source in the 2026-11-24 pass."
+  },
+  "amt_2026": {
+    "value": "exemption single 90,100 / mfj 140,200; phase-out start 500,000 / 1,000,000",
+    "source": "IRS Rev. Proc. 2025-32",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+    "checked": "2026-11-24",
+    "note": "Matches tax_rules.py; not independently re-verified against the primary source in the 2026-11-24 pass."
+  },
+  "standard_deduction_single_2027": {
+    "value": 16600,
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "standard_deduction_mfj_2027": {
+    "value": 33200,
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "standard_deduction_mfs_2027": {
+    "value": 16600,
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "standard_deduction_hoh_2027": {
+    "value": 24925,
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "brackets_single_2027": {
+    "value": "10% to 12,800; 12% to 52,025; 22% to 109,125; 24% to 208,325; 32% to 264,550; 35% to 661,375; 37% above",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "brackets_mfj_2027": {
+    "value": "10% to 25,600; 12% to 104,050; 22% to 218,250; 24% to 416,650; 32% to 529,100; 35% to 793,650; 37% above",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "brackets_hoh_2027": {
+    "value": "10% to 18,250; 12% to 69,650; 22% to 109,100; 24% to 208,300; 32% to 264,550; 35% to 661,350; 37% above",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "brackets_mfs_2027": {
+    "value": "10% to 12,800; 12% to 52,025; 22% to 109,125; 24% to 208,325; 32% to 264,550; 35% to 396,825; 37% above",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "long_term_capital_gains_2027": {
+    "value": "0%/15% breakpoints: single 51,050/563,200; mfj 102,100/633,600; hoh 68,350/598,400; mfs 51,050/316,800 (Rev. Proc. sec. 3.03)",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "amt_2027": {
+    "value": "exemption single 93,000 / mfj 144,700; phase-out start 515,950 / 1,031,900",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "qbi_thresholds_2027": {
+    "value": "single 208,300 / mfj 416,600; phase-out range 75,000 / 150,000 (range per P.L. 119-21)",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "child_tax_credit_2027": {
+    "value": "max 2,300 per child; refundable portion 1,800",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "estate_basic_exclusion_2027": {
+    "value": 15480000,
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "gift_annual_exclusion_2027": {
+    "value": 20000,
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "student_loan_interest_phaseout_2027": {
+    "value": "single 90,000-105,000; joint 180,000-210,000 (not modelled by the calculator)",
+    "source": "IRS Rev. Proc. 2026-35 (cf. IR-2026-133)",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-35.pdf",
+    "verified": "2026-11-24",
+    "note": "rp-26-35.pdf still contains a '[Release Date, 2026]' placeholder (draft-style text); figures also cross-checked against IR-2026-133 (URL not captured)."
+  },
+  "401k_limit_2027": {
+    "value": 25500,
+    "source": "IRS Notice 2026-66",
+    "url": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
+    "verified": "2026-11-24"
+  },
+  "401k_catchup_50plus_2027": {
+    "value": 8500,
+    "source": "IRS Notice 2026-66",
+    "url": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
+    "verified": "2026-11-24"
+  },
+  "401k_catchup_60_63_2027": {
+    "value": 11750,
+    "source": "IRS Notice 2026-66",
+    "url": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
+    "verified": "2026-11-24"
+  },
+  "ira_limit_2027": {
+    "value": 7500,
+    "source": "IRS Notice 2026-66",
+    "url": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
+    "verified": "2026-11-24"
+  },
+  "ira_catchup_50plus_2027": {
+    "value": 1100,
+    "source": "IRS Notice 2026-66",
+    "url": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
+    "verified": "2026-11-24"
+  },
+  "sep_ira_max_2027": {
+    "value": 75000,
+    "source": "IRS Notice 2026-66 (IRC 415(c)(1)(A))",
+    "url": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
+    "verified": "2026-11-24"
+  },
+  "hsa_individual_2027": {
+    "value": 4500,
+    "source": "IRS Rev. Proc. 2026-24",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-24.pdf",
+    "verified": "2026-11-24"
+  },
+  "hsa_family_2027": {
+    "value": 9000,
+    "source": "IRS Rev. Proc. 2026-24",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-26-24.pdf",
+    "verified": "2026-11-24"
+  },
+  "social_security_wage_base_2027": {
+    "value": 192300,
+    "source": "SSA OACT contribution and benefit base",
+    "url": "https://www.ssa.gov/oact/cola/cbb.html",
+    "verified": "2026-11-24"
+  },
+  "additional_medicare_2027": {
+    "value": "rate 0.9%; thresholds 200,000 single/HoH, 250,000 MFJ, 125,000 MFS (statutory, unchanged)",
+    "source": "IRC 3101(b)(2); IRS Form 8959 instructions",
+    "url": "https://www.irs.gov/pub/irs-pdf/i8959.pdf",
+    "verified": "2026-11-24"
+  },
+  "salt_cap_2027": {
+    "value": 40804,
+    "status": "derived",
+    "source": "P.L. 119-21 sec. 70120, IRC 164(b)(7)(A)(iii): 101% of prior-year cap (40,400 x 1.01); computed by statute arithmetic, no IRS restatement seen",
+    "url": "https://www.congress.gov/119/bills/hr1/BILLS-119hr1enr.htm",
+    "verified": "2026-11-24",
+    "note": "Not used by the calculator (itemized deductions unsupported); recorded for reference only."
+  },
+  "salt_phaseout_threshold_2027": {
+    "value": 510050,
+    "status": "derived",
+    "source": "P.L. 119-21 sec. 70120 (505,000 x 1.01)",
+    "url": "https://www.congress.gov/119/bills/hr1/BILLS-119hr1enr.htm",
+    "verified": "2026-11-24",
+    "note": "Not used by the calculator; derived by arithmetic."
+  },
+  "estimated_tax_deadlines_2027": {
+    "value": "Q1 2027-04-15; Q2 2027-06-15; Q3 2027-09-15; Q4 2028-01-18 (Jan 15 2028 is Saturday, Jan 17 is MLK Day)",
+    "source": "IRS Form 1040-ES; 5 U.S.C. 6103",
+    "url": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+    "verified": "2026-11-24"
+  },
+  "_gaps": {
+    "head_of_household_brackets": "HoH brackets exist only for 2027. For 2024-2026 the calculator still falls back to single brackets for head_of_household (standard deduction is correct); add them from the respective Rev. Procs. when sourced.",
+    "standard_deduction_single_2025": "The 2025 entries above (15,000 / 30,000, Rev. Proc. 2024-40) are stale: tax_rules.py uses 15,750 / 31,500 (OBBBA, IR-2025-103). Not changed here because the 2027 research file does not cover 2025; update after checking IR-2025-103.",
+    "us_init_labels": "us/__init__.py SUPPORTED_YEARS lists [2024, 2025] and the SALT label says 'capped $10k'; not touched in this pass."
   }
 }

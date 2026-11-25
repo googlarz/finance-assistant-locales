@@ -2,7 +2,7 @@
 United Kingdom locale plugin for Finance Assistant.
 
 Bundles income tax rules, National Insurance contributions, filing deadlines,
-and deduction discovery for UK tax years 2024, 2025, and 2026.
+and deduction discovery for UK tax years 2024, 2025, 2026, and 2027.
 
 Tax year convention: year=2024 → 2024/25 (6 April 2024 – 5 April 2025).
 """
@@ -28,7 +28,7 @@ except ImportError:
 
 LOCALE_CODE = "uk"
 LOCALE_NAME = "United Kingdom"
-SUPPORTED_YEARS = [2024, 2025, 2026]
+SUPPORTED_YEARS = [2024, 2025, 2026, 2027]
 CURRENCY = "GBP"
 
 

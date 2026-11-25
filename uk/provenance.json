@@ -1,18 +1,18 @@
 {
   "locale": "uk",
-  "last_reviewed": "2026-04-03",
+  "last_reviewed": "2026-11-24",
   "rules": {
     "personal_allowance_2024_2026": {
       "source_url": "https://www.gov.uk/income-tax-rates",
-      "verified_date": "2026-04-03",
+      "verified_date": "2026-11-24",
       "confidence": "Definitive",
-      "notes": "Frozen at £12,570 until April 2028 per Autumn Budget 2022"
+      "notes": "Frozen at £12,570; Finance Act 2026 s.10 extends the freeze to 2030-31"
     },
     "basic_rate_limit_2024_2026": {
       "source_url": "https://www.gov.uk/income-tax-rates",
-      "verified_date": "2026-04-03",
+      "verified_date": "2026-11-24",
       "confidence": "Definitive",
-      "notes": "Frozen at £50,270 until April 2028"
+      "notes": "Basic rate band £37,700 (limit £50,270 with the personal allowance), frozen to 2030-31 per Finance Act 2026 s.10"
     },
     "ni_employee_rate_2024": {
       "source_url": "https://www.gov.uk/national-insurance-rates-letters",
@@ -34,9 +34,9 @@
     },
     "ssp_weekly_rate_2024_2025": {
       "source_url": "https://www.gov.uk/statutory-sick-pay",
-      "verified_date": "2026-05-17",
+      "verified_date": "2026-11-24",
       "confidence": "Definitive",
-      "notes": "£116.75/week for 2024/25 and 2025/26; paid by employer for up to 28 weeks; self-employed not eligible"
+      "notes": "£116.75/week for 2024/25 only (2025/26 is £118.75, see ssp_weekly_rate_2025_2026); paid by employer for up to 28 weeks; self-employed not eligible"
     },
     "ni_lower_earnings_limit_2024": {
       "source_url": "https://www.gov.uk/national-insurance-rates-letters",
@@ -46,7 +46,7 @@
     },
     "ni_lower_earnings_limit_2025": {
       "source_url": "https://www.gov.uk/national-insurance-rates-letters",
-      "verified_date": "2026-05-17",
+      "verified_date": "2026-11-24",
       "confidence": "Definitive",
       "notes": "£125/week in 2025/26"
     },
@@ -67,6 +67,84 @@
       "verified_date": "2026-05-17",
       "confidence": "Definitive",
       "notes": "Minimum £5 million cover required under Employers' Liability (Compulsory Insurance) Act 1969; most policies provide £10 million"
+    },
+    "ssp_weekly_rate_2025_2026": {
+      "source_url": "https://www.gov.uk/government/publications/rates-and-thresholds-for-employers-2025-to-2026",
+      "verified_date": "2026-11-24",
+      "confidence": "Definitive",
+      "notes": "£118.75/week for 2025/26 (repo previously had £116.75)"
+    },
+    "ssp_weekly_rate_2026_2027": {
+      "source_url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
+      "verified_date": "2026-11-24",
+      "confidence": "Definitive",
+      "notes": "£123.25/week or 80% of average weekly earnings if lower; from 6 April 2026 SSP has no Lower Earnings Limit test and no waiting days (repo previously had £116.75)"
+    },
+    "ni_lower_earnings_limit_2026": {
+      "source_url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
+      "verified_date": "2026-11-24",
+      "confidence": "Definitive",
+      "notes": "£129/week in 2026/27 (repo previously had an estimated £125)"
+    },
+    "employer_ni_2025_onward": {
+      "source_url": "https://www.legislation.gov.uk/ukpga/2025/11",
+      "verified_date": "2026-11-24",
+      "confidence": "Definitive",
+      "notes": "NICs (Secondary Class 1 Contributions) Act 2025 s.1: employer rate 15% from 6 April 2025, no end date, so enacted for 2027/28. Secondary threshold £5,000/year for 2025/26 and 2026/27 (gov.uk employer rates pages); repo previously had 13.8% above £9,100 for 2025 and 2026. 2024/25 stays 13.8% above £9,100"
+    },
+    "employer_ni_secondary_threshold_2027_28": {
+      "source_url": "https://www.gov.uk/government/publications/budget-2026-overview-of-tax-legislation-and-rates-ootlar/annex-a-rates-and-allowances",
+      "verified_date": "2026-11-24",
+      "confidence": "Announced, not legislated",
+      "notes": "£5,000/year (£96/week) announced for 2027/28; the 2025 Act specifies it only for 2025/26. Repo carries the 2026/27 value (£5,000)"
+    },
+    "income_tax_2027_28_enacted": {
+      "source_url": "https://www.legislation.gov.uk/ukpga/2026/11/contents",
+      "verified_date": "2026-11-24",
+      "confidence": "Definitive",
+      "notes": "Finance Act 2026 (Royal Assent 18 Mar 2026): s.10 personal allowance £12,570 and basic rate band £37,700 for 2027-28 to 2030-31; s.4 dividend ordinary/upper rates 10.75%/35.75%; s.9 savings starting rate limit £5,000. Dividend allowance £500 (ITA 2007 s.13A)"
+    },
+    "savings_property_rates_2027_28": {
+      "source_url": "https://www.gov.uk/government/publications/budget-2026-overview-of-tax-legislation-and-rates-ootlar/budget-2026-overview-of-tax-legislation-and-rates-ootlar",
+      "verified_date": "2026-11-24",
+      "confidence": "Conflict: enacted 22/42/47, announced 24/44/49",
+      "notes": "Finance Act 2026 s.5 (savings) and s.7 (property) enact 22%/42%/47% for 2027/28, which the repo uses. Budget 2026 announces 24%/44%/49% from 2027/28 via Finance Bill 2026-27, not yet enacted: announced, unconfirmed; switch only after Royal Assent"
+    },
+    "cgt_isa_pension_2027_28": {
+      "source_url": "https://www.legislation.gov.uk/ukpga/1992/12/section/1H",
+      "verified_date": "2026-11-24",
+      "confidence": "Definitive",
+      "notes": "CGT 18%/24% (TCGA 1992 s.1H), annual exempt amount £3,000 (s.1K), BADR rate 18% (s.169N); ISA £20,000 (ISA Regs 1998 reg 4ZA); pension annual allowance £60,000 (FA 2004 s.228), taper trigger £260,000 / minimum £10,000 (s.228ZA)"
+    },
+    "announced_not_legislated_2027_28": {
+      "source_url": "https://www.gov.uk/government/publications/budget-2026-overview-of-tax-legislation-and-rates-ootlar/annex-a-rates-and-allowances",
+      "verified_date": "2026-11-24",
+      "confidence": "Announced, not legislated",
+      "notes": "Budget 2026 figures for 2027/28 that do NOT drive calculations (repo carries 2026/27 values, results flagged Likely with a warning): higher/additional rate limit £125,140, rates 20/40/45%, taper threshold £100,000, marriage allowance £1,260, NI primary threshold £12,570 / UEL £50,270 / rates 8% and 2% / Class 4 6% and 2%, personal savings allowance £1,000/£500, dividend additional rate 39.35%, trading allowance rising to £3,000 from 6 Apr 2027, BADR lifetime limit falling from £1,000,000 to £500,000 from 6 Apr 2027, LEL £133/week, Employment Allowance £10,500, MPAA £10,000, Junior ISA £9,000"
+    },
+    "ssp_weekly_rate_2027_28": {
+      "source_url": "https://www.gov.uk/government/publications/benefit-and-pension-rates-2027-to-2028/proposed-benefit-and-pension-rates-2027-to-2028",
+      "verified_date": "2026-11-24",
+      "confidence": "Announced, not legislated",
+      "notes": "£127.55/week proposed for 2027/28 (published 11 Nov 2026, titled 'Proposed'); repo carries £123.25 and income protection guidance is flagged Likely with a warning"
+    },
+    "student_loan_thresholds_2027_28": {
+      "source_url": "https://www.gov.uk/government/news/student-loans-repayment-threshold-announcement",
+      "verified_date": "2026-11-24",
+      "confidence": "Announced, not legislated",
+      "notes": "Not modelled in repo. Announced for 2027/28: Plan 1 £28,005; Plan 2 £29,385 (frozen); Plan 5 £26,025; Postgraduate £21,000; Plan 4 and rates not published"
+    },
+    "scottish_bands_2026_27": {
+      "source_url": "https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/",
+      "verified_date": "2026-11-24",
+      "confidence": "Unconfirmed",
+      "notes": "Discrepancy, repo NOT changed: the repo 2026 bands are a projection of 2025/26 (starter to £2,827, basic to £14,921 taxable income). gov.scot lists 2026/27 bands (starter £12,571-£16,537, basic £16,538-£29,526; intermediate to £43,662, higher to £75,000, advanced to £125,140), which would be taxable-income uppers of about £3,967 and £16,956 for the first two bands, but labels them 'proposed' and passage of the Scottish Rate Resolution is unverified. Update only once confirmed"
+    },
+    "scottish_bands_2027_28": {
+      "source_url": "https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/",
+      "verified_date": "2026-11-24",
+      "confidence": "Not published",
+      "notes": "No 2027/28 Scottish bands published; repo carries the 2026 projection forward and the 2027 result is flagged Likely"
     }
   }
 }

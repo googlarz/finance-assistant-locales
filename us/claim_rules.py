@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from datetime import date
 
+from .tax_rules import get_tax_year_rules
+
 
 def generate_us_claims(ctx, year: int = None) -> list[dict]:
     year = year or date.today().year
@@ -110,13 +112,16 @@ def generate_us_claims(ctx, year: int = None) -> list[dict]:
             "detail": "If you have a dedicated workspace at home, you can deduct a portion of rent/mortgage + utilities.",
             "next_action": "Do you work from a dedicated home office? Roughly what % of your home does it occupy?",
         })
+        sep_rules = get_tax_year_rules(year)
+        sep_ira_max = sep_rules["contribution_limits"]["sep_ira_max"]
+        sep_ira_year = sep_rules["year"]  # table year actually used (fallback-safe)
         claims.append({
             "id": "sep_ira",
             "title": "SEP-IRA contributions",
             "status": "needs_input",
             "confidence": "Likely",
             "domain": "tax",
-            "detail": "Self-employed can contribute up to 25% of net self-employment income to a SEP-IRA (max $69,000 for 2024).",
+            "detail": f"Self-employed can contribute up to 25% of net self-employment income to a SEP-IRA (max ${sep_ira_max:,} for {sep_ira_year}).",
             "next_action": "Did you make SEP-IRA contributions this year?",
         })
 

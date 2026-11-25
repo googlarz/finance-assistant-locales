@@ -8,7 +8,8 @@ Class 1 NI (employee):
         and further from 10% to 8% on 6 April 2024.
 
 Class 1 NI (employer):
-  - 13.8% on earnings above £9,100 per year (Secondary Threshold)
+  - 15% on earnings above £5,000 per year (Secondary Threshold) from 6 April 2025
+    (NICs (Secondary Class 1 Contributions) Act 2025); 13.8% above £9,100 in 2024/25
 
 Self-employed (Class 4 NI):
   - 6% on profits between £12,570 and £50,270
@@ -44,8 +45,8 @@ NI_THRESHOLDS = {
         "employee_upper_threshold": 50_270,
         "employee_rate_main": 0.08,
         "employee_rate_upper": 0.02,
-        "employer_secondary_threshold": 9_100,
-        "employer_rate": 0.138,
+        "employer_secondary_threshold": 5_000,  # cut from £9,100 on 6 Apr 2025
+        "employer_rate": 0.15,                  # raised from 13.8% on 6 Apr 2025
         "se_lower_threshold": 12_570,
         "se_upper_threshold": 50_270,
         "se_rate_main": 0.06,
@@ -56,8 +57,23 @@ NI_THRESHOLDS = {
         "employee_upper_threshold": 50_270,
         "employee_rate_main": 0.08,
         "employee_rate_upper": 0.02,
-        "employer_secondary_threshold": 9_100,
-        "employer_rate": 0.138,
+        "employer_secondary_threshold": 5_000,
+        "employer_rate": 0.15,
+        "se_lower_threshold": 12_570,
+        "se_upper_threshold": 50_270,
+        "se_rate_main": 0.06,
+        "se_rate_upper": 0.02,
+    },
+    # 2027/28: employer rate 15% is legislated (no end date). Every threshold and the
+    # employee/Class 4 rates are announced in Budget 2026 but not legislated, so the
+    # 2026/27 values are carried forward (they equal the announced figures).
+    2027: {
+        "employee_lower_threshold": 12_570,
+        "employee_upper_threshold": 50_270,
+        "employee_rate_main": 0.08,
+        "employee_rate_upper": 0.02,
+        "employer_secondary_threshold": 5_000,
+        "employer_rate": 0.15,
         "se_lower_threshold": 12_570,
         "se_upper_threshold": 50_270,
         "se_rate_main": 0.06,
@@ -123,7 +139,8 @@ def get_social_contributions(gross: float, year: int, self_employed: bool = Fals
         note = (
             "Class 1 NI (employee): 8% on £12,570–£50,270, 2% above. "
             "Rate reduced from 12% to 8% effective 6 Jan / 6 Apr 2024 (Spring Budget). "
-            "Employer: 13.8% above £9,100 secondary threshold."
+            f"Employer: {t['employer_rate'] * 100:g}% above "
+            f"£{t['employer_secondary_threshold']:,} secondary threshold."
         )
 
     return {

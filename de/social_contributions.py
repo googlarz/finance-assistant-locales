@@ -8,11 +8,13 @@ German social insurance system (Sozialversicherung):
   ALV — Arbeitslosenversicherung (§ 341 SGB III): 2.6% total, 1.3% each
   GKV — Krankenversicherung (§ 241 SGB V): 14.6% base + avg. Zusatzbeitrag
   PV  — Pflegeversicherung (§ 55 SGB XI): 3.6% for parents, 4.2% childless
-        (childless surcharge since July 2023); from 2025: 3.6% / 4.4%
+        (childless surcharge 0.6 pt since July 2023, unchanged 2025-2027)
 
 Beitragsbemessungsgrenzen (caps):
-  RV/ALV (West): 2024 €90,600 | 2025 €96,600 | 2026 €101,400
-  GKV/PV:        2024 €62,100 | 2025 €66,150 | 2026 €69,750
+  RV/ALV (West): 2024 €90,600 | 2025 €96,600 | 2026 €101,400 | 2027 €106,200
+  GKV (KV):      2024 €62,100 | 2025 €66,150 | 2026 €69,750 | 2027 €76,500
+  PV:            2024 €62,100 | 2025 €66,150 | 2026 €69,750 | 2027 €72,900
+  (2027: KV and PV caps differ — separate keys "gkv" and "pv")
 
 Sources:
   - § 157 SGB VI (RV-Beitragssatz)
@@ -28,11 +30,17 @@ from __future__ import annotations
 
 # ── Beitragsbemessungsgrenzen ─────────────────────────────────────────────
 # Source: BMAS Sozialversicherungsrechengrößen-Verordnung; § 159 SGB VI
+# 2027: Sozialversicherungsrechengrößen-Verordnung 2027 (Bundesrat Drs. 576/26,
+# Bundesrat consent 20.11.2026). PV BBG 72,900 per current § 55 Abs. 2 SGB XI.
 SOCIAL_CAPS = {
-    2024: {"rv_alv": 90_600, "gkv_pv": 62_100},
-    2025: {"rv_alv": 96_600, "gkv_pv": 66_150},
-    2026: {"rv_alv": 101_400, "gkv_pv": 69_750},  # 2026: estimated
+    2024: {"rv_alv": 90_600, "gkv": 62_100, "pv": 62_100},
+    2025: {"rv_alv": 96_600, "gkv": 66_150, "pv": 66_150},
+    2026: {"rv_alv": 101_400, "gkv": 69_750, "pv": 69_750},
+    2027: {"rv_alv": 106_200, "gkv": 76_500, "pv": 72_900},
 }
+
+# Bezugsgröße (§ 18 SGB IV), annual
+BEZUGSGROESSE = {2027: 49_560}
 
 # ── Employee contribution rates ───────────────────────────────────────────
 # Source: § 157 SGB VI, § 341 SGB III, § 241 SGB V, § 55 SGB XI
@@ -64,7 +72,7 @@ CONTRIBUTION_RATES = {
 # ── Pflegeversicherung rates by year and parental status ──────────────────
 # Source: § 55 SGB XI; § 55 Abs. 3 SGB XI (Kinderlosenzuschlag)
 # July 2023: PV reformed — new rates from 2023-07-01
-# 2025+: childless rate raised to 4.4%
+# Childless surcharge is 0.6 pt (§ 55 Abs. 3 SGB XI): total 4.2%, employee 2.4%
 PV_RATES = {
     2024: {
         "with_children_total": 0.036,    # 3.6% total; 1.8% each
@@ -78,16 +86,24 @@ PV_RATES = {
         "with_children_total": 0.036,
         "with_children_employee": 0.018,
         "with_children_employer": 0.018,
-        "childless_total": 0.044,        # 4.4% from 2025 (§ 55 Abs. 3 SGB XI)
-        "childless_employee": 0.026,     # 1.8% + 0.8% surcharge
+        "childless_total": 0.042,        # 3.6% + 0.6 pt surcharge (§ 55 Abs. 3 SGB XI)
+        "childless_employee": 0.024,     # 1.8% + 0.6 pt surcharge
         "childless_employer": 0.018,
     },
-    2026: {  # estimated — same as 2025 pending legislation
+    2026: {
         "with_children_total": 0.036,
         "with_children_employee": 0.018,
         "with_children_employer": 0.018,
-        "childless_total": 0.044,
-        "childless_employee": 0.026,
+        "childless_total": 0.042,
+        "childless_employee": 0.024,
+        "childless_employer": 0.018,
+    },
+    2027: {  # current law; Pflegeneuordnungsgesetz draft (0.9 pt surcharge) NOT applied
+        "with_children_total": 0.036,
+        "with_children_employee": 0.018,
+        "with_children_employer": 0.018,
+        "childless_total": 0.042,
+        "childless_employee": 0.024,
         "childless_employer": 0.018,
     },
 }
@@ -97,7 +113,8 @@ PV_RATES = {
 GKV_ZUSATZBEITRAG_AVG = {
     2024: 0.017,   # BMG Bekanntmachung Dez 2023
     2025: 0.025,   # BMG Bekanntmachung Dez 2024
-    2026: 0.025,   # estimated
+    2026: 0.029,   # BAnz AT 10.11.2025 B7 (Bekanntmachung vom 07.11.2025)
+    2027: 0.029,   # BMG press release 30.10.2026 (Bundesanzeiger notice not yet located)
 }
 
 # ── Freelancer GKV Mindestbeitrag (approximate) ───────────────────────────
@@ -132,14 +149,15 @@ def estimate_employee_social_contributions(annual_gross: float, year: int) -> di
     resolved = _resolve_year(year)
     caps = SOCIAL_CAPS[resolved]
     rv_base = min(annual_gross, caps["rv_alv"])
-    gkv_base = min(annual_gross, caps["gkv_pv"])
+    gkv_base = min(annual_gross, caps["gkv"])
+    pv_base = min(annual_gross, caps["pv"])
 
     # Use SOCIAL_RATES for backward compatibility (2024 baseline Zusatzbeitrag baked in)
     breakdown = {
         "pension": round(rv_base * SOCIAL_RATES["rv_employee"], 2),
         "unemployment": round(rv_base * SOCIAL_RATES["alv_employee"], 2),
         "health": round(gkv_base * SOCIAL_RATES["gkv_employee"], 2),
-        "care": round(gkv_base * SOCIAL_RATES["pv_employee"], 2),
+        "care": round(pv_base * SOCIAL_RATES["pv_employee"], 2),
     }
     breakdown["total"] = round(sum(breakdown.values()), 2)
     return breakdown
@@ -172,7 +190,8 @@ def get_full_contribution_picture(
     zb_rate = zusatzbeitrag_rate if zusatzbeitrag_rate is not None else GKV_ZUSATZBEITRAG_AVG[resolved]
 
     rv_base = min(annual_gross, caps["rv_alv"])
-    gkv_base = min(annual_gross, caps["gkv_pv"])
+    gkv_base = min(annual_gross, caps["gkv"])
+    pv_base = min(annual_gross, caps["pv"])
 
     pv_key = "with_children" if has_children else "childless"
 
@@ -192,8 +211,8 @@ def get_full_contribution_picture(
     gkv_employer = round(gkv_base * gkv_er_rate, 2)
 
     # ── PV ───────────────────────────────────────────────────────────────
-    pv_employee = round(gkv_base * pv_rates[f"{pv_key}_employee"], 2)
-    pv_employer = round(gkv_base * pv_rates[f"{pv_key}_employer"], 2)
+    pv_employee = round(pv_base * pv_rates[f"{pv_key}_employee"], 2)
+    pv_employer = round(pv_base * pv_rates[f"{pv_key}_employer"], 2)
 
     # ── Totals ────────────────────────────────────────────────────────────
     total_employee = round(rv_employee + alv_employee + gkv_employee + pv_employee, 2)
@@ -205,7 +224,7 @@ def get_full_contribution_picture(
         "annual_gross": annual_gross,
         "has_children": has_children,
         "zusatzbeitrag_rate": zb_rate,
-        "caps": {"rv_alv": caps["rv_alv"], "gkv_pv": caps["gkv_pv"]},
+        "caps": {"rv_alv": caps["rv_alv"], "gkv": caps["gkv"], "pv": caps["pv"]},
         "branches": {
             "pension_rv": {
                 "employee": rv_employee, "employer": rv_employer,
@@ -245,6 +264,6 @@ def get_full_contribution_picture(
         "note": (
             "GKV health includes Zusatzbeitrag split 50/50 employee/employer (§ 249 SGB V). "
             "PV rate depends on parental status (§ 55 Abs. 3 SGB XI). "
-            "Caps: RV/ALV uses BBG West; GKV/PV uses GKV-BBG."
+            "Caps: RV/ALV uses BBG West; GKV uses the KV-BBG; PV uses its own BBG (differs from KV in 2027)."
         ),
     }

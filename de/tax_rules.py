@@ -1,12 +1,16 @@
 """
 German tax rules and helpers.
 
-The Rürup maximum for 2026 was previously None (not yet published when TaxDE
-was last updated). Based on the 2026 Beitragsbemessungsgrenze (BBG) for the
-general pension insurance of €101,400 and the standard Rürup formula
-(BBG × 2 × pension_contribution_rate × deductible_pct), the estimated
-2026 ceiling is €29,344 × (101400/96600) ≈ €30,784. We use €30,784 with
-a "bundled_estimate" provenance tag.
+The Rürup maximum is the Höchstbetrag knappschaftliche Rentenversicherung
+(knappschaftliche BBG × 24.7%, rounded up, § 10 Abs. 3 EStG). 2026:
+124,800 × 24.7% = 30,825.6 -> 30,826 (official knappschaftliche BBG 2026).
+The 2027 knappschaftliche contribution rate is not published, so the 2027
+ceiling is None (entered contribution is used, confidence reduced).
+
+Tax year 2027: only enacted values are applied (see the 2027 block below).
+The 2027 income-tax reform (Einkommensteuerreformgesetz 2027, BT-Drs. 21/8235)
+is a draft; 2027 therefore keeps the 2026 tariff and is flagged low-confidence.
+Draft values are recorded in provenance.json with status "draft, unconfirmed".
 """
 
 from __future__ import annotations
@@ -117,13 +121,14 @@ TAX_YEAR_RULES = {
         "homeoffice_tagespauschale": 6,
         "homeoffice_max_days": 210,
         "homeoffice_max_annual": 1_260,
-        "pendlerpauschale_short": 0.30,
+        "pendlerpauschale_short": 0.38,        # 0.38 from the 1st km since 01.01.2026 (BGBl. 2025 I Nr. 363)
         "pendlerpauschale_long": 0.38,
         "sparer_pauschbetrag_single": 1_000,
         "sparer_pauschbetrag_married": 2_000,
         "riester_max": 2_100,
-        "ruerup_max_single": 30_784,       # FIX: was None — estimated from 2026 BBG €101,400
+        "ruerup_max_single": 30_826,       # 124,800 (knapp. BBG 2026) × 24.7%, rounded up (§ 10 Abs. 3 EStG)
         "bav_4pct_bbg": 4_056,
+        "bav_tax_free_limit": 8_112,       # § 3 Nr. 63 EStG: 8% of RV-BBG 101,400
         "bav_4pct_extra": 1_800,
         "kindergeld_per_child": 259,
         "kinderfreibetrag_child": 3_414,
@@ -143,6 +148,23 @@ TAX_YEAR_RULES = {
             "blind_helpless": 7_400,
         },
     },
+}
+
+
+# ── 2027: enacted values only ─────────────────────────────────────────────
+# Income-tax parameters (Grundfreibetrag, tariff, Kinderfreibetrag, Kindergeld,
+# Arbeitnehmer-Pauschbetrag) are only in the Regierungsentwurf BT-Drs. 21/8235
+# and are NOT applied: they are inherited from 2026 and flagged provisional.
+TAX_YEAR_RULES[2027] = {
+    **TAX_YEAR_RULES[2026],
+    "income_tax_provisional": True,
+    "income_tax_warning": "2027 income tax reform not yet enacted; using 2026 tariff",
+    # Altersvorsorgereformgesetz (BGBl. 2026 I Nr. 156), in force 01.01.2027:
+    # 1,800 EUR contributions PLUS the Zulage are deductible (Zulage not modelled).
+    "riester_max": 1_800,
+    "ruerup_max_single": None,         # 2027 knappschaftliche rate not published
+    "bav_4pct_bbg": 4_248,             # 4% of RV-BBG 2027 (106,200)
+    "bav_tax_free_limit": 8_496,       # § 3 Nr. 63 EStG: 8% of RV-BBG 2027 (106,200)
 }
 
 

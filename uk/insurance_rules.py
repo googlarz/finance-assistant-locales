@@ -24,16 +24,27 @@ from __future__ import annotations
 # Self-employed are NOT eligible.
 SSP_WEEKLY = {
     2024: 116.75,   # 2024/25 — gov.uk/statutory-sick-pay (official)
-    2025: 116.75,   # 2025/26 — gov.uk/statutory-sick-pay (official; unchanged)
-    2026: 116.75,   # estimated — frozen; update when DWP announces
+    2025: 118.75,   # 2025/26 — gov.uk employer rates page (official)
+    2026: 123.25,   # 2026/27 — gov.uk employer rates page (official)
+    2027: 123.25,   # 2026/27 value carried forward; £127.55 proposed, not legislated
+}
+
+# Years whose SSP/LEL values are not yet legislated: result is low-confidence + warning.
+SSP_UNLEGISLATED_YEARS = {
+    2027: (
+        "2027/28 SSP (£127.55 proposed) and Lower Earnings Limit (£133 announced) are not "
+        "yet legislated; the 2026/27 values are used instead."
+    ),
 }
 
 # Lower Earnings Limit (LEL) — must earn at least this to qualify for SSP
 # Source: https://www.gov.uk/national-insurance-rates-letters
+# Note: from 6 April 2026 SSP no longer has an LEL eligibility test.
 NI_LOWER_EARNINGS_LIMIT_WEEKLY = {
     2024: 123,      # 2024/25 — official
     2025: 125,      # 2025/26 — official
-    2026: 125,      # estimated
+    2026: 129,      # 2026/27 — official (gov.uk rates and thresholds for employers)
+    2027: 129,      # 2026/27 value carried forward; £133 announced, not legislated
 }
 
 # SSP maximum duration (weeks)
@@ -196,6 +207,8 @@ def get_income_protection_guidance(gross: float, year: int = 2025) -> dict:
             "self_employed_eligible": False,
             "source": "https://www.gov.uk/statutory-sick-pay",
         },
+        "confidence": "Likely" if resolved in SSP_UNLEGISLATED_YEARS else "Definitive",
+        "warning": SSP_UNLEGISLATED_YEARS.get(resolved),
         "adequacy_note": (
             f"SSP pays £{ssp_weekly}/week (£{ssp_annual:.0f}/year equivalent) for up to "
             f"{SSP_MAX_WEEKS} weeks — far below most people's living costs. "

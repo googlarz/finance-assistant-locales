@@ -104,6 +104,12 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
         confidence -= 10
         confidence_detractors.append(year_note)
 
+    if p.get("income_tax_provisional"):
+        # Income-tax parameters for this year are only a draft: keep the
+        # previous tariff but never present the result as reliable.
+        confidence = min(confidence, 45)
+        confidence_detractors.append(p["income_tax_warning"])
+
     # ── Werbungskosten ───────────────────────────────────────────────────
     ho_days_pw = g["homeoffice_days_per_week"]
     if ho_days_pw is not None:
@@ -151,7 +157,7 @@ def calculate_refund(ctx: "LocaleContext | dict") -> dict:
             confidence_detractors.append(f"{year} Ruerup annual ceiling not bundled — using entered contribution.")
         sonderausgaben += ruerup_deductible
 
-    bav_deductible = min(g["bav_contribution"], p["bav_4pct_bbg"])
+    bav_deductible = min(g["bav_contribution"], p.get("bav_tax_free_limit", p["bav_4pct_bbg"]))
 
     children = g["children"]
     kita_total = 0.0

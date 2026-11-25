@@ -1,7 +1,7 @@
 {
   "locale": "de",
-  "last_verified": "2025-04-01",
-  "maintainer_notes": "2026 parameters are estimates based on BBG progression. Verify against BMF publication when available.",
+  "last_verified": "2026-11-24",
+  "maintainer_notes": "2026 values corrected against official sources on 2026-11-24. 2027: only enacted values are applied; income-tax parameters (Grundfreibetrag, tariff, Kinderfreibetrag, Kindergeld, Arbeitnehmer-Pauschbetrag) are draft (Einkommensteuerreformgesetz 2027, BT-Drs. 21/8235) and are NOT applied - code uses the 2026 tariff for 2027 and flags it low-confidence. Entries with status 'draft, unconfirmed' are recorded for reference only.",
   "rules": {
     "grundfreibetrag": {
       "2024": {
@@ -24,6 +24,15 @@
         "source_label": "BMF Steuerfortentwicklungsgesetz 2024 — Progression estimate",
         "verified_date": "2025-04-01",
         "confidence": "estimated"
+      },
+      "2027": {
+        "value": 12564,
+        "applied_in_code": false,
+        "source_url": "https://dserver.bundestag.de/btd/21/082/2108235.pdf",
+        "source_label": "Einkommensteuerreformgesetz 2027, Regierungsentwurf BT-Drs. 21/8235, Art. 1 (§ 32a EStG) - NOT applied, code keeps 2026 value",
+        "verified_date": "2026-11-24",
+        "status": "draft, unconfirmed",
+        "confidence": "draft"
       }
     },
     "soli_freigrenze": {
@@ -70,6 +79,15 @@
         "source_label": "§ 9a Satz 1 Nr. 1a EStG — assumed unchanged for 2026",
         "verified_date": "2025-04-01",
         "confidence": "stable"
+      },
+      "2027": {
+        "value": 1430,
+        "applied_in_code": false,
+        "source_url": "https://dserver.bundestag.de/btd/21/082/2108235.pdf",
+        "source_label": "BT-Drs. 21/8235 (§ 9a EStG) - NOT applied, code keeps 2026 value",
+        "verified_date": "2026-11-24",
+        "status": "draft, unconfirmed",
+        "confidence": "draft"
       }
     },
     "sparer_pauschbetrag": {
@@ -148,6 +166,15 @@
         "source_label": "BKGG § 6 — estimated €259/Monat 2026 (pending legislation)",
         "verified_date": "2025-04-01",
         "confidence": "estimated"
+      },
+      "2027": {
+        "value_per_child_monthly": 267,
+        "applied_in_code": false,
+        "source_url": "https://dserver.bundestag.de/btd/21/082/2108235.pdf",
+        "source_label": "BT-Drs. 21/8235 (§ 66 EStG) - NOT applied, code keeps 2026 value",
+        "verified_date": "2026-11-24",
+        "status": "draft, unconfirmed",
+        "confidence": "draft"
       }
     },
     "kinderfreibetrag": {
@@ -177,6 +204,17 @@
         "source_label": "§ 32 Abs. 6 EStG — 2026 estimated from progression",
         "verified_date": "2025-04-01",
         "confidence": "estimated"
+      },
+      "2027": {
+        "child_freibetrag": 3564,
+        "bea_freibetrag": 1464,
+        "total_per_parent": 5028,
+        "applied_in_code": false,
+        "source_url": "https://dserver.bundestag.de/btd/21/082/2108235.pdf",
+        "source_label": "BT-Drs. 21/8235 (§ 32 Abs. 6 EStG) - NOT applied, code keeps 2026 value",
+        "verified_date": "2026-11-24",
+        "status": "draft, unconfirmed",
+        "confidence": "draft"
       }
     },
     "riester_max": {
@@ -200,6 +238,15 @@
         "source_label": "§ 10a EStG — assumed unchanged for 2026",
         "verified_date": "2025-04-01",
         "confidence": "stable"
+      },
+      "2027": {
+        "value": 1800,
+        "plus_zulage": true,
+        "source_url": "https://www.recht.bund.de/bgbl/1/2026/156/regelungstext.pdf?__blob=publicationFile&v=1",
+        "source_label": "Altersvorsorgereformgesetz BGBl. 2026 I Nr. 156, Art. 2 (§ 10a EStG), in force 01.01.2027: 1,800 EUR contributions PLUS Zulage deductible",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
       }
     },
     "ruerup_max": {
@@ -218,11 +265,21 @@
         "confidence": "official"
       },
       "2026": {
-        "value_single": 30784,
+        "value_single": 30826,
         "source_url": "https://www.gesetze-im-internet.de/estg/__10.html",
-        "source_label": "§ 10 Abs. 1 Nr. 2b EStG — estimated from BBG 2026 €101.400",
-        "verified_date": "2025-04-01",
-        "confidence": "estimated"
+        "source_label": "§ 10 Abs. 3 EStG: knappschaftliche BBG 2026 124,800 x 24.7% = 30,825.6, rounded up",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
+      },
+      "2027": {
+        "value_single": null,
+        "derived_candidate_not_applied": 32308,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__10.html",
+        "source_label": "2027 knappschaftliche contribution rate not published (§ 158 SGB VI); derived candidate 130,800 x 24.7% = 32,308 NOT applied; code uses None",
+        "verified_date": "2026-11-24",
+        "status": "not published",
+        "confidence": "unknown"
       }
     },
     "bav_limits": {
@@ -249,9 +306,21 @@
         "value_extra_flat": 1800,
         "bbg_rv_west": 101400,
         "source_url": "https://www.gesetze-im-internet.de/estg/__3.html",
-        "source_label": "§ 3 Nr. 63 EStG — bAV 2026 estimated (BBG West est. €101.400)",
-        "verified_date": "2025-04-01",
-        "confidence": "estimated"
+        "source_label": "§ 3 Nr. 63 S.1 EStG: 8% of RV-BBG 101,400 = 8,112 (4% = 4,056 is the social-insurance-free share)",
+        "verified_date": "2026-11-24",
+        "confidence": "official",
+        "value_tax_free_8pct_of_bbg": 8112,
+        "status": "enacted"
+      },
+      "2027": {
+        "value_4pct_of_bbg": 4248,
+        "value_tax_free_8pct_of_bbg": 8496,
+        "bbg_rv_west": 106200,
+        "source_url": "https://www.gesetze-im-internet.de/estg/__3.html",
+        "source_label": "§ 3 Nr. 63 S.1 EStG: 8% of RV-BBG 2027 (106,200) = 8,496; 4% = 4,248 (derived)",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
       }
     },
     "social_contribution_caps": {
@@ -275,9 +344,26 @@
         "rv_alv_bbg": 101400,
         "gkv_pv_bbg": 69750,
         "source_url": "https://www.bundesgesundheitsministerium.de/themen/krankenversicherung/online-ratgeber-krankenversicherung/beitraege.html",
-        "source_label": "BMG / GKV-Spitzenverband — Beitragsbemessungsgrenze 2026 (estimated)",
-        "verified_date": "2025-04-01",
-        "confidence": "estimated"
+        "source_label": "Sozialversicherungsrechengrößen 2026 (official; JAEG 77,400)",
+        "verified_date": "2026-11-24",
+        "confidence": "official",
+        "gkv_bbg": 69750,
+        "pv_bbg": 69750,
+        "jaeg": 77400,
+        "status": "enacted"
+      },
+      "2027": {
+        "rv_alv_bbg": 106200,
+        "gkv_bbg": 76500,
+        "pv_bbg": 72900,
+        "jaeg": 84150,
+        "bezugsgroesse_annual": 49560,
+        "bezugsgroesse_monthly": 4130,
+        "source_url": "https://www.bundesregierung.de/breg-de/aktuelles/beitragsbemessungsgrenzen-2027-2454638",
+        "source_label": "Sozialversicherungsrechengrößen-Verordnung 2027 (Bundesrat Drs. 576/26, consent 20.11.2026); PV BBG per current § 55 Abs. 2 SGB XI; BGBl citation not yet found",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
       }
     },
     "kirchensteuer_rates": {
@@ -301,6 +387,110 @@
         "source_label": "§ 33b EStG — Behinderten-Pauschbetrag (neu ab 2021)",
         "verified_date": "2021-01-01",
         "confidence": "stable"
+      }
+    },
+    "einkommensteuertarif": {
+      "2027": {
+        "zone1_upper": 17799,
+        "zone1_coeff": 952.24,
+        "zone2_upper": 70600,
+        "zone2_coeff": 170.74,
+        "zone2_base": 993.86,
+        "spitzensteuersatz_threshold": 70601,
+        "spitzensteuersatz_offset": 11241.73,
+        "reichensteuersatz_threshold": 250000,
+        "reichensteuersatz_offset": 18741.7,
+        "top47_threshold": 280000,
+        "top47_rate": 0.47,
+        "top47_offset": 24341.68,
+        "applied_in_code": false,
+        "source_url": "https://dserver.bundestag.de/btd/21/082/2108235.pdf",
+        "source_label": "BT-Drs. 21/8235, Art. 1 § 32a EStG tariff - NOT applied, code keeps 2026 tariff",
+        "verified_date": "2026-11-24",
+        "status": "draft, unconfirmed",
+        "confidence": "draft"
+      }
+    },
+    "pendlerpauschale": {
+      "2026": {
+        "value_short": 0.38,
+        "value_long": 0.38,
+        "max_annual": 4500,
+        "source_url": "https://www.recht.bund.de/bgbl/1/2025/363/VO.html",
+        "source_label": "§ 9 Abs. 1 S. 3 Nr. 4 EStG - 0.38 EUR/km from the 1st km since 01.01.2026 (Steueränderungsgesetz 2025, BGBl. 2025 I Nr. 363)",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
+      },
+      "2027": {
+        "value_short": 0.38,
+        "value_long": 0.38,
+        "max_annual": 4500,
+        "source_url": "https://www.recht.bund.de/bgbl/1/2025/363/VO.html",
+        "source_label": "Unchanged in current law (§ 9 Abs. 1 S. 3 Nr. 4 EStG); 2027 follows 2026",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
+      }
+    },
+    "gkv_zusatzbeitrag_avg": {
+      "2026": {
+        "value": 0.029,
+        "source_url": "https://www.bundesanzeiger.de/pub/publication/oUJYVk8GYRXybnb9Y4h",
+        "source_label": "§ 242a SGB V - BAnz AT 10.11.2025 B7 (Bekanntmachung vom 07.11.2025)",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
+      },
+      "2027": {
+        "value": 0.029,
+        "source_url": "https://www.bundesgesundheitsministerium.de/presse/pressemitteilungen/zusatzbeitragssatz-gkv-2027-festgelegt",
+        "source_label": "BMG press release 30.10.2026; formal Bundesanzeiger notice not yet located",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
+      }
+    },
+    "pv_childless_rates": {
+      "2025": {
+        "childless_total": 0.042,
+        "childless_employee": 0.024,
+        "with_children_total": 0.036,
+        "source_url": "https://www.gesetze-im-internet.de/sgb_11/__55.html",
+        "source_label": "§ 55 Abs. 3 SGB XI: childless surcharge 0.6 pt -> total 4.2%, employee 2.4%",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
+      },
+      "2026": {
+        "childless_total": 0.042,
+        "childless_employee": 0.024,
+        "with_children_total": 0.036,
+        "source_url": "https://www.gesetze-im-internet.de/sgb_11/__55.html",
+        "source_label": "§ 55 Abs. 3 SGB XI: childless surcharge 0.6 pt -> total 4.2%, employee 2.4%",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
+      },
+      "2027": {
+        "childless_total": 0.042,
+        "childless_employee": 0.024,
+        "with_children_total": 0.036,
+        "source_url": "https://www.gesetze-im-internet.de/sgb_11/__55.html",
+        "source_label": "§ 55 Abs. 3 SGB XI: childless surcharge 0.6 pt -> total 4.2%, employee 2.4% (Pflegeneuordnungsgesetz draft 0.9 pt NOT applied)",
+        "verified_date": "2026-11-24",
+        "status": "enacted",
+        "confidence": "official"
+      },
+      "2027_draft_pnog": {
+        "childless_total": 0.045,
+        "childless_employee": 0.027,
+        "applied_in_code": false,
+        "source_url": "https://dserver.bundestag.de/btd/21/088/2108869.pdf",
+        "source_label": "Pflegeneuordnungsgesetz Regierungsentwurf BT-Drs. 21/8869: surcharge 0.9 pt - NOT applied",
+        "verified_date": "2026-11-24",
+        "status": "draft, unconfirmed",
+        "confidence": "draft"
       }
     }
   }

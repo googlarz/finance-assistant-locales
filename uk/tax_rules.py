@@ -4,9 +4,15 @@ UK tax rules for Finance Assistant.
 UK tax year runs 6 April to 5 April of the following calendar year.
 For this plugin, year=2024 means the 2024/25 tax year (6 Apr 2024 – 5 Apr 2025).
 
-All income tax thresholds are frozen at 2024/25 levels until April 2028
-per the Autumn Budget 2022. NI rates reflect the reductions effective
-6 January 2024 (Spring Budget 2024).
+Income tax thresholds (personal allowance £12,570, basic rate band £37,700)
+are frozen at 2024/25 levels to 2030-31 (Finance Act 2026 s.10, extending the
+Finance Act 2021 s.5 freeze). NI rates reflect the reductions effective
+6 January 2024 (Spring Budget 2024). Employer Class 1 NI is 15% above £5,000
+from 6 April 2025 (NICs (Secondary Class 1 Contributions) Act 2025).
+
+The 2027 entry (2027/28) holds only legislated values plus 2026/27 values
+carried forward for anything not yet legislated; its "confidence" is "Likely"
+and its "note" lists the carried-forward items (see provenance.json).
 
 Sources:
   https://www.gov.uk/income-tax-rates
@@ -79,8 +85,8 @@ TAX_YEAR_RULES = {
         "ni_employee_upper_threshold": 50_270,
         "ni_employee_rate_main": 0.08,
         "ni_employee_rate_upper": 0.02,
-        "ni_employer_secondary_threshold": 9_100,
-        "ni_employer_rate": 0.138,
+        "ni_employer_secondary_threshold": 5_000,  # cut from £9,100 on 6 Apr 2025
+        "ni_employer_rate": 0.15,               # raised from 13.8% on 6 Apr 2025
         "currency": "GBP",
         # ── Scottish income tax bands (2025/26) ──────────────────────────
         "scottish_bands": [
@@ -95,7 +101,8 @@ TAX_YEAR_RULES = {
         "confidence": "Definitive",
     },
     2026: {
-        # Still frozen per current projection (until April 2028); marked Likely
+        # Thresholds frozen (to 2030-31 per FA 2026 s.10); entry marked Likely because
+        # the Scottish bands below are an unconfirmed projection (see provenance.json)
         "personal_allowance": 12_570,
         "basic_rate_limit": 50_270,
         "higher_rate_limit": 125_140,
@@ -113,8 +120,8 @@ TAX_YEAR_RULES = {
         "ni_employee_upper_threshold": 50_270,
         "ni_employee_rate_main": 0.08,
         "ni_employee_rate_upper": 0.02,
-        "ni_employer_secondary_threshold": 9_100,
-        "ni_employer_rate": 0.138,
+        "ni_employer_secondary_threshold": 5_000,
+        "ni_employer_rate": 0.15,
         "currency": "GBP",
         # Scottish bands were missing entirely for this year — tax_calculator.py's
         # `"scottish_bands" in rules` check silently fell back to rUK bands/rates
@@ -129,7 +136,65 @@ TAX_YEAR_RULES = {
             (0.45, 62_430,  125_140),  # Advanced rate
             (0.48, 125_140, None),     # Top rate
         ],
-        "confidence": "Likely",  # Frozen thresholds confirmed to 2028; 2026/27 projection
+        "confidence": "Likely",  # Scottish bands unconfirmed; rUK thresholds are frozen
+    },
+    2027: {
+        # 2027/28. Legislated (Finance Act 2026 s.4, s.5, s.7, s.9, s.10; TCGA 1992
+        # s.1H/s.1K; FA 2004 s.228; ISA Regs reg 4ZA; NICs Act 2025): personal
+        # allowance, basic rate band £37,700, dividend rates/allowance, savings and
+        # property rates, CGT, ISA, pension annual allowance, employer NI rate.
+        "personal_allowance": 12_570,
+        "basic_rate_limit": 50_270,             # PA + £37,700 basic rate band
+        # Announced in Budget 2026 but not yet legislated: carried forward from 2026/27
+        "higher_rate_limit": 125_140,
+        "additional_rate_threshold": 125_140,
+        "personal_allowance_taper_threshold": 100_000,
+        "basic_rate": 0.20,
+        "higher_rate": 0.40,
+        "additional_rate": 0.45,
+        "marriage_allowance": 1_260,
+        "ni_employee_lower_threshold": 12_570,
+        "ni_employee_upper_threshold": 50_270,
+        "ni_employee_rate_main": 0.08,
+        "ni_employee_rate_upper": 0.02,
+        "ni_employer_secondary_threshold": 5_000,
+        # Legislated
+        "dividend_allowance": 500,
+        "dividend_ordinary_rate": 0.1075,
+        "dividend_upper_rate": 0.3575,
+        "savings_starting_rate_limit": 5_000,
+        # Savings/property rates as currently enacted (FA 2026 s.5, s.7); Budget 2026
+        # announces 24/44/49 via Finance Bill 2026-27 (not yet enacted)
+        "savings_basic_rate": 0.22,
+        "savings_higher_rate": 0.42,
+        "savings_additional_rate": 0.47,
+        "property_basic_rate": 0.22,
+        "property_higher_rate": 0.42,
+        "property_additional_rate": 0.47,
+        "capital_gains_allowance": 3_000,
+        "cgt_rate_basic": 0.18,
+        "cgt_rate_higher": 0.24,
+        "pension_annual_allowance": 60_000,
+        "isa_allowance": 20_000,
+        "ni_employer_rate": 0.15,
+        "currency": "GBP",
+        # No 2027/28 Scottish bands published yet: 2026/27 projection carried forward
+        "scottish_bands": [
+            (0.19, 0,       2_827),
+            (0.20, 2_827,   14_921),
+            (0.21, 14_921,  31_092),
+            (0.42, 31_092,  62_430),
+            (0.45, 62_430,  125_140),
+            (0.48, 125_140, None),
+        ],
+        "confidence": "Likely",
+        "note": (
+            "2027/28: only some parameters are legislated (personal allowance, "
+            "basic rate band, dividend, savings/property, CGT, ISA and pension rules, "
+            "employer NI rate). Higher/additional rate limits, income tax rates, "
+            "taper threshold, marriage allowance, NI thresholds and Scottish bands "
+            "are 2026/27 values carried forward, not yet legislated or published."
+        ),
     },
 }
 
