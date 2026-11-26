@@ -1,0 +1,152 @@
+[
+  {
+    "id": "ca_2024_on_single_60k_employed",
+    "description": "Single Ontario employee, $60,000 gross, 2024",
+    "source": {
+      "url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/payroll/t4127-payroll-deductions-formulas.html",
+      "description": "CRA T4127 120th edition & Form 5000-S1 / ON428 2024 rules",
+      "accessed": "2026-11-12"
+    },
+    "year": 2024,
+    "locale": "ca",
+    "inputs": {
+      "gross_annual_income": 60000,
+      "employment_type": "employed",
+      "province": "ON"
+    },
+    "expected": {
+      "federal_tax": 6088,
+      "provincial_tax": 3163,
+      "tax": 9251,
+      "cpp_employee": 3362,
+      "ei_employee": 996,
+      "tolerance_abs": 50
+    },
+    "notes": "Gross $60,000 in Ontario. CPP = (60,000 - 3,500) * 5.95% = 3,361.75; EI = 60,000 * 1.66% = 996.00."
+  },
+  {
+    "id": "ca_2024_bc_single_75k_employed",
+    "description": "Single British Columbia employee, $75,000 gross, 2024",
+    "source": {
+      "url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/payroll/t4127-payroll-deductions-formulas.html",
+      "description": "CRA T4127 120th edition & BC428 2024 brackets",
+      "accessed": "2026-11-12"
+    },
+    "year": 2024,
+    "locale": "ca",
+    "inputs": {
+      "gross_annual_income": 75000,
+      "employment_type": "employed",
+      "province": "BC"
+    },
+    "expected": {
+      "federal_tax": 9092,
+      "provincial_tax": 3657,
+      "tax": 12749,
+      "cpp_employee": 4056,
+      "ei_employee": 1049,
+      "tolerance_abs": 50
+    },
+    "notes": "Gross $75,000 in BC. Reaches YMPE ($68,500) and CPP2 band (up to $73,200). EI capped at $1,049.12."
+  },
+  {
+    "id": "ca_2024_ab_single_100k_employed",
+    "description": "Single Alberta employee, $100,000 gross, 2024",
+    "source": {
+      "url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/payroll/t4127-payroll-deductions-formulas.html",
+      "description": "CRA T4127 120th edition & AB428 2024 flat 10% bottom bracket",
+      "accessed": "2026-11-12"
+    },
+    "year": 2024,
+    "locale": "ca",
+    "inputs": {
+      "gross_annual_income": 100000,
+      "employment_type": "employed",
+      "province": "AB"
+    },
+    "expected": {
+      "federal_tax": 14217,
+      "provincial_tax": 7385,
+      "tax": 21602,
+      "cpp_employee": 4056,
+      "ei_employee": 1049,
+      "tolerance_abs": 50
+    },
+    "notes": "Gross $100,000 in Alberta. 10% rate on income up to $148,269."
+  },
+  {
+    "id": "ca_2024_qc_single_70k_employed",
+    "description": "Single Quebec employee, $70,000 gross, 2024 (Quebec Abatement & QPP)",
+    "source": {
+      "url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/payroll/t4127-payroll-deductions-formulas.html",
+      "description": "CRA T4127 120th edition Table 8.3 QPP & 16.5% Federal Abatement",
+      "accessed": "2026-11-12"
+    },
+    "year": 2024,
+    "locale": "ca",
+    "inputs": {
+      "gross_annual_income": 70000,
+      "employment_type": "employed",
+      "province": "QC"
+    },
+    "expected": {
+      "federal_tax": 6732,
+      "provincial_tax": 7582,
+      "tax": 14314,
+      "cpp_employee": 4220,
+      "ei_employee": 834,
+      "tolerance_abs": 50
+    },
+    "notes": "Federal tax reflects 16.5% Quebec abatement. QPP at 6.40%. Reduced EI rate for QPIP."
+  },
+  {
+    "id": "ca_2025_on_single_80k_employed",
+    "description": "Single Ontario employee, $80,000 gross, 2025 (Blended 14.5% federal rate)",
+    "source": {
+      "url": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/tax-rates-brackets/last-year.html",
+      "description": "CRA 2025 rates: 14.5% bottom federal bracket, indexed ON brackets",
+      "accessed": "2026-11-12"
+    },
+    "year": 2025,
+    "locale": "ca",
+    "inputs": {
+      "gross_annual_income": 80000,
+      "employment_type": "employed",
+      "province": "ON"
+    },
+    "expected": {
+      "federal_tax": 9781,
+      "provincial_tax": 5036,
+      "tax": 14817,
+      "cpp_employee": 4378,
+      "ei_employee": 1077,
+      "tolerance_abs": 50
+    },
+    "notes": "2025 tax year. Bottom federal tax bracket reduced to 14.5%."
+  },
+  {
+    "id": "ca_2026_bc_single_65k_employed",
+    "description": "Single BC employee, $65,000 gross, 2026 (5.60% bottom rate in BC, 14.0% federal)",
+    "source": {
+      "url": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/tax-rates-brackets/current-year.html",
+      "description": "CRA 2026 rates & BC Budget 2026 5.60% rate",
+      "accessed": "2026-11-12"
+    },
+    "year": 2026,
+    "locale": "ca",
+    "inputs": {
+      "gross_annual_income": 65000,
+      "employment_type": "employed",
+      "province": "BC"
+    },
+    "expected": {
+      "federal_tax": 6433,
+      "provincial_tax": 2977,
+      "tax": 9411,
+      "cpp_employee": 3659,
+      "ei_employee": 1060,
+      "tolerance_abs": 50
+    },
+    "notes": "2026 tax year. Federal bottom rate 14.0%. BC bottom rate 5.60%."
+  }
+]

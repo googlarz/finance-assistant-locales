@@ -15,6 +15,9 @@ locales/
 ├── fr/     # France — bundled, full 2024-2026 support
 ├── nl/     # Netherlands — bundled, full 2024-2026 support
 ├── pl/     # Poland — bundled, full 2024-2026 support
+├── ie/     # Ireland — bundled, full 2024-2026 support
+├── ca/     # Canada — bundled, full 2024-2026 support (all provinces/territories)
+├── us/     # United States — federal support
 ├── at/     # Austria — not yet implemented · scaffold: `python3 scripts/scaffold_locale.py AT`
 └── ch/     # Switzerland — not yet implemented · scaffold: `python3 scripts/scaffold_locale.py CH`
 ```
@@ -316,6 +319,32 @@ Key Polish-specific areas covered:
 - **Wspólne rozliczenie** — joint filing with spouse halves combined income; `calculate_tax` returns estimated saving when `spouse_gross` is provided
 - **Self-employed flag** — działalność gospodarcza can choose skala podatkowa, 19% podatek liniowy, or ryczałt; calculator uses skala podatkowa and returns `"Likely"` confidence when `employment_type=self_employed`
 - **ZUS annual cap** — pension and disability contributions capped at 30× average monthly salary (~234,720 PLN for 2024)
+
+Sources and verification dates for all parameters are tracked in `provenance.json`.
+
+---
+
+### Canada (`ca`)
+
+Full support for tax years 2024, 2025, and 2026 across the federal system and all 10 provinces and 3 territories (AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT). All parameters are filled — no `None` values for any supported year. Tax year = calendar year.
+
+| Module | Content |
+|--------|---------|
+| `tax_rules.py` | `TAX_YEAR_RULES` for 2024, 2025, 2026 — Federal brackets, indexed BPA with high-income taper, and provincial brackets/BPA for all 13 jurisdictions |
+| `tax_calculator.py` | Combined Federal + Provincial tax calculation, NRTCs, Ontario surtax and health premium, BC tax reduction, Quebec federal abatement (16.5%), CPP/EI deductions, effective and marginal rates |
+| `tax_dates.py` | T1 standard filing deadline (Apr 30), self-employed deadline (Jun 15), RRSP 60-day contribution deadline, quarterly instalment deadlines |
+| `social_contributions.py` | Canada Pension Plan (CPP/QPP base + CPP2/QPP2 second additional enhancement) and Employment Insurance (EI / QC QPIP) employee and employer contributions |
+| `claim_rules.py` | Deduction discovery: Federal & provincial BPA, Canada Employment Amount (CEA), RRSP contribution deduction & room opportunity, work space in home expenses (T2200), child care expenses (T778), union dues, FHSA deduction |
+
+Key Canada-specific areas covered:
+
+- **Province awareness** — full support for all 13 provinces and territories via `ctx.region` (e.g. `"ON"`, `"BC"`, `"AB"`, `"QC"`, etc.)
+- **Federal rate changes** — 15% lowest bracket in 2024, 14.5% blended rate in 2025, and 14.0% rate in 2026
+- **Federal Basic Personal Amount taper** — phases out from maximum to minimum between the 29% and 33% tax bracket thresholds
+- **CPP Enhancement (CPP2)** — full phase 2 implementation (4% on earnings between YMPE and YAMPE starting 2024)
+- **Quebec separate system awareness** — models the 16.5% federal tax abatement, QPP rates, and reduced EI with QPIP premiums
+- **Ontario surtax & Health Premium** — graduated health premium up to $900 and surtax rates (20%/36%)
+- **BC Tax Reduction & PEI/NL changes** — reflects 2026 BC Budget (5.60% bottom rate), PEI 20% high-income bracket, and NL BPA adjustments
 
 Sources and verification dates for all parameters are tracked in `provenance.json`.
 

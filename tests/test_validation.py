@@ -32,7 +32,7 @@ def test_run_all_validations_no_exception():
 
 # ── Pass-rate: at least 80% per locale ───────────────────────────────────────
 
-@pytest.mark.parametrize("locale", ["de", "uk", "fr", "nl", "pl"])
+@pytest.mark.parametrize("locale", ["de", "uk", "fr", "nl", "pl", "ie", "ca"])
 def test_locale_pass_rate_80_pct(locale):
     """Each locale must pass at least 80% of its cases."""
     result = run_all_validations(locales=[locale])

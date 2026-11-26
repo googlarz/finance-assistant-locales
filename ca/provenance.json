@@ -1,0 +1,67 @@
+{
+  "locale": "ca",
+  "locale_name": "Canada",
+  "last_reviewed": "2026-11-12",
+  "rules": {
+    "federal_income_tax_brackets_2024": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/tax-rates-brackets/all-years.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "Federal tax brackets for 2024: 15% up to $55,867; 20.5% up to $111,733; 26% up to $173,205; 29% up to $246,752; 33% over $246,752."
+    },
+    "federal_income_tax_brackets_2025": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/tax-rates-brackets/last-year.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "Notice of Ways and Means Motion reduced lowest federal bracket from 15% to 14% on July 1, 2025, creating an effective 14.5% rate for 2025 up to $57,375."
+    },
+    "federal_income_tax_brackets_2026": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/tax-rates-brackets/current-year.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "Full implementation of 14% lowest federal bracket for 2026 up to $58,523; indexed thresholds for higher brackets."
+    },
+    "federal_basic_personal_amount": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/frequently-asked-questions-individuals/adjustment-personal-income-tax-benefit-amounts.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "Indexed amounts: 2024 ($15,705 max, $14,156 min); 2025 ($16,129 max, $14,538 min); 2026 ($16,452 max, $14,829 min). Tapered between 29% and 33% tax bracket thresholds."
+    },
+    "provincial_tax_brackets_all_provinces": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/frequently-asked-questions-individuals/canadian-income-tax-rates-individuals-current-previous-years.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "Rates and brackets for all 10 provinces (AB, BC, MB, NB, NL, NS, ON, PE, QC, SK) and 3 territories (NT, NU, YT) for 2024-2026 verified against CRA schedules and T4127."
+    },
+    "ontario_surtax_and_health_premium": {
+      "source_url": "https://www.canada.ca/content/dam/cra-arc/formspubs/pub/t4127-jan/t4127-01-26e.pdf",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "Ontario provincial surtax of 20% on basic provincial tax above threshold 1 ($5,554 in 2024 / $5,710 in 2025 / $5,818 in 2026) and 36% above threshold 2 ($7,108 in 2024 / $7,307 in 2025 / $7,446 in 2026). OHP graduated up to $900 max."
+    },
+    "cpp_contribution_rates_and_maximums": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "YMPE: $68,500 (2024), $71,300 (2025), $74,600 (2026). Employee rate 5.95%, basic exemption $3,500. Maximum employee contribution $3,867.50 (2024), $4,034.10 (2025), $4,230.45 (2026)."
+    },
+    "cpp2_second_additional_contributions": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "Phase 2 CPP enhancement effective Jan 1, 2024. Rate 4% on earnings between YMPE and YAMPE ($73,200 in 2024, $81,200 in 2025, $85,000 in 2026). Max employee: $188 (2024), $396 (2025), $416 (2026)."
+    },
+    "ei_premium_rates_and_maximums": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/employment-insurance-ei/ei-premium-rates-maximums.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "Max insurable earnings: $63,200 (2024), $65,700 (2025), $68,900 (2026). Employee rate: 1.66% (2024), 1.64% (2025), 1.63% (2026). Max premium: $1,049.12 (2024), $1,077.48 (2025), $1,123.07 (2026). Quebec rates adjusted for QPIP."
+    },
+    "filing_deadlines": {
+      "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/important-dates-individuals.html",
+      "verified_date": "2026-11-12",
+      "confidence": "Definitive",
+      "notes": "April 30 filing & balance payment deadline; June 15 self-employed filing deadline; March 1-3 RRSP contribution deadline; quarterly instalment dates."
+    }
+  }
+}
